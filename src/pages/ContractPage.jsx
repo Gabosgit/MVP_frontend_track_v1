@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useParams } from "react-router-dom";
-import { PageWrapper } from "../components/PageWrapper";
 import { fetchContractAndUsers } from "../services/ContractService"; // Import the service
 import { useAuth } from "../context/useAuth";
+import Content from "../components/Content";
 
 export default function ContractPage() {
   const apiBaseUrl = useContext(ApiContext);
@@ -56,7 +56,7 @@ export default function ContractPage() {
 
   // ✅ RETURN the JSX to ensure React renders it
     return (
-      <PageWrapper
+      <Content
         pageName="Contract"
         loading={loading} 
         error={error}

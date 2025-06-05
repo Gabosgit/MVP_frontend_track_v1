@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useNavigate } from "react-router-dom";
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 
 export default function CreateContract() {
   const apiBaseUrl = useContext(ApiContext);
@@ -88,7 +88,7 @@ export default function CreateContract() {
   };
 
   return (
-    <PageWrapper
+    <Content
       pageName="Create Contract"
       htmlContent={
         <CreateContractContent

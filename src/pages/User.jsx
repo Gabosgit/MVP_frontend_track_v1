@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { getUserData } from "../services/getUserData";
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 
 
 function UserContent({ userData }) {
@@ -9,9 +9,9 @@ function UserContent({ userData }) {
     return <div className="text-gray-500">No user data available.</div>;
 
   return (
-<div className="bg-transparent -top-40 p-8 pb-20 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
+<div className="bg-transparent mt-20 p-8 pb-14 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
       {/* Single Edit Profile Button at the top right */}
-      <div className="flex justify-end w-full mb-8">
+      <div className="flex justify-end w-full">
           <a href="#" className="inline-flex justify-center py-2.5 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5">
               Edit
           </a>
@@ -102,7 +102,7 @@ export default function User() {
 
   // ✅ RETURN the JSX to ensure React renders it
   return (
-    <PageWrapper 
+    <Content 
       pageName={"User Data"}
       loading={loading} 
       error={error}

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useNavigate } from "react-router-dom";
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 
 
 export default function CreateProfile() {
@@ -98,7 +98,7 @@ export default function CreateProfile() {
 
     // ✅ RETURN the JSX to ensure React renders it
     return (
-        <PageWrapper 
+        <Content 
             pageName={"Create Profile"}
             htmlContent={
                 <CreateProfileContent 

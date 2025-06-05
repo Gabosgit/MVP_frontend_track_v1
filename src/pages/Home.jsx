@@ -1,4 +1,4 @@
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 import '../index.css'
 
 
@@ -7,7 +7,7 @@ export default function Home() {
 
   // ✅ RETURN the JSX to ensure React renders it
     return (
-      <PageWrapper 
+      <Content 
         htmlContent={<HomeContent />} 
       />
     );
@@ -18,7 +18,7 @@ function HomeContent() {
   return (
     <div className="max-w-4xl p-4 text-center sm:p-8">
         <a href="#">
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end animate-slideInUp text-transparent bg-gradient-to-r">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end animate-slideInUp text-transparent">
               Professional Creative Platform
             </h1>
         </a>

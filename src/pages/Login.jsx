@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import { login } from "../services/AuthService"; // Import authentication function login
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 
 export default function Login() {
   const apiBaseUrl = useContext(ApiContext);
@@ -14,7 +14,7 @@ export default function Login() {
 
     try {
       await login(username, password, apiBaseUrl); // Calls the authentication login function from ../services/AuthService
-      alert("Login successful!"); // shows success message
+      // alert("Login successful!"); // shows success message
       window.location.href = `/dashboard`; // Redirect with username
     } catch (error) {
       alert("Login failed. Please try again.");
@@ -22,7 +22,7 @@ export default function Login() {
   };
 
   return (
-    <PageWrapper
+    <Content
       pageName={"Login"}
       htmlContent={<LoginContent
         username={username} 
@@ -36,7 +36,7 @@ export default function Login() {
 
 function LoginContent({username, setUsername, password, setPassword, handleSubmit}) {
   return (
-    <div className="max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
+    <div className="mt-44  max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
       <form className="space-y-6" onSubmit={handleSubmit} >
         <h2 className="mt-6 text-center text-3xl sm:text-4xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
          dark:from-indigo-300 dark:to-purple-400 dark:text-transparent dark:bg-gradient-to-r">
@@ -85,9 +85,8 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
         </button>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Not registered? 
-            <Link to="/sign_up">
-              <a className="text-custom-purple-start hover:underline dark:text-custom-purple-start"> Create account
-              </a>
+            <Link to="/sign_up" className="text-custom-purple-start hover:underline dark:text-custom-purple-start">
+              Create account
             </Link>
             
         </div>

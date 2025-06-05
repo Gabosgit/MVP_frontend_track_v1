@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import axios from "axios";
-import { PageWrapper } from "../components/PageWrapper";
 
 export default function SignUp() {
   const apiBaseUrl = useContext(ApiContext);
@@ -57,7 +56,7 @@ export default function SignUp() {
 
 function SignUpContent({handleSubmit, form, handleChange}) {
   return (
-    <div className="max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 
+    <div className="mt-36 max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 
     dark:border-dark-nav-border animate-slideInUp">
         <div>
             <h2 className="mt-6 text-center text-3xl sm:text-4xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
@@ -72,16 +71,16 @@ function SignUpContent({handleSubmit, form, handleChange}) {
             <input type="hidden" name="remember" value="true"/>
             <div className="rounded-md shadow-sm -space-y-px">
                 <div>
-                    <label for="full-name" className="sr-only">Username</label>
-                    <input id="full-name" name="full-name" type="text" autocomplete="name" required
+                    <label htmlFor="full-name" className="sr-only">Username</label>
+                    <input id="full-name" name="full-name" type="text" autoComplete="name" required
                             className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
                             rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
                             dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
                             placeholder="Username"/>
                 </div>
                 <div>
-                    <label for="email-address" className="sr-only">Email address</label>
-                    <input id="email-address" name="email" type="email" autocomplete="email" required
+                    <label htmlFor="email-address" className="sr-only">Email address</label>
+                    <input id="email-address" name="email" type="email" autoComplete="email" required
                       className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-dark-input-border placeholder-gray-500 
                       dark:placeholder-gray-400 text-gray-900 dark:text-dark-text bg-gray-50 dark:bg-dark-input-bg focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start 
                       dark:focus:ring-indigo-400 dark:focus:border-indigo-400 focus:z-10 sm:text-sm transition-colors"
@@ -89,8 +88,8 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                     />
                 </div>
                 <div>
-                    <label for="password" className="sr-only">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required
+                    <label htmlFor="password" className="sr-only">Password</label>
+                    <input id="password" name="password" type="password" autoComplete="new-password" required
                       className="bg-gray-50 appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
                       focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
                       dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
@@ -99,8 +98,8 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                     />
                 </div>
                 <div>
-                    <label for="confirm-password" className="sr-only">Confirm Password</label>
-                    <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" required
+                    <label htmlFor="confirm-password" className="sr-only">Confirm Password</label>
+                    <input id="confirm-password" name="confirm-password" type="password" autoComplete="new-password" required
                       className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text bg-gray-50 dark:bg-dark-input-bg rounded-b-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start dark:focus:ring-indigo-400 dark:focus:border-indigo-400 focus:z-10 sm:text-sm transition-colors"
                       placeholder="Confirm Password"
                     />
@@ -111,7 +110,7 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                 <div className="flex items-center">
                     <input id="terms-and-privacy" name="terms-and-privacy" type="checkbox" required
                         className="h-4 w-4 text-custom-purple-start dark:text-indigo-400 border-gray-300 dark:border-dark-input-border rounded focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-colors"/>
-                    <label for="terms-and-privacy" className="ml-2 block text-sm text-gray-700 dark:text-dark-text-secondary">
+                    <label htmlFor="terms-and-privacy" className="ml-2 block text-sm text-gray-700 dark:text-dark-text-secondary">
                         I agree to the 
                         <a href="/terms.html" className="font-medium text-custom-purple-start hover:text-custom-purple-end dark:text-indigo-400 dark:hover:text-indigo-300"> Terms</a> and <a href="/privacy.html" className="font-medium text-custom-purple-start hover:text-custom-purple-end dark:text-indigo-400 dark:hover:text-indigo-300">
                           Privacy Policy
@@ -131,9 +130,8 @@ function SignUpContent({handleSubmit, form, handleChange}) {
         <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
                 Already have an account? 
-                <Link to="/login">
-                  <a className="font-medium text-custom-purple-start hover:text-custom-purple-end dark:text-indigo-400 dark:hover:text-indigo-300"> Log in
-                  </a>
+                <Link to="/login" className="font-medium text-custom-purple-start hover:text-custom-purple-end dark:text-indigo-400 dark:hover:text-indigo-300">
+                  Log in
                 </Link>
                 
             </p>
@@ -168,7 +166,7 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                     dark:text-dark-text-secondary hover:bg-gray-50 dark:hover:bg-opacity-20 dark:hover:bg-white transition-colors">
                         <span className="sr-only">Sign up with GitHub</span>
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.036 1.531 1.036.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.201 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                          <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.036 1.531 1.036.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.201 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
                         </svg>
                     </a>
                 </div>

@@ -3,6 +3,7 @@
 .env.development
 .env.production
 .env.test
+.BKversions
 
 # Logs
 logs

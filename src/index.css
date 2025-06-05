@@ -94,28 +94,27 @@ body {
   }
 
   .feature-icon-bg {
-            @apply w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mx-auto mb-6 flex items-center justify-center text-3xl sm:text-4xl text-white shadow-lg transition-all duration-300 group-hover:scale-110;
-        }
+      @apply w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mx-auto mb-6 flex items-center justify-center text-3xl sm:text-4xl text-white shadow-lg transition-all duration-300 group-hover:scale-110;
+  }
 }
 
 
-/* Custom gradient colors for Tailwind CSS */
+/* Animations */
+  @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-slideInUp { animation: slideInUp 0.6s ease-out forwards; }
 
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slideInUp { animation: slideInUp 0.6s ease-out forwards; }
-
-        /* Custom styles for carousel dots */
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            background-color: rgba(0, 0, 0, 0.3); /* Default dot color */
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .carousel-dot.active {
-            background-color: #6B46C1; /* Active dot color */
-        }
+  /* Custom styles for carousel dots */
+  .carousel-dot {
+      width: 10px;
+      height: 10px;
+      background-color: rgba(0, 0, 0, 0.3); /* Default dot color */
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+  .carousel-dot.active {
+      background-color: #6B46C1; /* Active dot color */
+  }

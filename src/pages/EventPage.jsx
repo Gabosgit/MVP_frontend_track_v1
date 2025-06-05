@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
-import { PageWrapper } from "../components/PageWrapper";
 import { useParams } from "react-router-dom";
 import { fetchEvent } from "../services/EventService"; // Import the service
+import Content from "../components/Content";
 
 
 export default function EventPage() {
@@ -38,7 +38,7 @@ export default function EventPage() {
 
   // ✅ RETURN the JSX to ensure React renders it
     return (
-      <PageWrapper 
+      <Content 
         pageTitle={"Event"}
         loading={loading} 
         error={error}

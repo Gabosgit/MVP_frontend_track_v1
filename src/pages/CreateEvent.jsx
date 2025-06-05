@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useParams } from "react-router-dom";
-import { PageWrapper } from "../components/PageWrapper";
 import { useNavigate } from "react-router-dom";
+import Content from "../components/Content";
 
 export default function CreateEvent() {
     const apiBaseUrl = useContext(ApiContext);
@@ -102,7 +102,7 @@ export default function CreateEvent() {
 
     // ✅ RETURN the JSX to ensure React renders it
     return (
-        <PageWrapper 
+        <Content 
             pageName={"Create Event"}
             htmlContent={
                 <CreateEventContent

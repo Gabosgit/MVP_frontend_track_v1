@@ -1,9 +1,9 @@
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
 import Carousel from "../components/Carousel";
 
 export default function About() {
   return (
-  <PageWrapper
+  <Content
     htmlContent={<AboutContent />} 
   />
   )

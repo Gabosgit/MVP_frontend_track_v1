@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { Link } from "react-router-dom";
 import { getUserData } from "../services/getUserData";
-import { PageWrapper } from "../components/PageWrapper";
+import Content from "../components/Content";
+
 
 export default function Dashboard() {
   const apiBaseUrl = useContext(ApiContext);
@@ -28,7 +29,7 @@ export default function Dashboard() {
 
   // ✅ RETURN the JSX to ensure React renders it
       return (
-          <PageWrapper 
+          <Content 
               pageName={"Dashboard"}
               loading={loading} 
               error={error}
