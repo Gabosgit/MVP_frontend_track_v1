@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 // Display load, error, or htmlContent
-export default function Content({loading, error, htmlContent }) {
+export default function Content({pageName, loading, error, htmlContent }) {
+    const { user, setUser } = useContext(AuthContext);
+    const { pathname } = location;
+
     if (loading) {
       return (
         <div className="flex justify-center items-center h-64">
@@ -22,9 +26,21 @@ export default function Content({loading, error, htmlContent }) {
     }
   
     return (
-      <div className="flex flex-col items-center">
-        {htmlContent}
-      </div>
+      <>
+        {user && user.username && pathname !== "/sign_up" && pathname !== "/login" && pathname !== "/about" && 
+            <div className="flex flex-col items-end mt-[100px] mr-20">
+                {/*<p>Hello {user.username}, you are in section</p>*/}
+                <p>Hello {user.username}, you are in section</p>
+                <div className="h-[75px] text-3xl md:text-5xl lg:text-6xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
+                    {pageName}
+                </div>
+            </div>
+        }
+        <div className="flex flex-col items-center min-h-screen">
+          {htmlContent}
+        </div>
+      </>
+      
     );
   }
   

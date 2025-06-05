@@ -79,16 +79,6 @@ export default function Navbar({pageName}) {
                 </div>
             </nav>
         </div>
-        
-        {user && user.username && 
-            <div className="flex flex-col items-end mt-[100px] mr-20">
-                {/*<p>Hello {user.username}, you are in section</p>*/}
-                <p>Hello {user.username}, you are in section</p>
-                <div className="h-[75px] text-3xl md:text-5xl lg:text-6xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
-                    {pageName}
-                </div>
-            </div>
-        }
     </div>
     
   );

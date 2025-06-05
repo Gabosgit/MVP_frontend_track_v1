@@ -139,10 +139,8 @@ function Carousel() {
 
       {/* Buttons below carousel */}
       <div className="flex flex-col sm:flex-row gap-5 justify-center mt-10 animate-slideInUp [animation-delay:0.4s]">
-        <Link to="/sign_up">
-          <a className="btn btn-primary bg-gradient-to-r from-custom-purple-start to-custom-purple-end text-white py-3 px-8 rounded-xl font-semibold hover:opacity-90 transition-opacity duration-300">
+        <Link to="/sign_up" className="btn btn-primary bg-gradient-to-r from-custom-purple-start to-custom-purple-end text-white py-3 px-8 rounded-xl font-semibold hover:opacity-90 transition-opacity duration-300">
             Get Started Free
-          </a>
         </Link>
         
         <a id="learn" href="#more" className="btn btn-secondary bg-custom-purple-start/10 text-custom-purple-start border-2 border-custom-purple-start/20 dark:bg-white/5 dark:text-indigo-300 dark:border-indigo-400/30 py-3 px-8 rounded-xl font-semibold hover:bg-custom-purple-start/20 transition-colors duration-300">
