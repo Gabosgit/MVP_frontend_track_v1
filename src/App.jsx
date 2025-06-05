@@ -14,8 +14,6 @@ import ContractPage from "./pages/ContractPage";
 import UserContracts from "./pages/UserContracts";
 import CreateEvent from "./pages/CreateEvent";
 import EventPage from "./pages/EventPage";
-import Footer from "./components/Footer";
-
 
 function App() {
   return (
@@ -40,9 +38,7 @@ function App() {
           <Route path="/contract/:contract_id/event/create" element={<CreateEvent />} />
           <Route path="contract/:contract_id/event/:event_id" element={<EventPage />} />
       </Routes>
-      <Footer />
     </>
-      
   );
 }
 

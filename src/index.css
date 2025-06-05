@@ -13,7 +13,7 @@ body {
     bg-gradient-to-br 
     from-[#f8f9ff] 
     to-[rgb(147,130,173)] 
-    min-h-screen 
+    min-h-screen
     w-screen 
     overflow-x-hidden
     transition-all 

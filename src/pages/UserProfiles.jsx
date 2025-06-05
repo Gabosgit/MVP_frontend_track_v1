@@ -67,7 +67,7 @@ export default function UserProfiles() {
   // ✅ RETURN the JSX to ensure React renders it
     return (
       <Content 
-        pageName={"Your Profiles"}
+        pageName={"Profiles"}
         loading={loading} 
         error={error}
         htmlContent={<UserProfilesContent profiles={profiles} />} 

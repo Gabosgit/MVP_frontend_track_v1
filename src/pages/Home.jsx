@@ -13,12 +13,12 @@ export default function Home() {
     );
 }
 
-
 function HomeContent() {
   return (
-    <div className="max-w-4xl p-4 text-center sm:p-8">
+    <div className="mt-52 max-w-4xl p-4 text-center sm:p-8">
         <a href="#">
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end animate-slideInUp text-transparent">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+            dark:from-dark-purple-start dark:to-dark-purple-end animate-slideInUp text-transparent">
               Professional Creative Platform
             </h1>
         </a>
@@ -35,8 +35,6 @@ function HomeContent() {
               Learn More
             </a>
         </div>
-
-        
     </div>
 
 

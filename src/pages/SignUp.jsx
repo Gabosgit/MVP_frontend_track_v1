@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
+import Content from "../components/Content";
 import axios from "axios";
 
 export default function SignUp() {
@@ -44,7 +45,7 @@ export default function SignUp() {
   };
 
   return (
-    <PageWrapper
+    <Content
       htmlContent={<SignUpContent 
         handleSubmit={handleSubmit} 
         form={form}
@@ -67,34 +68,54 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                 And start your journey with CreativePro.
             </p>
         </div>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" value="true"/>
             <div className="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label htmlFor="full-name" className="sr-only">Username</label>
-                    <input id="full-name" name="full-name" type="text" autoComplete="name" required
-                            className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
-                            rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
-                            dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
-                            placeholder="Username"/>
+                    <input 
+                      id="username"
+                      type="text"
+                      name="username"
+                      value={form.username}
+                      onChange={handleChange}
+                      placeholder="Username"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
+                                rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
+                               dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                    />
                 </div>
                 <div>
                     <label htmlFor="email-address" className="sr-only">Email address</label>
-                    <input id="email-address" name="email" type="email" autoComplete="email" required
+                    <input
+                      id="email_address"
+                      type="email"
+                      name="email_address"
+                      value={form.email_address}
+                      onChange={handleChange}
+                      placeholder="Email address"
+                      required
                       className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-dark-input-border placeholder-gray-500 
                       dark:placeholder-gray-400 text-gray-900 dark:text-dark-text bg-gray-50 dark:bg-dark-input-bg focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start 
                       dark:focus:ring-indigo-400 dark:focus:border-indigo-400 focus:z-10 sm:text-sm transition-colors"
-                      placeholder="Email address"
                     />
                 </div>
                 <div>
                     <label htmlFor="password" className="sr-only">Password</label>
-                    <input id="password" name="password" type="password" autoComplete="new-password" required
+                    <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    autoComplete="new-password"
+                    placeholder="Password"
+                    required
                       className="bg-gray-50 appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
                       focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
                       dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
                       dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400 transition-colors"
-                      placeholder="Password"
                     />
                 </div>
                 <div>

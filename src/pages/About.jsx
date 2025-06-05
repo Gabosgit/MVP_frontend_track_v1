@@ -15,7 +15,7 @@ function AboutContent() {
     <>
         <Carousel />
         
-        <section id="more" className="w-screen py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-dark-card">
+        <section id="more" className="flex min-h-screen w-screen items-center py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-dark-card">
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-12 sm:mb-16 animate-slideInUp">
                     <h2 className="text-3xl sm:text-4xl font-bold mb-5 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">

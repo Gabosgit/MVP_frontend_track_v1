@@ -9,8 +9,6 @@ function Carousel() {
   const dotsRef = useRef([]);
   let autoSlideInterval = useRef(null);
 
-
-
   // Function to update the carousel's position and active dot
   const updateCarousel = () => {
     if (carouselTrackRef.current && slidesRef.current.length > 0) {
@@ -66,20 +64,23 @@ function Carousel() {
   }, []); // Run only once on mount
 
   return (
-    <section className="relative w-full h-screen overflow-hidden py-16 sm:py-20">
+    <section className="mt-14 relative w-full min-h-screen overflow-hidden py-16 sm:py-20">
       <div className="carousel-container relative w-full">
         {/* Carousel Track: Holds all slides, moves horizontally */}
-        <div ref={carouselTrackRef} className="carousel-track flex my-40 transition-transform duration-500 ease-in-out">
+        <div ref={carouselTrackRef} className="carousel-track flex my-14 transition-transform duration-500 ease-in-out">
           
           {/* Slide 1 */}
           <div ref={(el) => (slidesRef.current[2] = el)} className="carousel-slide flex-shrink-0 w-full p-8 sm:p-12 flex items-center justify-center text-center">
             <div className="animate-slideInUp" style={{ animationDelay: '0.4s' }}>
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+              <div className='max-w-2xl'>
+                <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
                 Professional Creative Platform
-              </h1>
-              <p className="text-lg sm:text-xl lg:text-[1.3rem] mb-8 font-normal text-gray-700 dark:text-gray-400 max-w-3xl mx-auto">
-                Connect with top creatives, manage projects seamlessly, and grow your creative business with our comprehensive platform designed for professionals.
-              </p>
+                </h1>
+                <p className="text-lg sm:text-xl lg:text-[1.3rem] mb-8 font-normal text-gray-700 dark:text-gray-400 max-w-3xl mx-auto">
+                  Connect with top creatives, manage projects seamlessly, and grow your creative business with our comprehensive platform designed for professionals.
+                </p>
+              </div>
+              
             </div>
           </div>
           
@@ -87,12 +88,14 @@ function Carousel() {
           {/* Slide 2 */}
           <div ref={(el) => (slidesRef.current[0] = el)} className="carousel-slide flex-shrink-0 w-full p-8 sm:p-12 flex items-center justify-center text-center">
             <div className="max-w-3xl mx-auto animate-slideInUp">
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
-                About CreativePro
-              </h1>
-              <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-400 leading-relaxed">
-                Welcome to CreativePro! We are excited to introduce a project designed to revolutionize contract creation by making the entire process quicker, more transparent, and remarkably user-friendly.
-              </p>
+              <div className='max-w-2xl'>
+                <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+                  About CreativePro
+                </h1>
+                <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-400 leading-relaxed">
+                  Welcome to CreativePro! We are excited to introduce a project designed to revolutionize contract creation by making the entire process quicker, more transparent, and remarkably user-friendly.
+                </p>
+              </div>
             </div>
           </div>
           
@@ -100,25 +103,27 @@ function Carousel() {
           {/* Slide 3 */}
           <div ref={(el) => (slidesRef.current[1] = el)} className="carousel-slide flex-shrink-0 w-full p-8 sm:p-12 flex items-center justify-center text-center">
             <div className="animate-slideInUp" style={{ animationDelay: '0.2s' }}>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-5 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+              <div className='max-w-2xl'>
+                <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
                 Our Core Aim
-              </h2>
+              </h1>
               <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
                 Our project aims to simplify and significantly speed up the generation of professional contracts, all while ensuring absolute clarity and ease of understanding for everyone involved.
               </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Buttons */}
         <button
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-white dark:text-custom-purple-end p-3 rounded-full shadow-sm hover:bg-opacity-75 transition-colors duration-300 z-10 hidden sm:block"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-custom-purple-start dark:text-custom-purple-end p-3 rounded-full shadow-sm hover:bg-opacity-75 transition-colors duration-300 z-10 hidden sm:block"
           onClick={() => { showPrevSlide(); resetAutoSlide(); }}
         >
           &#10094; {/* Left arrow */}
         </button>
         <button
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-white dark:text-custom-purple-end p-3 rounded-full shadow-sm hover:bg-opacity-75 transition-colors duration-300 z-10 hidden sm:block"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-custom-purple-start dark:text-custom-purple-end p-3 rounded-full shadow-sm hover:bg-opacity-75 transition-colors duration-300 z-10 hidden sm:block"
           onClick={() => { showNextSlide(); resetAutoSlide(); }}
         >
           &#10095; {/* Right arrow */}
