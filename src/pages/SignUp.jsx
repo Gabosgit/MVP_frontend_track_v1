@@ -68,7 +68,7 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                 And start your journey with CreativePro.
             </p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" value="true"/>
             <div className="rounded-md shadow-sm -space-y-px">
@@ -151,8 +151,8 @@ function SignUpContent({handleSubmit, form, handleChange}) {
         <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
                 Already have an account? 
-                <Link to="/login" className="font-medium text-custom-purple-start hover:text-custom-purple-end dark:text-indigo-400 dark:hover:text-indigo-300">
-                  Log in
+                <Link to="/login" className="font-medium text-custom-purple-start hover:text-custom-purple-end 
+                dark:text-indigo-400 dark:hover:text-indigo-300"> Log in
                 </Link>
                 
             </p>

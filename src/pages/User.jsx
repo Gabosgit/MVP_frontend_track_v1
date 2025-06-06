@@ -9,13 +9,8 @@ function UserContent({ userData }) {
     return <div className="text-gray-500">No user data available.</div>;
 
   return (
-<div className="bg-transparent mt-20 p-8 pb-14 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
-      {/* Single Edit Profile Button at the top right */}
-      <div className="flex justify-end w-full">
-          <a href="#" className="inline-flex justify-center py-2.5 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5">
-              Edit
-          </a>
-      </div>
+<div className="bg-transparent mt-20 p-8 pb-14 backdrop-blur-lg rounded-2xl animate-slideInUp">
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-gray-700 dark:text-dark-text">
         {/* Personal Information Column */}
         <div className="space-y-4">
@@ -72,6 +67,12 @@ function UserContent({ userData }) {
             <span className="col-span-2 text-left">{userData.bank_account}</span>
           </div>
         </div>
+      </div>
+      {/* Single Edit Profile Button at the top right */}
+      <div className="flex justify-end w-full">
+          <a href="#" className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5">
+              Edit
+          </a>
       </div>
     </div>
   )

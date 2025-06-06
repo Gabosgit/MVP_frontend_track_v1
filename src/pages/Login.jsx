@@ -51,7 +51,10 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
             type="text" 
             name="username"
             id="username" 
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+            className="bg-gray-50 appearance-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
+                      focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
+                      dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
+                      dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400 transition-colors rounded-lg" 
             required />
         </div>
         <div>
@@ -64,13 +67,17 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
             placeholder="Enter your password"
             name="password" 
             id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+            className="bg-gray-50 appearance-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
+                      focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
+                      dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
+                      dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400 transition-colors rounded-lg"
             required />
         </div>
         <div className="flex items-start">
             <div className="flex items-start">
                 <div className="flex items-center h-5">
-                    <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                    <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 
+                    dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"/>
                 </div>
                 <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                   Remember me
@@ -85,8 +92,8 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
         </button>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Not registered? 
-            <Link to="/sign_up" className="text-custom-purple-start hover:underline dark:text-custom-purple-start">
-              Create account
+            <Link to="/sign_up" className="text-custom-purple-start hover:underline 
+            dark:text-custom-purple-start"> Create account
             </Link>
             
         </div>

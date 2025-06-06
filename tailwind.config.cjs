@@ -24,8 +24,8 @@ module.exports = {
         //Background Start/End
         'light-bg-start': '#f8f9ff', 
         'light-bg-end': 'rgb(147,130,173)',
-        'dark-bg-start': '#334775',
-        'dark-bg-end': '#040107',
+        'dark-bg-start': '#3d006a',
+        'dark-bg-end': '#050009',
         //'dark-bg-start': '#334775',
         //'dark-bg-end': '#3b2551',
 

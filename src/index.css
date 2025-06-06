@@ -67,8 +67,9 @@ body {
     text-white hover:opacity-80;
     /* Dark mode adjustments - Tailwind handles these automatically when dark mode is enabled */
     @apply
-     dark:from-indigo-400 
-     dark:to-purple-500 dark:hover:opacity-80;
+     dark:from-[#ba85f5]
+     dark:to-[#c2adff] dark:hover:opacity-80
+     dark:text-custom-purple-end;
   }
 
   .btn-secondary {
