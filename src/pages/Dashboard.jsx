@@ -11,21 +11,21 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await getUserData(apiBaseUrl);
-          setUserData(data);
-        } catch (error) {
-          setError(err.message);
-          window.location.href = "/login"; // Redirect if unauthorized
-        } finally {
-          setLoading(false);
-        }
-      };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUserData(apiBaseUrl);
+        setUserData(data);
+      } catch (error) {
+        setError(error.message);
+        window.location.href = "/login"; // Redirect if unauthorized
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchData();
-    }, []);
+    fetchData();
+  }, []);
 
   // ✅ RETURN the JSX to ensure React renders it
       return (

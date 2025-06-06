@@ -1,14 +1,35 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect, useRef} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Greeting from "./Greeting";
 
-export default function Navbar({pageName}) {
+
+export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange prop
   const [dark, setDark] = React.useState(false);
   const { user, setUser, loading } = useContext(AuthContext);
   const [themeStatus, seThemeStatus] = useState("☀️ Light");
   const location = useLocation(); // Get the current location object
   const currentPathname = location.pathname; // Extract the pathname
+  const navbarRef = useRef(null); // <-- Create a ref for the navbar element
+
+   // Effect to measure navbar height after render
+// Effect to measure navbar height after render and handle scroll
+    useEffect(() => {
+    console.log('Navbar useEffect ran.');
+    console.log('navbarRef.current at start of useEffect:', navbarRef.current);
+
+    if (navbarRef.current) {
+      console.log("navbarRef.current exists!");
+      const height = navbarRef.current.offsetHeight;
+      console.log(`Measured Navbar Height: ${height}px`); // This should now always show correct height
+      if (onHeightChange) {
+        onHeightChange(height);
+      }
+    } else {
+      console.log("navbarRef.current is null.");
+    }
+
+  }, [onHeightChange]);
   
   const darkModeHandler = () => {
       setDark(!dark);
@@ -27,7 +48,8 @@ export default function Navbar({pageName}) {
 
   return (
     <div>
-        <nav id="navbar" className="fixed top-0 left-0 right-0 w-full z-[1000] 
+        <nav ref={navbarRef} // <-- Ensure this ref is attached to your <nav> element
+        id="navbar" className="fixed top-0 left-0 right-0 w-full z-[1000] min-h-[80px]
         bg-white dark:bg-[#23003d] backdrop-blur-xl border-b border-gray-200/50 dark:border-dark-nav-border py-3.5 
         transition-all duration-300 ease-in-out">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
