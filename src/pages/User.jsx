@@ -13,62 +13,61 @@ function UserContent({ userData }) {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-gray-700 dark:text-dark-text">
         {/* Personal Information Column */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
+        <div className="card-data">
+          <h3 className="text-2xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
             Personal Information
           </h3>
 
           {/* Each data row now uses grid for alignment */}
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Status:</strong>
             <span className={`col-span-2 text-left ${userData.is_active ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               {userData.is_active ? 'Active' : 'Inactive'}
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Username:</strong>
             <span className="col-span-2 text-left">{userData.username}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Name:</strong>
             <span className="col-span-2 text-left">{userData.name}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Surname:</strong>
             <span className="col-span-2 text-left">{userData.surname}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Email:</strong>
             <span className="col-span-2 text-left">{userData.email_address}</span>
           </div>
         </div>
 
         {/* Account Details Column */}
-        <div className="space-y-4 md:mt-0 mt-8">
-          <h3 className="text-xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
+        <div className="card-data">
+          <h3 className="text-2xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
             Account Details
           </h3>
-
-          {/* Each data row now uses grid for alignment */}
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          {/* Each data row uses grid for alignment */}
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Type of Entity:</strong>
             <span className="col-span-2 text-left">{userData.type_of_entity}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Phone Number:</strong>
             <span className="col-span-2 text-left">{userData.phone_number}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">VAT ID:</strong>
             <span className="col-span-2 text-left">{userData.vat_id}</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-4 items-baseline">
+          <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Bank Account:</strong>
             <span className="col-span-2 text-left">{userData.bank_account}</span>
           </div>
         </div>
       </div>
-      {/* Single Edit Profile Button at the top right */}
+      {/* Edit Profile Button  */}
       <div className="flex justify-end w-full">
           <a href="#" className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5">
               Edit

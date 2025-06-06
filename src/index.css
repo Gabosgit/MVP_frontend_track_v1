@@ -97,6 +97,28 @@ body {
   .feature-icon-bg {
       @apply w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mx-auto mb-6 flex items-center justify-center text-3xl sm:text-4xl text-white shadow-lg transition-all duration-300 group-hover:scale-110;
   }
+
+  .card-data {
+      @apply
+      space-y-4 
+      md:mt-0 
+      mt-8 p-10
+      bg-slate-100
+      dark:bg-slate-900 
+      rounded-xl;
+  }
+
+  .data-field {
+    @apply
+    flex 
+    grid-cols-2
+    gap-2
+    items-baseline
+    bg-dark-purple-end
+    dark:bg-dark-purple-start
+    py-2 px-4
+    rounded-lg
+  }
 }
 
 
