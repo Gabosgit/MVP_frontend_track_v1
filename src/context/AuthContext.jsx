@@ -6,18 +6,18 @@ import {ApiContext} from "../context/ApiContext"
 
 // -- Manage an isAuthenticated state within AuthProvider that changes when a user logs in or out.
 export const AuthContext = createContext(
-  {
-    user: null,
-    setUser: () => {}, // Provide a default no-op function for context consumers
-    loading: true,
-    isAuthenticated: false, // Add isAuthenticated to context
+  // {
+  //   user: null,
+  //   setUser: () => {}, // Provide a default no-op function for context consumers
+  //   loading: true,
+  //   isAuthenticated: false, // Add isAuthenticated to context
 
-    // "no-op" ("no operation")
-    // Calling authContext.login() or authContext.logout() simply does nothing, 
-    // preventing a crash. It's a safer fallback.
-    login: () => {}, // Add login function to context. Default no-op for login
-    logout: () => {} // Add logout function to context. Default no-op for logout
-  }
+  //   // "no-op" ("no operation")
+  //   // Calling authContext.login() or authContext.logout() simply does nothing, 
+  //   // preventing a crash. It's a safer fallback.
+  //   login: () => {}, // Add login function to context. Default no-op for login
+  //   logout: () => {} // Add logout function to context. Default no-op for logout
+  // }
 );
 
 export function AuthProvider({ children }) {

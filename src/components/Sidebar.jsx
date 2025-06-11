@@ -11,14 +11,14 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
   const [isOpen, setIsOpen] = useState(false);
   const { user, loading, isAuthenticated, logout } = useContext(AuthContext);
   
-  const [userId, setUserId ] = useState("")
+  // const [userId, setUserId ] = useState("")
 
   // --- FIX: Use useEffect to set userId based on 'user' from context ---
-  useEffect(() => {
-    {user ? setUserId(user.id) : setUserId("")}
-  }, [user]); // Re-run this effect only when the 'user' object changes
+  // useEffect(() => {
+  //   {user ? setUserId(user.id) : setUserId("")}
+  // }, [user]); // Re-run this effect only when the 'user' object changes
   
-  console.log(`The User Data is: ${userId}`)
+  // console.log(`The User Data is: ${userId}`)
 
   
   // Define navigation links
@@ -27,8 +27,6 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
       title: 'Main',
       links: [
         { name: 'Dashboard', path: '/dashboard', icon: '🏠' },
-        { name: 'My Profiles', path: `/user/${userId}/profiles`, icon: '👤' },
-        { name: 'Contracts', path: '/contracts', icon: '📋' },
         { name: 'Projects', path: '/projects', icon: '💼' },
         { name: 'Messages', path: '/messages', icon: '💬' },
       ],
@@ -52,6 +50,14 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
       ],
     },
   ];
+
+  if (user && user.id) {
+    menuSections[0].links.splice(1, 0, ...[
+      { name: 'My Profiles', path: `/user/${user.id}/profiles`, icon: '👤' },
+      { name: 'Contracts', path: '/contracts', icon: '📋' },
+    ])
+  }
+
 
 
   const handleLogout = (e) => {
