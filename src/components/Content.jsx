@@ -12,7 +12,7 @@ export default function Content({pageName, loading, error, htmlContent }) {
         <div className="flex justify-center items-center h-64">
           <div className="w-12 h-12 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
         </div>
-        <div className="text-xl font-semibold ml-5">Loading ...</div>
+        <div className="text-xl font-semibold ml-5">Changing this ...</div>
       </div>
     );
   }
