@@ -24,6 +24,7 @@ export default function Content({pageName, loading, error, htmlContent }) {
       </div>
     );
   }
+  
 
   return (
       <>
