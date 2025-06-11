@@ -3,6 +3,8 @@ import React, { createContext, useState, useEffect, useCallback, useContext } fr
 import { getUserData } from "../services/getUserData";
 import { login as authServiceLogin } from "../services/AuthService"; // Your login service (renamed to avoid conflict)
 import {ApiContext} from "../context/ApiContext"
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection (assuming React Router v6+)
+
 
 // -- Manage an isAuthenticated state within AuthProvider that changes when a user logs in or out.
 export const AuthContext = createContext(
@@ -25,6 +27,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
+  const navigate = useNavigate(); // Initialize the navigate hook for redirection
   
 // --- Helper function to fetch user data and update state ---
   // Memoize with useCallback to prevent unnecessary re-creations,
@@ -95,7 +98,8 @@ export function AuthProvider({ children }) {
     setUser(null);
     setIsAuthenticated(false);
     console.log("AuthContext: User logged out.");
-    // Optionally: Redirect user after logout here or in the consuming component
+    // Redirect to the home page after logout
+    navigate('/'); // Use '/' for the home page
   }, []); // No dependencies needed for logout
 
 

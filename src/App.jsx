@@ -16,7 +16,7 @@ import ContractPage from "./pages/ContractPage";
 import UserContracts from "./pages/UserContracts";
 import CreateEvent from "./pages/CreateEvent";
 import EventPage from "./pages/EventPage";
-import { AuthProvider } from "./context/AuthContext";
+import './index.css'
 
 function App() {
   const [navbarHeight, setNavbarHeight] = useState(0); // <-- State to store navbar height
@@ -28,7 +28,7 @@ function App() {
 
   return (
     // THIS WRAPPING DIV IS CRUCIAL FOR THE LAYOUT
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Navbar onHeightChange={handleNavbarHeightChange} />
 
       {/* Main content area - needs padding-top */}

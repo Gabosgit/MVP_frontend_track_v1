@@ -2,23 +2,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection (assuming React Router v6+)
 
 
 export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight prop
   const location = useLocation();
-  const navigate = useNavigate(); // Initialize the navigate hook for redirection
   const [isOpen, setIsOpen] = useState(false);
   const { user, loading, isAuthenticated, logout } = useContext(AuthContext);
-  
-  // const [userId, setUserId ] = useState("")
-
-  // --- FIX: Use useEffect to set userId based on 'user' from context ---
-  // useEffect(() => {
-  //   {user ? setUserId(user.id) : setUserId("")}
-  // }, [user]); // Re-run this effect only when the 'user' object changes
-  
-  // console.log(`The User Data is: ${userId}`)
 
   
   // Define navigation links
@@ -53,8 +42,8 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
 
   if (user && user.id) {
     menuSections[0].links.splice(1, 0, ...[
-      { name: 'My Profiles', path: `/user/${user.id}/profiles`, icon: '👤' },
-      { name: 'Contracts', path: '/contracts', icon: '📋' },
+      { name: 'Profiles', path: `/user/${user.id}/profiles`, icon: '👤' },
+      { name: 'Contracts', path: `/user/${user.id}/contracts`, icon: '📋' },
     ])
   }
 
@@ -63,14 +52,9 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
   const handleLogout = (e) => {
     e.preventDefault(); // Prevent default form submission or link navigation
     if (window.confirm('Are you sure you want to logout?')) {
-      alert('Logging out...'); // This alert will show immediately
-
+      //alert('Logging out...'); // This alert will show immediately
       // Call the logout function from your AuthContext
       logout();
-
-      // Redirect to the home page after logout
-      navigate('/'); // Use '/' for the home page
-
     }
     setIsOpen(false); // Close the menu/modal after action
   };

@@ -6,7 +6,7 @@ import Greeting from "./Greeting";
 
 export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange prop
   const [dark, setDark] = React.useState(false);
-  const { user, setUser, loading } = useContext(AuthContext);
+  const { user, setUser, loading, logout } = useContext(AuthContext);
   const [themeStatus, seThemeStatus] = useState("☀️ Light");
   const location = useLocation(); // Get the current location object
   const currentPathname = location.pathname; // Extract the pathname
@@ -38,11 +38,13 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
       !dark ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setIsMobileMenuOpen(false);
-    navigate("/");
+  const handleLogout = (e) => {
+    e.preventDefault(); // Prevent default form submission or link navigation
+    if (window.confirm('Are you sure you want to logout?')) {
+      //alert('Logging out...'); // This alert will show immediately
+      // Call the logout function from your AuthContext
+      logout();
+    }
   };
 
 
