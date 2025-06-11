@@ -1,23 +1,33 @@
 // src/components/Sidebar.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from "../context/useAuth"
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection (assuming React Router v6+)
+
 
 export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight prop
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize the navigate hook for redirection
   const [isOpen, setIsOpen] = useState(false);
-  const { userData, setUserData } = useAuth
+  const { user, loading, isAuthenticated, logout } = useContext(AuthContext);
+  
+  const [userId, setUserId ] = useState("")
 
-  {{console.log(userData)}}
-
+  // --- FIX: Use useEffect to set userId based on 'user' from context ---
+  useEffect(() => {
+    {user ? setUserId(user.id) : setUserId("")}
+  }, [user]); // Re-run this effect only when the 'user' object changes
+  
+  console.log(`The User Data is: ${userId}`)
 
   
-  // Define your navigation links
+  // Define navigation links
   const menuSections = [
     {
       title: 'Main',
       links: [
         { name: 'Dashboard', path: '/dashboard', icon: '🏠' },
+        { name: 'My Profiles', path: `/user/${userId}/profiles`, icon: '👤' },
         { name: 'Contracts', path: '/contracts', icon: '📋' },
         { name: 'Projects', path: '/projects', icon: '💼' },
         { name: 'Messages', path: '/messages', icon: '💬' },
@@ -45,19 +55,22 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
 
 
   const handleLogout = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission or link navigation
     if (window.confirm('Are you sure you want to logout?')) {
-      alert('Logging out...');
-      // Implement your actual logout logic here
+      alert('Logging out...'); // This alert will show immediately
+
+      // Call the logout function from your AuthContext
+      logout();
+
+      // Redirect to the home page after logout
+      navigate('/'); // Use '/' for the home page
+
     }
-    setIsOpen(false);
+    setIsOpen(false); // Close the menu/modal after action
   };
 
   return (
-    
     <>
-      {/* Hamburger Button: Position it relative to the Navbar, or adjust its top offset */}
-      {/* If your Navbar itself contains the hamburger, this button might move into Navbar.jsx */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-3.5 left-8 z-[1050] p-2 rounded-md dark:bg-opacity-40

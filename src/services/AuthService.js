@@ -8,7 +8,6 @@ export const login = async (username, password, apiBaseUrl) => {
     params.append("password", password);
 
     const response = await axios.post(`${apiBaseUrl}/token`, params, {
-    // const response = await axios.post(`${process.env.API_BASE_URL}/${token}`, params, {
 
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

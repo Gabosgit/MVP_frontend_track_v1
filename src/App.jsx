@@ -16,6 +16,7 @@ import ContractPage from "./pages/ContractPage";
 import UserContracts from "./pages/UserContracts";
 import CreateEvent from "./pages/CreateEvent";
 import EventPage from "./pages/EventPage";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   const [navbarHeight, setNavbarHeight] = useState(0); // <-- State to store navbar height
@@ -32,8 +33,8 @@ function App() {
 
       {/* Main content area - needs padding-top */}
       <main
-        className="flex-1 p-4" // flex-1 makes it take remaining height
-        style={{ paddingTop: navbarHeight > 0 ? `${navbarHeight}px` : '0px' }} // Dynamic padding
+        //className="flex-1 p-4" // flex-1 makes it take remaining height
+        //style={{ paddingTop: navbarHeight > 0 ? `${navbarHeight}px` : '0px' }} // Dynamic padding
       >
         <Routes>
           {/* Your Routes */}
@@ -54,7 +55,6 @@ function App() {
           <Route path="contract/:contract_id/event/:event_id" element={<EventPage />} />
         </Routes>
       </main>
-
       {/* Sidebar is fixed, so it doesn't need to be inside the flex container to work. */}
       {/* However, the flex container for main is important for ensuring it takes space. */}
       <Sidebar navbarHeight={navbarHeight} />

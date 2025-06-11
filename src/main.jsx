@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ApiProvider } from "./context/ApiContext";
+import Sidebar from './components/Sidebar.jsx';
 import App from './App.jsx'
 
 

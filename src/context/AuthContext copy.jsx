@@ -1,32 +1,26 @@
-// -- Added useCallback
+// src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
-import { getUserData } from "../services/getUserData";
-import { login as authServiceLogin } from "../services/AuthService"; // Your login service (renamed to avoid conflict)
-import {ApiContext} from "../context/ApiContext"
+import { getUserData } from "../services/getUserData"; // <-- Your getUserData service
+import { login as authServiceLogin } from "../services/login"; // Your login service (renamed to avoid conflict)
+import { ApiContext } from "../context/ApiContext"; // Assuming this provides your API base URL
 
-// -- Manage an isAuthenticated state within AuthProvider that changes when a user logs in or out.
-export const AuthContext = createContext(
-  {
-    user: null,
-    setUser: () => {}, // Provide a default no-op function for context consumers
-    loading: true,
-    isAuthenticated: false, // Add isAuthenticated to context
-
-    // "no-op" ("no operation")
-    // Calling authContext.login() or authContext.logout() simply does nothing, 
-    // preventing a crash. It's a safer fallback.
-    login: () => {}, // Add login function to context. Default no-op for login
-    logout: () => {} // Add logout function to context. Default no-op for logout
-  }
-);
+// Define the shape of the context value for better autocompletion and default values
+export const AuthContext = createContext({
+  user: null,
+  setUser: () => {},
+  loading: true,
+  isAuthenticated: false,
+  login: async () => {}, // Default no-op for login
+  logout: () => {},     // Default no-op for logout
+});
 
 export function AuthProvider({ children }) {
-  const apiBaseUrl = useContext(ApiContext);
+  const apiBaseUrl = useContext(ApiContext); // Get apiBaseUrl from ApiContext
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
-  
-// --- Helper function to fetch user data and update state ---
+
+  // --- Helper function to fetch user data and update state ---
   // Memoize with useCallback to prevent unnecessary re-creations,
   // especially if passed down to useEffect or other components.
   const fetchAndSetUser = useCallback(async () => {
@@ -35,7 +29,7 @@ export function AuthProvider({ children }) {
 
     if (token) {
       try {
-        const userData = await getUserData(apiBaseUrl); // Use getUserData service
+        const userData = await getUserData(apiBaseUrl); // Use your getUserData service
         setUser(userData);
         setIsAuthenticated(true);
         console.log("AuthContext: User data fetched and set.");
@@ -54,16 +48,12 @@ export function AuthProvider({ children }) {
     setLoading(false); // Indicate loading has finished
   }, [apiBaseUrl]); // Depend on apiBaseUrl, as getUserData uses it
 
-
-
   // --- useEffect for initial load/re-authentication check ---
   useEffect(() => {
     // This effect runs once on mount to check for an existing session
     // and whenever fetchAndSetUser changes (which is only if apiBaseUrl changes)
     fetchAndSetUser();
   }, [fetchAndSetUser]); // This dependency means it re-runs if fetchAndSetUser definition changes
-
-
 
   // --- Login Function to be exposed via context ---
   const login = useCallback(async (username, password) => {
@@ -87,8 +77,6 @@ export function AuthProvider({ children }) {
     }
   }, [apiBaseUrl, fetchAndSetUser]); // Depend on apiBaseUrl and fetchAndSetUser
 
-
-
   // --- Logout Function to be exposed via context ---
   const logout = useCallback(() => {
     localStorage.removeItem("token");
@@ -98,8 +86,6 @@ export function AuthProvider({ children }) {
     // Optionally: Redirect user after logout here or in the consuming component
   }, []); // No dependencies needed for logout
 
-
-  
   // --- Context value to be provided to consumers ---
   const contextValue = {
     user,

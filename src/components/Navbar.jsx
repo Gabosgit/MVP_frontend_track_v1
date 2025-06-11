@@ -15,13 +15,13 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
    // Effect to measure navbar height after render
 // Effect to measure navbar height after render and handle scroll
     useEffect(() => {
-    console.log('Navbar useEffect ran.');
-    console.log('navbarRef.current at start of useEffect:', navbarRef.current);
+    //console.log('Navbar useEffect ran.');
+    //console.log('navbarRef.current at start of useEffect:', navbarRef.current);
 
     if (navbarRef.current) {
-      console.log("navbarRef.current exists!");
+      //console.log("navbarRef.current exists!");
       const height = navbarRef.current.offsetHeight;
-      console.log(`Measured Navbar Height: ${height}px`); // This should now always show correct height
+      //console.log(`Measured Navbar Height: ${height}px`); // This should now always show correct height
       if (onHeightChange) {
         onHeightChange(height);
       }

@@ -6,8 +6,9 @@
 /* Define your custom components/classes here */
 
 body {
+  box-sizing: border-box;
   @apply 
-    font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] 
+    font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif]
     text-gray-700 
     backdrop-blur-xl 
     bg-gradient-to-br 
