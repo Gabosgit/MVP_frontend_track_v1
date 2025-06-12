@@ -46,6 +46,7 @@ function CreateDashboardContent({userData}) {
 
   return(
     <div className="grid grid-cols-1 max-w-screen-xl mt-16">
+
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
                 <div className="flex justify-between items-center mb-6">
@@ -133,61 +134,48 @@ function CreateDashboardContent({userData}) {
             </div>
         </div>
 
-        <div className="grid mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="order-1 flex flex-col px-10">
-                    <h4 className="font-bold text-lg text-gray-900 dark:text-white">
-                        Start creating a profile
-                    </h4>
-                    <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 mt-2 space-y-1">
-                        <li>You can create many profiles to offer different services.</li>
-                        <li>Add detailed information about your projects.</li>
-                        <li>Select a profile to make contracts with other users.</li>
-                    </ul>
+        <h2 className="font-bold text-2xl text-center mt-20">QUICK START</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            <div className="order-2 md:order-3 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
+                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl mb-4">
+                    👤
                 </div>
-
-                <div className="order-3 md:order-2 flex flex-col px-10">
-                    <h4 className="font-bold text-lg text-gray-900 dark:text-white">
-                        Draft a contract
-                    </h4>
-                    <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 mt-2 space-y-1">
-                        <li>Ensure you enter the mandatory fields.</li>
-                        <li>Add events and milestones to the contract.</li>
-                        <li>Once ready, send it to your client for approval.</li>
-                    </ul>
-                </div>
-
-                <div className="order-2 md:order-3 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
-                    <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl mb-4">
-                        👤
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
-                        Create Profile
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        Set up a new professional profile to showcase your services.
-                    </p>
-                    <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
-                        Get Started
-                    </a>
-                </div>
-
-                <div className="order-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
-                    <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-3xl mb-4">
-                        📋
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
-                        Create Contract
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        Generate professional contracts with our templates.
-                    </p>
-                    <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
-                        New Contract
-                    </a>
-                </div>
-
+                <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
+                    Create Profile
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Set up a new professional profile to showcase your services.
+                </p>
+                <ul className="flex flex-col py-10 list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <li>You can create many profiles to offer different services.</li>
+                    <li>Add detailed information about your projects.</li>
+                    <li>Select a profile to make contracts with other users.</li>
+                </ul>
+                <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                    Get Started
+                </a>
             </div>
+
+            <div className="order-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
+                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-3xl mb-4">
+                    📋
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
+                    Create Contract
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    Generate professional contracts with our templates.
+                </p>
+                <ul className="flex flex-col py-10 list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <li>Ensure you enter the mandatory fields.</li>
+                    <li>Add events and milestones to the contract.</li>
+                    <li>Once ready, send it to your client for approval.</li>
+                </ul>
+                <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                    New Contract
+                </a>
+            </div>
+
         </div>
     </div>
     
