@@ -2,15 +2,21 @@ import React, { useContext, useState, useEffect, useRef} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Greeting from "./Greeting";
+import Sidebar from "./SideBar";
 
 
-export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange prop
+export default function Navbar() { // <-- Accept onHeightChange prop
   const [dark, setDark] = React.useState(false);
   const { user, setUser, loading, logout } = useContext(AuthContext);
   const [themeStatus, seThemeStatus] = useState("☀️ Light");
   const location = useLocation(); // Get the current location object
   const currentPathname = location.pathname; // Extract the pathname
   const navbarRef = useRef(null); // <-- Create a ref for the navbar element
+  
+
+  const [navbarHeight, setNavbarHeight] = useState(0); // <-- State to store navbar height
+  const [isOpen, setIsOpen] = useState(false);
+
 
    // Effect to measure navbar height after render
 // Effect to measure navbar height after render and handle scroll
@@ -19,17 +25,12 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
     //console.log('navbarRef.current at start of useEffect:', navbarRef.current);
 
     if (navbarRef.current) {
-      //console.log("navbarRef.current exists!");
-      const height = navbarRef.current.offsetHeight;
       //console.log(`Measured Navbar Height: ${height}px`); // This should now always show correct height
-      if (onHeightChange) {
-        onHeightChange(height);
-      }
-    } else {
-      console.log("navbarRef.current is null.");
+        setNavbarHeight(navbarRef.current.offsetHeight);
+
     }
 
-  }, [onHeightChange]);
+  }, []);
   
   const darkModeHandler = () => {
       setDark(!dark);
@@ -52,15 +53,38 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
     <div>
         <nav ref={navbarRef} // <-- Ensure this ref is attached to your <nav> element
         id="navbar" className="fixed top-0 left-0 right-0 w-full z-[1000] min-h-[80px]
-        bg-gradient-to-br from-[#f8f9ff] to-[rgb(147,130,173)] dark:from-[#23003d] dark:to-[#12061c] backdrop-blur-xl border-b border-gray-200/50 dark:border-dark-nav-border py-3.5 
+        bg-gradient-to-br from-[#f8f9ff] to-[rgb(147,130,173)] 
+        dark:from-[#23003d] dark:to-[#12061c] backdrop-blur-xl  py-3.5 
         transition-all duration-300 ease-in-out">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <div className="text-3xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end text-transparent">
-                    CreativePro
-                </div>
 
-                <div className="nav-links hidden md:flex items-center space-x-8">
-                    
+            <div className="flex px-4 sm:px-6 lg:px-8 justify-between items-center">
+
+                <div className="flex gap-6">
+
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="top-3.5 left-8 z-[1050] p-2 rounded-md dark:bg-opacity-40
+                                bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border dark:border-custom-purple-end
+                                shadow-lg transition-colors duration-200 focus:outline-none focus:bg-custom-purple-start focus:bg-opacity-5"
+                        aria-label="Toggle sidebar"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                        ></path>
+                        </svg>
+                    </button>
+                
+                    <div className="ml-0 xl:ml-40  text-3xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end text-transparent">
+                        CreativePro
+                    </div>
+                </div>
+                
+                <div className="xl:mr-44 nav-links hidden md:flex items-center space-x-8">
+
                     <Greeting />
 
                     {!user && (
@@ -89,7 +113,7 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
                     {user && (
                         <>
                             <Link to="/dashboard" 
-                                className="bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+                                className="hidden lg:flex bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
                                 font-semibold rounded-lg text-sm px-5 py-2.5 text-center">
                                     Dashboard
                             </Link>
@@ -101,9 +125,21 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
                     <Link onClick={darkModeHandler} className="nav-link-item text-gray-700 dark:text-gray-300 hover:text-custom-purple-start dark:hover:text-indigo-400 font-medium transition-all duration-300 relative after:content-[''] after:absolute after:-bottom-1.5 after:left-0 after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-custom-purple-start after:to-custom-purple-end after:transition-all after:duration-300 hover:after:w-full hover:-translate-y-px">
                             {themeStatus}
                     </Link>
+
                 </div>
+
             </div>
+
         </nav>
+        <Sidebar navbarHeight={navbarHeight} isOpen={isOpen}/>
+        {/* Sidebar Overlay (Dark backdrop when sidebar is open) */}
+        {isOpen && (
+            <div
+            id="sidebarOverlay"
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999] opacity-100 visible transition-opacity duration-300"
+            ></div>
+        )}
     </div>
   );
 }

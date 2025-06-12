@@ -1,7 +1,8 @@
 import Footer from "./Footer";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-
+import BackButton from "./BackButton"
+ 
 // Display load, error, or htmlContent
 export default function Content({pageName, loading, error, htmlContent }) {
   const { user, setUser } = useContext(AuthContext);
@@ -30,16 +31,22 @@ export default function Content({pageName, loading, error, htmlContent }) {
       <>
         <div className="flex flex-col min-h-screen justify-between">
           <div className="flex flex-col items-center w-screen pb-32">
+            
             {user && (
-            <div className="flex mt-24 w-full justify-end pr-[18%]">
-              <p className="text-xl text-right font-semibold">
-                You are in the section<br />
-                <span className="text-4xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
-              dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
-                  {pageName}
-                </span>
-              </p>
-            </div>
+              <>
+                
+                <div className="flex mt-24 w-2/3 justify-between">
+                  <BackButton />
+                  <p className="text-xl text-right font-semibold">
+                    You are in the section<br />
+                    <span className="text-4xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+                  dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
+                      {pageName}
+                    </span>
+                  </p>
+                </div>
+              </>
+            
             )}
 
             {htmlContent}

@@ -4,10 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 
-export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight prop
+export default function Sidebar({ navbarHeight, isOpen }) { // <-- Accept navbarHeight prop
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
   const { user, loading, isAuthenticated, logout } = useContext(AuthContext);
+  
 
   
   // Define navigation links
@@ -31,6 +31,7 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
     {
       title: 'Account',
       links: [
+        { name: 'User Data', path: '/user', icon: '👤' },
         { name: 'Settings', path: '/settings', icon: '⚙️' },
         { name: 'Preferences', path: '/preferences', icon: '🎨' },
         { name: 'Billing', path: '/billing', icon: '💳' },
@@ -42,7 +43,7 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
 
   if (user && user.id) {
     menuSections[0].links.splice(1, 0, ...[
-      { name: 'Profiles', path: `/user/${user.id}/profiles`, icon: '👤' },
+      { name: 'Profiles', path: `/user/${user.id}/profiles`, icon: '🗂️' },
       { name: 'Contracts', path: `/user/${user.id}/contracts`, icon: '📋' },
     ])
   }
@@ -61,31 +62,7 @@ export default function Sidebar({ navbarHeight }) { // <-- Accept navbarHeight p
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-3.5 left-8 z-[1050] p-2 rounded-md dark:bg-opacity-40
-                   bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border dark:border-custom-purple-end
-                   shadow-lg transition-colors duration-200 focus:outline-none focus:bg-custom-purple-start focus:bg-opacity-5"
-        aria-label="Toggle sidebar"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-          ></path>
-        </svg>
-      </button>
-
-      {/* Sidebar Overlay (Dark backdrop when sidebar is open) */}
-      {isOpen && (
-        <div
-          id="sidebarOverlay"
-          onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999] opacity-100 visible transition-opacity duration-300"
-        ></div>
-      )}
+      
 
       {/* Sidebar Menu */}
       <aside

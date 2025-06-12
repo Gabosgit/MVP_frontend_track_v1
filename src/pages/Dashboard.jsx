@@ -50,8 +50,12 @@ function CreateDashboardContent({userData}) {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl title-gradient font-bold">My Profiles</h2>
-                    <a href="#" className="text-sm font-semibold text-brand-indigo hover:underline">View All</a>
+                    <h2 className="text-2xl title-gradient font-bold">
+                        My Profiles
+                    </h2>
+                    <Link to={`/user/${userData?.id}/profiles`} className="text-sm font-semibold text-brand-indigo hover:underline">
+                        View All
+                    </Link>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -65,10 +69,12 @@ function CreateDashboardContent({userData}) {
                         <h4 className="font-semibold text-gray-800 dark:text-white">Wedding Planner</h4>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Luxury Weddings</p>
                     </div>
-                    <div className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
-                        <i className="fas fa-plus text-3xl mb-2"></i>
+                    <Link to="/profile/create" 
+                            className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl 
+                            flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
+                        <div className="text-3xl">➕</div> 
                         <p className="font-semibold">Add New</p>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 text-center">
@@ -90,7 +96,9 @@ function CreateDashboardContent({userData}) {
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold title-gradient">Contracts</h2>
-                    <a href="#" className="text-sm font-semibold text-brand-indigo hover:underline">View All</a>
+                    <Link to={`/user/${userData?.id}/contracts`} className="text-sm font-semibold text-brand-indigo hover:underline">
+                        View All
+                    </Link>
                 </div>
                 
                 <div className="space-y-4 mb-6">
@@ -135,45 +143,47 @@ function CreateDashboardContent({userData}) {
         </div>
 
         <h2 className="font-bold text-2xl text-center mt-20">QUICK START</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 text-gray-900 dark:text-white">
             <div className="order-2 md:order-3 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
-                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl mb-4">
+                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-4">
                     👤
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
                     Create Profile
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-semibold text-stone-800">
                     Set up a new professional profile to showcase your services.
                 </p>
-                <ul className="flex flex-col py-10 list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <ul className="flex flex-col py-10 text-left list-disc list-inside text-sm space-y-1
+                                 text-gray-500 dark:text-gray-400">
                     <li>You can create many profiles to offer different services.</li>
                     <li>Add detailed information about your projects.</li>
                     <li>Select a profile to make contracts with other users.</li>
                 </ul>
-                <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                <Link to="/profile/create" className="btn-primary w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
                     Get Started
-                </a>
+                </Link>
             </div>
 
             <div className="order-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 text-center flex flex-col items-center justify-center interactive-card">
-                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-3xl mb-4">
+                <div className="icon-gradient w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-4">
                     📋
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
                     Create Contract
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <p className="text-sm font-semibold text-stone-800">
                     Generate professional contracts with our templates.
                 </p>
-                <ul className="flex flex-col py-10 list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <ul className="flex flex-col py-10 text-left list-disc list-inside text-sm space-y-1
+                                 text-gray-500 dark:text-gray-400">
                     <li>Ensure you enter the mandatory fields.</li>
                     <li>Add events and milestones to the contract.</li>
                     <li>Once ready, send it to your client for approval.</li>
                 </ul>
-                <a href="#" className="btn-primary w-full text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                <Link to="/contract/create" className="btn-primary w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
                     New Contract
-                </a>
+                </Link>
             </div>
 
         </div>
