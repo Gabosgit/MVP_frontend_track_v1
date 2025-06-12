@@ -32,8 +32,8 @@ export default function Content({pageName, loading, error, htmlContent }) {
           <div className="flex flex-col items-center w-screen pb-32">
             {user && (
             <div className="flex mt-24 w-full justify-end pr-[18%]">
-              <p className="text-xl text-right font-semibold text-gray-500">
-                You are in the section: <br />
+              <p className="text-xl text-right font-semibold">
+                You are in the section<br />
                 <span className="text-4xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
               dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
                   {pageName}

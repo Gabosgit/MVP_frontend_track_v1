@@ -52,7 +52,7 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
     <div>
         <nav ref={navbarRef} // <-- Ensure this ref is attached to your <nav> element
         id="navbar" className="fixed top-0 left-0 right-0 w-full z-[1000] min-h-[80px]
-        bg-white dark:bg-[#23003d] backdrop-blur-xl border-b border-gray-200/50 dark:border-dark-nav-border py-3.5 
+        bg-gradient-to-br from-[#f8f9ff] to-[rgb(147,130,173)] dark:from-[#23003d] dark:to-[#12061c] backdrop-blur-xl border-b border-gray-200/50 dark:border-dark-nav-border py-3.5 
         transition-all duration-300 ease-in-out">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <div className="text-3xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end text-transparent">
@@ -81,15 +81,17 @@ export default function Navbar({onHeightChange}) { // <-- Accept onHeightChange 
                     )}
                     {!user && currentPathname !== "/sign_up" && (
                         <Link to="/sign_up" className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 hover:from-blue-500 hover:to-purple-600 hover:text-dark-purple-start dark:text-white dark:hover:text-dark-purple-start focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-                                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 hover:bg-gray-100 rounded-md group-hover:dark:bg-transparent">
+                                <span className="relative px-4 py-2 transition-all ease-in duration-75 bg-purple-200 dark:bg-gray-900 hover:bg-gray-100 rounded-md group-hover:dark:bg-transparent">
                                     Sign Up
                                 </span>
                         </Link>
                     )}
                     {user && (
                         <>
-                            <Link to="/dashboard" className="btn-primary font-semibold rounded-lg text-sm px-5 py-2.5 text-center">
-                                Dashboard
+                            <Link to="/dashboard" 
+                                className="bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+                                font-semibold rounded-lg text-sm px-5 py-2.5 text-center">
+                                    Dashboard
                             </Link>
                             <Link onClick={handleLogout} className="font-semibold text-[#b829ff] py-1 rounded">
                                 Logout

@@ -11,7 +11,7 @@ function UserContent({ userData }) {
   return (
 <div className="bg-transparent mt-20 p-8 pb-14 backdrop-blur-lg rounded-2xl animate-slideInUp">
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-gray-700 dark:text-dark-text">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
         {/* Personal Information Column */}
         <div className="card-data">
           <h3 className="text-2xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
@@ -68,8 +68,14 @@ function UserContent({ userData }) {
         </div>
       </div>
       {/* Edit Profile Button  */}
-      <div className="flex justify-end w-full">
-          <a href="#" className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5">
+      <div className="flex justify-center w-full mt-5">
+          <a href="#" className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md 
+          bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+          hover:from-custom-purple-end hover:to-custom-purple-start 
+          hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5 
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start 
+          dark:focus:ring-offset-dark-card
+          transition-all duration-300 ease-in-out " >
               Edit
           </a>
       </div>
