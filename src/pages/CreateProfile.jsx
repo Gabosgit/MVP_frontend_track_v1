@@ -10,13 +10,15 @@ export default function CreateProfile() {
     const navigate = useNavigate(); 
 
     // State variables for single fields:
-    const [name, setName] = useState("");
-    const [performanceType, setPerformanceType] = useState("");
-    const [description, setDescription] = useState("");
-    const [bio, setBio] = useState("");
-    const [stagePlan, setStagePlan] = useState("");
-    const [techRider, setTechRider] = useState("");
-    const [website, setWebsite] = useState("");
+    const [formSingle, setFormSingle] = useState({
+        name: "",
+        performanceType: "",
+        description: "",
+        bio: "",
+        stagePlan: "",
+        techRider: "",
+        website: ""
+    })
 
     // State variables for list fields:
     const [socialMedia, setSocialMedia] = useState([""]);
@@ -24,6 +26,13 @@ export default function CreateProfile() {
     const [videos, setVideos] = useState([""]);
     const [audios, setAudios] = useState([""]);
     const [onlinePress, setOnlinePress] = useState([""]);
+
+    function handleChangeSingle(event) {
+        console.log(event.target.name)
+        const tempFormSingle = {...formSingle}
+        tempFormSingle[event.target.name] = event.target.value
+        setFormSingle(tempFormSingle)
+    }
 
     // Helper for updating array-based fields:
     const handleArrayChange = (index, value, array, setArray) => {
@@ -42,14 +51,14 @@ export default function CreateProfile() {
 
         // Create the payload to match the API's expected dictionary:
         const payload = {
-        name,
-        performance_type: performanceType,
-        description,
-        bio,
-        website: website || null, // Optional fields set to null if empty
+        name:formSingle.name,
+        performance_type:formSingle.performanceType,
+        description: formSingle.description,
+        bio: formSingle.bio,
+        website: formSingle.website || null, // Optional fields set to null if empty
         social_media: socialMedia.filter((url) => url.trim() !== ""),
-        stage_plan: stagePlan || null,
-        tech_rider: techRider || null,
+        stage_plan: formSingle.stagePlan || null,
+        tech_rider: formSingle.techRider || null,
         photos: photos.filter((url) => url.trim() !== ""),
         videos: videos.filter((url) => url.trim() !== ""),
         audios: audios.filter((url) => url.trim() !== ""),
@@ -102,13 +111,14 @@ export default function CreateProfile() {
             pageName={"Create Profile"}
             htmlContent={
                 <CreateProfileContent 
-                    name={name} setName={setName} 
-                    performanceType={performanceType} setPerformanceType={setPerformanceType}
-                    description={description} setDescription={setDescription}
-                    bio={bio} setBio={setBio}
-                    website={website} setWebsite={setWebsite}
-                    stagePlan={stagePlan} setStagePlan={setStagePlan}
-                    techRider={techRider} setTechRider={setTechRider}
+                    handleChangeSingle={handleChangeSingle}
+                    name={formSingle.name}
+                    bio={formSingle.bio}
+                    description={formSingle.description}
+                    performanceType={formSingle.performanceType}
+                    techRider={formSingle.techRider}
+                    stagePlan={formSingle.stagePlan}
+                    website={formSingle.website}
                     socialMedia={socialMedia} setSocialMedia={setSocialMedia}
                     photos={photos} setPhotos={setPhotos}
                     videos={videos} setVideos={setVideos}
@@ -124,10 +134,8 @@ export default function CreateProfile() {
 
 
 function CreateProfileContent({
-    name, setName, performanceType, setPerformanceType, 
-    description, setDescription, bio, setBio, 
-    website, setWebsite, stagePlan, setStagePlan, 
-    techRider, setTechRider, socialMedia, setSocialMedia, 
+    handleChangeSingle, name, bio, description, stagePlan, techRider, performanceType, website,
+    socialMedia, setSocialMedia, 
     photos, setPhotos, videos, setVideos, audios, setAudios, 
     onlinePress, setOnlinePress, handleArrayChange, addArrayField, handleSubmit 
 }) {
@@ -142,9 +150,10 @@ function CreateProfileContent({
                     </label>
                     <input
                         id="name"
+                        name="name"
                         type="text"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={handleChangeSingle}
                         required
                         className="w-full border rounded px-3 py-2"
                     />
@@ -157,10 +166,11 @@ function CreateProfileContent({
                 </label>
                 <input
                     id="performanceType"
+                    name="performanceType"
                     type="text"
                     className="w-full border rounded px-3 py-2"
                     value={performanceType}
-                    onChange={(e) => setPerformanceType(e.target.value)}
+                    onChange={handleChangeSingle}
                     required
                 />
                 </div>
@@ -172,10 +182,11 @@ function CreateProfileContent({
                 </label>
                 <textarea
                     id="description"
+                    name="description"
                     className="w-full border rounded px-3 py-2"
                     rows="3"
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={handleChangeSingle}
                     required
                 />
                 </div>
@@ -187,10 +198,11 @@ function CreateProfileContent({
                 </label>
                 <textarea
                     id="bio"
+                    name="bio"
                     className="w-full border rounded px-3 py-2"
                     rows="3"
                     value={bio}
-                    onChange={(e) => setBio(e.target.value)}
+                    onChange={handleChangeSingle}
                     required
                 />
                 </div>
@@ -226,11 +238,12 @@ function CreateProfileContent({
                 </label>
                 <input
                     id="website"
+                    name="website"
                     type="url"
                     placeholder="https://example.com"
                     className="w-full border rounded px-3 py-2"
                     value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
+                    onChange={handleChangeSingle}
                 />
                 </div>
         
@@ -241,11 +254,12 @@ function CreateProfileContent({
                 </label>
                 <input
                     id="stagePlan"
+                    name="stagePlan"
                     type="url"
                     placeholder="https://example.com"
                     className="w-full border rounded px-3 py-2"
                     value={stagePlan}
-                    onChange={(e) => setStagePlan(e.target.value)}
+                    onChange={handleChangeSingle}
                 />
                 </div>
         
@@ -256,11 +270,12 @@ function CreateProfileContent({
                 </label>
                 <input
                     id="techRider"
+                    name="techRider"
                     type="url"
                     placeholder="https://example.com"
                     className="w-full border rounded px-3 py-2"
                     value={techRider}
-                    onChange={(e) => setTechRider(e.target.value)}
+                    onChange={handleChangeSingle}
                 />
                 </div>
         
