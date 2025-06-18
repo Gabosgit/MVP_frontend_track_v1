@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-console.log("Tailwind config is being loaded!"); // Add this line
 module.exports = {
   darkMode: 'class', // Make sure this is set for manual dark mode toggling
   content: [
