@@ -48,34 +48,37 @@ function CreateDashboardContent({userData}) {
     <div className="grid grid-cols-1 max-w-screen-xl mt-16">
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl title-gradient font-bold">
-                        My Profiles
-                    </h2>
-                    <Link to={`/user/${userData?.id}/profiles`} className="text-sm font-semibold text-brand-indigo hover:underline">
-                        View All
-                    </Link>
+            <div className="flex flex-col justify-between bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl title-gradient font-bold">
+                            Profiles
+                        </h2>
+                        <Link to={`/user/${userData?.id}/profiles`} className="text-sm font-semibold text-brand-indigo hover:underline">
+                            View All
+                        </Link>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
+                            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">ED</div>
+                            <h4 className="font-semibold text-gray-800 dark:text-white">Event Designer</h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Corporate Events</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
+                            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">WP</div>
+                            <h4 className="font-semibold text-gray-800 dark:text-white">Wedding Planner</h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Luxury Weddings</p>
+                        </div>
+                        <Link to="/profile/create" 
+                                className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl 
+                                flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
+                            <div className="text-3xl">➕</div> 
+                            <p className="font-semibold">Add New</p>
+                        </Link>
+                    </div>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
-                        <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">ED</div>
-                        <h4 className="font-semibold text-gray-800 dark:text-white">Event Designer</h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Corporate Events</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
-                        <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">WP</div>
-                        <h4 className="font-semibold text-gray-800 dark:text-white">Wedding Planner</h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Luxury Weddings</p>
-                    </div>
-                    <Link to="/profile/create" 
-                            className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl 
-                            flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
-                        <div className="text-3xl">➕</div> 
-                        <p className="font-semibold">Add New</p>
-                    </Link>
-                </div>
 
                 <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
@@ -93,35 +96,38 @@ function CreateDashboardContent({userData}) {
                 </div>
             </div>
 
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold title-gradient">Contracts</h2>
-                    <Link to={`/user/${userData?.id}/contracts`} className="text-sm font-semibold text-brand-indigo hover:underline">
-                        View All
-                    </Link>
-                </div>
+            <div className="flex flex-col justify-between bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
                 
-                <div className="space-y-4 mb-6">
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                        <div>
-                            <h4 className="font-semibold text-gray-800 dark:text-white">Summer Gala 2025</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">Tech Corp • $12,500</p>
-                        </div>
-                        <span className="text-xs font-bold py-1 px-3 rounded-full bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200">Active</span>
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-bold title-gradient">Contracts</h2>
+                        <Link to={`/user/${userData?.id}/contracts`} className="text-sm font-semibold text-brand-indigo hover:underline">
+                            View All
+                        </Link>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                        <div>
-                            <h4 className="font-semibold text-gray-800 dark:text-white">Johnson Wedding</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">Private Client • $8,750</p>
+                    
+                    <div className="space-y-4 mb-6">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
+                            <div>
+                                <h4 className="font-semibold text-gray-800 dark:text-white">Summer Gala 2025</h4>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Tech Corp • $12,500</p>
+                            </div>
+                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200">Active</span>
                         </div>
-                        <span className="text-xs font-bold py-1 px-3 rounded-full bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200">Pending</span>
-                    </div>
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                        <div>
-                            <h4 className="font-semibold text-gray-800 dark:text-white">Product Launch</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">StartupXYZ • $6,200</p>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
+                            <div>
+                                <h4 className="font-semibold text-gray-800 dark:text-white">Johnson Wedding</h4>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Private Client • $8,750</p>
+                            </div>
+                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200">Pending</span>
                         </div>
-                        <span className="text-xs font-bold py-1 px-3 rounded-full bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200">Draft</span>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
+                            <div>
+                                <h4 className="font-semibold text-gray-800 dark:text-white">Product Launch</h4>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">StartupXYZ • $6,200</p>
+                            </div>
+                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200">Draft</span>
+                        </div>
                     </div>
                 </div>
 
