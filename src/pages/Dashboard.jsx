@@ -157,7 +157,7 @@ function CreateDashboardContent({userData}) {
                 <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
                     Create Profile
                 </h3>
-                <p className="text-sm font-semibold text-stone-800">
+                <p className="text-sm font-semibold text-stone-800 dark:text-gray-400">
                     Set up a new professional profile to showcase your services.
                 </p>
                 <ul className="flex flex-col py-10 text-left list-disc list-inside text-sm space-y-1
@@ -178,7 +178,7 @@ function CreateDashboardContent({userData}) {
                 <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
                     Create Contract
                 </h3>
-                <p className="text-sm font-semibold text-stone-800">
+                <p className="text-sm font-semibold text-stone-800 dark:text-gray-400">
                     Generate professional contracts with our templates.
                 </p>
                 <ul className="flex flex-col py-10 text-left list-disc list-inside text-sm space-y-1

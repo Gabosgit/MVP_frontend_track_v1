@@ -18,7 +18,7 @@ export default function Greeting() {
                     Hello, {user.username}!
                 </h2>
                 <p>
-                    {user.type_of_entity} • Premium User
+                    {user.type_of_entity} • Premium member
                 </p>
             </div>
           </div>

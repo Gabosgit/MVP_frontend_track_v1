@@ -1,42 +1,76 @@
 import Content from "../components/Content";
-import '../index.css'
+import Carousel from "../components/Carousel";
 
-
-
-export default function Home() {
-
-  // ✅ RETURN the JSX to ensure React renders it
-    return (
-      <Content 
-        htmlContent={<HomeContent />} 
-      />
-    );
+export default function About() {
+  return (
+  <Content
+    htmlContent={<AboutContent />} 
+  />
+  )
+  
 }
 
-function HomeContent() {
+function AboutContent() {
   return (
-    <div className="mt-52 max-w-4xl p-4 text-center sm:p-8">
-        <a href="#">
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
-            dark:from-dark-purple-start dark:to-dark-purple-end animate-slideInUp text-transparent">
-              Professional Creative Platform
-            </h1>
-        </a>
-        <p className="text-lg sm:text-xl lg:text-[1.3rem]  mb-8 font-normal text-gray-700 dark:text-gray-400">
-          Connect with top creatives, manage projects seamlessly, and grow your creative business with our comprehensive platform designed for professionals.
-        </p>
+    <>
+        <Carousel />
+        
+        <section id="more" className="flex min-h-screen w-screen items-center py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-dark-card">
+            <div className="max-w-5xl mx-auto">
+                <div className="text-center mb-12 sm:mb-16 animate-slideInUp">
+                    <h2 className="text-3xl sm:text-4xl font-bold mb-5 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+                        How We Achieve It
+                    </h2>
+                    <p className="text-lg sm:text-xl text-gray-700 dark:text-dark-text-secondary max-w-2xl mx-auto">
+                        We focus on intuitive design and powerful tools to streamline your workflow.
+                    </p>
+                </div>
+                {/* Card left */}
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-12 items-start">
+                    <div className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl 
+                    transition-all ease-in-out duration-300 hover:shadow-2xl hover:-translate-y-1">
+                        <div className="feature-icon-bg">
+                            <span>🖥️</span>
+                        </div>
+                        <h3 className="text-2xl sm:text-3xl font-semibold mb-4 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+                            User-Friendly Interface 
+                        </h3>
+                        <p className="text-gray-600 dark:text-dark-text-secondary leading-relaxed">
+                            Our intuitive, user-friendly interface is crafted to guide you step-by-step, enabling effortless creation of both professional profiles and comprehensive contracts. Say goodbye to complexity!
+                        </p>
+                    </div>
+                    {/* Card right */}
+                    <div className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl
+                    transition-all ease-in-out duration-300 hover:shadow-2xl hover:-translate-y-1">
+                        <div className="feature-icon-bg">
+                            <span>🗓️</span>
+                        </div>
+                        <h3 className="text-2xl sm:text-3xl font-semibold mb-4 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+                            Smart Event Itinerary
+                        </h3>
+                        <p className="text-gray-600 dark:text-dark-text-secondary leading-relaxed">
+                            The innovative event itinerary feature empowers users to track all contract-related events, milestones, and deadlines with unparalleled ease and precision, ensuring you never miss a beat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div className="flex flex-col sm:flex-row gap-5 justify-center animate-slideInUp [animation-delay:0.4s]" >
-            <a href="#dashboard" className="btn btn-primary bg-gradient-to-r from-custom-purple-start to-custom-purple-end text-white">
-              Get Started Free
-            </a>
-
-            <a href="#features" className="btn btn-secondary bg-custom-purple-start/10 text-custom-purple-start border-2 border-custom-purple-start/20 dark:bg-white/5 dark:text-indigo-300 dark:border-indigo-400/30">
-              Learn More
-            </a>
-        </div>
-    </div>
-
-
+        <section className="text-center w-screen py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-transparent  backdrop-blur-md">
+            <div className="max-w-3xl mx-auto animate-slideInUp">
+                <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end">
+                    Join the Revolution
+                </h2>
+                <p className="text-lg sm:text-xl text-gray-700 dark:text-dark-text-secondary mb-10 leading-relaxed">
+                    CreativePro is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best – creating.
+                </p>
+                <a href="/sign_up"
+                   className="inline-block py-3.5 px-8 rounded-xl font-semibold text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card 
+                   transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-custom-purple-start/40 hover:-translate-y-1 text-base sm:text-lg">
+                    Get Started with CreativePro
+                </a>
+            </div>
+        </section>
+    </>
   );
 }
