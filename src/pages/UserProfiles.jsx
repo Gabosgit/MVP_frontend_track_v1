@@ -1,12 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
-import { ApiContext } from "../context/ApiContext";
-import Content from "../components/Content";
+import React from 'react';
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-// 1. Import the new service
-import { fetchUserProfiles } from "../services/profilesService"; 
+import { useParams } from 'react-router-dom';
+import { useUserProfiles } from '../hooks/useUserProfiles'; // Import custom hook
+import Content from '../components/Content';
 
-// This sub-component remains unchanged
+export default function UserProfiles() {
+  const { id } = useParams();
+  
+  // All the state management logic is handled by the custom hook useUserProfiles
+  const { profiles, loading, error } = useUserProfiles(id); // custom hook
+
+  return (
+    <Content 
+      pageName={"Profiles"}
+      loading={loading} 
+      error={error}
+      htmlContent={<UserProfilesContent profiles={profiles} />} 
+    />
+  );
+}
+
 function UserProfilesContent({ profiles }) {
   if (!profiles || profiles.length === 0) {
     return <div className="text-gray-500">No profiles found for this user.</div>;
@@ -23,42 +36,5 @@ function UserProfilesContent({ profiles }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-
-export default function UserProfiles() {
-  const apiBaseUrl = useContext(ApiContext);
-  const { id } = useParams();
-  const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // 2. The data fetching logic is now clean and simple
-    const loadProfiles = async () => {
-      try {
-        setLoading(true);
-        // 3. Call the service function with the required parameters
-        const userProfilesData = await fetchUserProfiles(apiBaseUrl, id);
-        setProfiles(userProfilesData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfiles();
-  }, [id, apiBaseUrl]); // Include apiBaseUrl as a dependency
-
-  // The JSX for rendering remains the same
-  return (
-    <Content 
-      pageName={"Profiles"}
-      loading={loading} 
-      error={error}
-      htmlContent={<UserProfilesContent profiles={profiles} />} 
-    />
   );
 }
