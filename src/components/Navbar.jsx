@@ -7,7 +7,7 @@ import Sidebar from "./SideBar";
 
 export default function Navbar() { // <-- Accept onHeightChange prop
   const [dark, setDark] = React.useState(false);
-  const { user, setUser, loading, logout } = useContext(AuthContext);
+  const { user, setUser, loading, logout, isAuthenticated } = useContext(AuthContext);
   const [themeStatus, seThemeStatus] = useState("☀️ Light");
   const location = useLocation(); // Get the current location object
   const currentPathname = location.pathname; // Extract the pathname
@@ -60,23 +60,25 @@ export default function Navbar() { // <-- Accept onHeightChange prop
             <div className="flex px-4 sm:px-6 lg:px-8 justify-between items-center">
 
                 <div className="flex gap-6">
-
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="top-3.5 left-8 z-[1050] p-2 rounded-md dark:bg-opacity-40
-                                bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border dark:border-custom-purple-end
-                                shadow-lg transition-colors duration-200 focus:outline-none focus:bg-custom-purple-start focus:bg-opacity-5"
-                        aria-label="Toggle sidebar"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                        ></path>
-                        </svg>
-                    </button>
+                    {isAuthenticated &&
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="top-3.5 left-8 z-[1050] p-2 rounded-md dark:bg-opacity-40
+                                    bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border dark:border-custom-purple-end
+                                    shadow-lg transition-colors duration-200 focus:outline-none focus:bg-custom-purple-start focus:bg-opacity-5"
+                            aria-label="Toggle sidebar"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                            ></path>
+                            </svg>
+                        </button>
+                    }
+                    
                 
                     <div className="ml-0 xl:ml-40  text-3xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end text-transparent">
                         CreativePro
@@ -131,7 +133,11 @@ export default function Navbar() { // <-- Accept onHeightChange prop
             </div>
 
         </nav>
-        <Sidebar navbarHeight={navbarHeight} isOpen={isOpen}/>
+        {isAuthenticated &&
+            <Sidebar navbarHeight={navbarHeight} isOpen={isOpen}/>
+
+        }
+        
         {/* Sidebar Overlay (Dark backdrop when sidebar is open) */}
         {isOpen && (
             <div
