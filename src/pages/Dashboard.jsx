@@ -5,6 +5,8 @@ import Content from "../components/Content";
 import useUserData from '../hooks/useUserData'; // Adjust path as needed
 import ProfilesDashboard from "../components/ProfilesDashboard";
 import { useUserProfiles } from "../hooks/useUserProfiles"
+import ContractsDashboard from "../components/ContractsDashboard";
+import { useUserContracts } from "../hooks/useUserContracts"
 
 export default function Dashboard() {
     const navigate = useNavigate(); // Initialize useNavigate hook
@@ -15,10 +17,10 @@ export default function Dashboard() {
     // Initialize profiles and profilesLoading with default values
     // They will only get actual values when userData.id is available
     const { profiles, loading: profilesLoading, error: profilesError } = useUserProfiles(userData?.id);
-
+    const { contracts, loading: contractsLoading, error: contractsError } = useUserContracts(userData?.id);
     // Combine loading and error states for the Content component
-    const isLoading = userLoading || profilesLoading;
-    const hasError = userError || profilesError;
+    const isLoading = userLoading || profilesLoading || contractsLoading;
+    const hasError = userError || profilesError|| contractsError;
 
   // Handle redirection if there's an error (e.g., unauthorized)
   // This useEffect will run whenever 'error' changes
@@ -41,7 +43,7 @@ export default function Dashboard() {
               loading={isLoading} 
               error={hasError}
               htmlContent={ 
-                userData ? <CreateDashboardContent userData={userData} profiles={profiles} /> 
+                userData ? <CreateDashboardContent userData={userData} profiles={profiles} contracts={contracts} /> 
                 : null 
               }
           />
@@ -49,63 +51,14 @@ export default function Dashboard() {
 };
 
   
-function CreateDashboardContent({userData, profiles}) {
+function CreateDashboardContent({userData, profiles, contracts}) {
   return(
     <div className="grid grid-cols-1 max-w-screen-xl mt-16">
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
             <ProfilesDashboard userData={userData}  profiles={profiles} />
 
-            <div className="flex flex-col justify-between bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
-                
-                <div>
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold title-gradient">Contracts</h2>
-                        <Link to={`/user/${userData?.id}/contracts`} className="text-sm font-semibold text-brand-indigo hover:underline">
-                            View All
-                        </Link>
-                    </div>
-                    
-                    <div className="space-y-4 mb-6">
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                            <div>
-                                <h4 className="font-semibold text-gray-800 dark:text-white">Summer Gala 2025</h4>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Tech Corp • $12,500</p>
-                            </div>
-                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200">Active</span>
-                        </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                            <div>
-                                <h4 className="font-semibold text-gray-800 dark:text-white">Johnson Wedding</h4>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Private Client • $8,750</p>
-                            </div>
-                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200">Pending</span>
-                        </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 dark:bg-gray-700/50">
-                            <div>
-                                <h4 className="font-semibold text-gray-800 dark:text-white">Product Launch</h4>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">StartupXYZ • $6,200</p>
-                            </div>
-                            <span className="text-xs font-bold py-1 px-3 rounded-full bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-200">Draft</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">$42K</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Revenue</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">15</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Contracts</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">92%</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Success Rate</p>
-                    </div>
-                </div>
-            </div>
+            <ContractsDashboard userData={userData} contracts={contracts} />
         </div>
 
         <h2 className="font-bold text-2xl text-center mt-20">QUICK START</h2>

@@ -115,7 +115,7 @@ export default function Navbar() { // <-- Accept onHeightChange prop
                     {user && (
                         <>
                             <Link to="/dashboard" 
-                                className="hidden lg:flex bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
+                                className="hidden lg:flex bg-gradient-to-r text-slate-200 from-custom-purple-start to-custom-purple-end 
                                 font-semibold rounded-lg text-sm px-5 py-2.5 text-center">
                                     Dashboard
                             </Link>
