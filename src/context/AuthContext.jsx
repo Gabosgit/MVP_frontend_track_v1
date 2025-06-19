@@ -1,6 +1,6 @@
 // -- Added useCallback
 import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
-import { getUserData } from "../services/getUserData";
+import { UserDataService } from "../services/UserDataService";
 import { login as authServiceLogin } from "../services/AuthService"; // Your login service (renamed to avoid conflict)
 import {ApiContext} from "../context/ApiContext"
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection (assuming React Router v6+)
@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
 
     if (token) {
       try {
-        const userData = await getUserData(apiBaseUrl); // Use getUserData service
+        const userData = await UserDataService(apiBaseUrl); // Use UserDataService service
         setUser(userData);
         setIsAuthenticated(true);
         console.log("AuthContext: User data fetched and set.");
@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(false);
     }
     setLoading(false); // Indicate loading has finished
-  }, [apiBaseUrl]); // Depend on apiBaseUrl, as getUserData uses it
+  }, [apiBaseUrl]); // Depend on apiBaseUrl, as UserDataService uses it
 
 
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUserData } from '../services/getUserData'; // Adjust path as needed
+import { UserDataService } from '../services/UserDataService'; // Adjust path as needed
 
 const useUserData = (apiBaseUrl) => {
   const [userData, setUserData] = useState(null);
@@ -13,7 +13,7 @@ const useUserData = (apiBaseUrl) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getUserData(apiBaseUrl);
+        const data = await UserDataService(apiBaseUrl);
         if (isMounted) {
           setUserData(data);
         }

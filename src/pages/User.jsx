@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
-import { getUserData } from "../services/getUserData";
+import { UserDataService } from "../services/UserDataService";
 import Content from "../components/Content";
 
 
@@ -93,7 +93,7 @@ export default function User() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getUserData(apiBaseUrl);
+        const data = await UserDataService(apiBaseUrl);
         setUserData(data);
         setLoading(false); // ✅ Stop loading after data is fetched
       } catch (error) {

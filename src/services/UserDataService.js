@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getUserData = async (apiBaseUrl) => {
+export const UserDataService = async (apiBaseUrl) => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("User is not authenticated");

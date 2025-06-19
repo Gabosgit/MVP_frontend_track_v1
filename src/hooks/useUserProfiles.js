@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { ApiContext } from '../context/ApiContext';
-import { fetchUserProfiles } from '../services/profilesService';
+import { fetchUserProfiles } from '../services/ProfilesService';
 
 // Create the custom hook useUserProfiles
 export const useUserProfiles = (userId) => {
