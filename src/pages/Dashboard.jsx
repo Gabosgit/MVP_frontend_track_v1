@@ -1,31 +1,28 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
-import { Link } from "react-router-dom";
-import { getUserData } from "../services/getUserData";
+import { Link, useNavigate } from "react-router-dom";
 import Content from "../components/Content";
+import useUserData from '../hooks/useUserData'; // Adjust path as needed
 
 
 export default function Dashboard() {
   const apiBaseUrl = useContext(ApiContext);
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  const { userData, loading, error } = useUserData(apiBaseUrl); // Custom hook
 
+  // Handle redirection if there's an error (e.g., unauthorized)
+  // This useEffect will run whenever 'error' changes
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserData(apiBaseUrl);
-        setUserData(data);
-      } catch (error) {
-        setError(error.message);
-        window.location.href = "/login"; // Redirect if unauthorized
-      } finally {
-        setLoading(false);
+    if (error) {
+      // You can add more specific error handling here if needed
+      console.error("Dashboard error:", error);
+      // Redirect to login if the error indicates unauthentication
+      // You might want to check for specific error codes like 401 from your API
+      if (error.message === "User is not authenticated" || error.response?.status === 401) {
+        navigate("/login");
       }
-    };
-
-    fetchData();
-  }, []);
+    }
+  }, [error, navigate]); // Dependencies for useEffect
 
   // ✅ RETURN the JSX to ensure React renders it
       return (
@@ -33,8 +30,9 @@ export default function Dashboard() {
               pageName={"Dashboard"}
               loading={loading} 
               error={error}
-              htmlContent={
-                  <CreateDashboardContent userData={userData} />
+              htmlContent={ 
+                userData ? <CreateDashboardContent userData={userData} /> 
+                : null 
               }
           />
       );
@@ -42,8 +40,6 @@ export default function Dashboard() {
 
   
 function CreateDashboardContent({userData}) {
-  // if (!userData) return <p>Loading user data...</p>; // ✅ Prevent crashes when userData is null
-
   return(
     <div className="grid grid-cols-1 max-w-screen-xl mt-16">
 
