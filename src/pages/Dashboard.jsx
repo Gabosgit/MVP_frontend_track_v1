@@ -4,34 +4,44 @@ import { Link, useNavigate } from "react-router-dom";
 import Content from "../components/Content";
 import useUserData from '../hooks/useUserData'; // Adjust path as needed
 import ProfilesDashboard from "../components/ProfilesDashboard";
+import { useUserProfiles } from "../hooks/useUserProfiles"
 
 export default function Dashboard() {
     const navigate = useNavigate(); // Initialize useNavigate hook
     const apiBaseUrl = useContext(ApiContext);
-    const { userData, loading, error } = useUserData(apiBaseUrl); // Custom hook
+    // Get user data, loading state, and error from the custom hook
+    const { userData, loading: userLoading, error: userError } = useUserData(apiBaseUrl);
+
+    // Initialize profiles and profilesLoading with default values
+    // They will only get actual values when userData.id is available
+    const { profiles, loading: profilesLoading, error: profilesError } = useUserProfiles(userData?.id);
+
+    // Combine loading and error states for the Content component
+    const isLoading = userLoading || profilesLoading;
+    const hasError = userError || profilesError;
 
   // Handle redirection if there's an error (e.g., unauthorized)
   // This useEffect will run whenever 'error' changes
   useEffect(() => {
-    if (error) {
+    if (hasError) {
       // You can add more specific error handling here if needed
-      console.error("Dashboard error:", error);
+      console.error("Dashboard error:", hasError);
       // Redirect to login if the error indicates unauthentication
       // You might want to check for specific error codes like 401 from your API
-      if (error.message === "User is not authenticated" || error.response?.status === 401) {
+      if (hasError.message === "User is not authenticated" || hasError.response?.status === 401) {
         navigate("/login");
       }
     }
-  }, [error, navigate]); // Dependencies for useEffect
+  }, [hasError, navigate]); // Dependencies for useEffect
 
   // ✅ RETURN the JSX to ensure React renders it
       return (
           <Content 
               pageName={"Dashboard"}
-              loading={loading} 
-              error={error}
+              loading={isLoading} 
+              error={hasError}
               htmlContent={ 
-                userData ? <CreateDashboardContent userData={userData} /> 
+                userData ? <CreateDashboardContent userData={userData} profiles={profiles} /> 
                 : null 
               }
           />
@@ -39,12 +49,12 @@ export default function Dashboard() {
 };
 
   
-function CreateDashboardContent({userData}) {
+function CreateDashboardContent({userData, profiles}) {
   return(
     <div className="grid grid-cols-1 max-w-screen-xl mt-16">
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
-            <ProfilesDashboard />
+            <ProfilesDashboard userData={userData}  profiles={profiles} />
 
             <div className="flex flex-col justify-between bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
                 

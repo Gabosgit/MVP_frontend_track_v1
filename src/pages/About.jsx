@@ -65,8 +65,7 @@ function AboutContent() {
                     CreativePro is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best – creating.
                 </p>
                 <a href="/sign_up"
-                   className="inline-block py-3.5 px-8 rounded-xl font-semibold text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card 
-                   transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-custom-purple-start/40 hover:-translate-y-1 text-base sm:text-lg">
+                   className="btn-primary">
                     Get Started with CreativePro
                 </a>
             </div>

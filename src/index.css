@@ -9,7 +9,7 @@ body {
   box-sizing: border-box;
   @apply 
     font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif]
-    text-slate-800
+    text-slate-700
     backdrop-blur-xl
     bg-slate-200
     min-h-screen
@@ -100,12 +100,33 @@ body {
     bg-gradient-to-r 
     from-custom-purple-start 
     to-custom-purple-end 
-    text-white hover:opacity-80;
+    text-white 
+    inline-block 
+    py-3.5 px-8 
+    rounded-xl 
+    font-semibold  
+    transition-all 
+    duration-300 
+    ease-in-out
+    hover:text-purple-900
+    hover:from-dark-purple-start
+    hover:to-dark-purple-end
+    hover:shadow-custom-purple-start/40 
+    hover:-translate-y-1 
+    text-base sm:text-lg
+    focus:ring-custom-purple-start
+    focus:outline-none 
+    focus:ring-2 
+    focus:ring-offset-2;
     /* Dark mode adjustments - Tailwind handles these automatically when dark mode is enabled */
     @apply
-     dark:from-[#ba85f5]
-     dark:to-[#c2adff] dark:hover:opacity-80
-     dark:text-custom-purple-end;
+      dark:text-dark-purple-end
+     dark:from-dark-purple-start
+     dark:to-dark-purple-start/50
+     dark:hover:text-custom-purple-end 
+     dark:hover:from-dark-purple-end
+     dark:hover:to-dark-purple-start
+     dark:focus:ring-offset-dark-card;
   }
 
   .btn-secondary {
@@ -122,6 +143,25 @@ body {
       dark:text-indigo-300 
       dark:border-indigo-400/30 
       dark:hover:bg-white/10;
+  }
+
+  .btn-profile {
+    /* Inherits .btn, then adds primary specific styles */
+    @apply
+      bg-gradient-to-r 
+    from-custom-purple-start/50
+    to-custom-purple-end/50
+    hover:text-slate-200
+    hover:from-custom-purple-start/100
+    hover:to-custom-purple-end/100;
+    /* Dark mode adjustments - Tailwind handles these automatically when dark mode is enabled */
+    @apply
+     /* dark:text-gray-400 */
+     dark:from-custom-purple-start
+     dark:to-custom-purple-end
+     dark:hover:text-slate-800
+     dark:hover:from-dark-purple-end
+     dark:hover:to-dark-purple-start;
   }
 
   .feature-icon-bg {

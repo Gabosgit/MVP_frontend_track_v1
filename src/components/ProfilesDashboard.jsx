@@ -1,11 +1,22 @@
-import { useContext } from "react";
-import { ApiContext } from "../context/ApiContext";
 import { Link } from "react-router-dom";
-import useUserData from "../hooks/useUserData"
 
-export default function profilesDashboard() {
-    const apiBaseUrl = useContext(ApiContext);
-    const { userData } = useUserData(apiBaseUrl); // Custom hook
+
+export default function profilesDashboard({userData, profiles}) {
+    console.log("THE PROFILES: ", profiles)
+    const profileCards = profiles.slice(0, 3) // Map max. 3 profiles
+        .map(profile =>
+        <Link to={`/profile/${profile.id}`} className="btn-profile p-4 rounded-xl text-center">
+            <div className="w-16 h-16 mx-auto mb-2 rounded-full btn-primary flex items-center justify-center font-bold">
+                Profile
+            </div>
+            <h4 className="font-semibold">
+                {profile.name}
+            </h4>
+            <p className="text-xs">
+                Corporate Events
+            </p>
+        </Link>
+    )
 
     return (
         <div className="flex flex-col justify-between bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-md p-6 interactive-card">
@@ -19,17 +30,8 @@ export default function profilesDashboard() {
                     </Link>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
-                        <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">ED</div>
-                        <h4 className="font-semibold text-gray-800 dark:text-white">Event Designer</h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Corporate Events</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-xl text-center">
-                        <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-brand-indigo to-brand-purple flex items-center justify-center text-white font-bold">WP</div>
-                        <h4 className="font-semibold text-gray-800 dark:text-white">Wedding Planner</h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Luxury Weddings</p>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {profileCards}
                     <Link to="/profile/create" 
                             className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl 
                             flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
