@@ -4,22 +4,6 @@ import { useParams } from 'react-router-dom';
 import { useUserProfiles } from '../hooks/useUserProfiles'; // Import custom hook
 import Content from '../components/Content';
 
-export default function UserProfiles() {
-  const { id } = useParams();
-  
-  // All the state management logic is handled by the custom hook useUserProfiles
-  const { profiles, loading, error } = useUserProfiles(id); // custom hook
-
-  return (
-    <Content 
-      pageName={"Profiles"}
-      loading={loading} 
-      error={error}
-      htmlContent={<UserProfilesContent profiles={profiles} />} 
-    />
-  );
-}
-
 function UserProfilesContent({ profiles }) {
   if (!profiles || profiles.length === 0) {
     return <div className="text-gray-500">No profiles found for this user.</div>;
@@ -36,5 +20,21 @@ function UserProfilesContent({ profiles }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+export default function UserProfiles() {
+  const { id } = useParams();
+  
+  // All the state management logic is handled by the custom hook useUserProfiles
+  const { profiles, loading, error } = useUserProfiles(id); // custom hook
+
+  return (
+    <Content 
+      pageName={"Profiles"}
+      loading={loading} 
+      error={error}
+      htmlContent={<UserProfilesContent profiles={profiles} />} 
+    />
   );
 }
