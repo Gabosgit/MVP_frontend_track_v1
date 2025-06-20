@@ -70,12 +70,7 @@ function UserContent({ userData }) {
       {/* Edit Profile Button  */}
       <div className="flex justify-center w-full mt-5">
           <a href="#" className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md 
-          bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
-          hover:from-custom-purple-end hover:to-custom-purple-start 
-          hover:shadow-lg hover:shadow-custom-purple-start/40 hover:-translate-y-0.5 
-          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start 
-          dark:focus:ring-offset-dark-card
-          transition-all duration-300 ease-in-out " >
+          btn-primary" >
               Edit
           </a>
       </div>

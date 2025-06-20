@@ -16,7 +16,7 @@ body {
     w-screen 
     overflow-x-hidden
     transition-all 
-    duration-500
+    duration-500;
 }
 
 .dark body {
@@ -24,7 +24,7 @@ body {
     dark:text-slate-300
     dark:bg-gradient-to-br 
     dark:from-dark-bg-start 
-    dark:to-dark-bg-end
+    dark:to-dark-bg-end;
 }
 
 @layer components {
@@ -36,7 +36,7 @@ body {
     to-custom-purple-end
     dark:from-dark-purple-start 
     dark:to-dark-purple-end 
-    text-transparent
+    text-transparent;
   }
 
   .icon-gradient {
@@ -45,7 +45,7 @@ body {
     from-custom-purple-start 
     to-custom-purple-end
     dark:from-dark-purple-start 
-    dark:to-dark-purple-end 
+    dark:to-dark-purple-end;
   }
 
   .text-gradient {
@@ -54,8 +54,14 @@ body {
     color: transparent;
   }
 
+  /* BUTTONS */
   .hero-buttons {
-    @apply flex flex-col sm:flex-row gap-5 justify-center;
+    @apply 
+    flex 
+    flex-col 
+    sm:flex-row 
+    gap-5 
+    justify-center;
   }
 
   .btn {
@@ -73,6 +79,19 @@ body {
     whitespace-nowrap;
   }
 
+  .btn-animation {
+    @apply
+    /* ANIMATION */
+    hover:-translate-y-0.5
+    hover:translate-x-0.5
+    hover:shadow-lg
+    hover:shadow-custom-purple-end
+    transition-all 
+    duration-300 
+    ease-in-out;
+    
+  }
+
   .btn-submit {
     @apply 
      text-white 
@@ -84,49 +103,50 @@ body {
      focus:ring-offset-2 
      focus:ring-custom-purple-start 
      dark:focus:ring-offset-dark-card 
-     transition-all 
-     duration-300 
-     ease-in-out
      hover:from-custom-purple-end
-     hover:to-custom-purple-start 
-     hover:shadow-lg 
-     hover:shadow-custom-purple-start/40 
-     hover:-translate-y-0.5
+     hover:to-custom-purple-start
   }
 
   .btn-primary {
     /* Inherits .btn, then adds primary specific styles */
-    @apply 
-    bg-gradient-to-r 
-    from-custom-purple-start 
-    to-custom-purple-end 
-    text-white 
+    @apply
+    /* CONTAINER */
     inline-block 
     py-3.5 px-8 
-    rounded-xl 
-    font-semibold  
-    transition-all 
-    duration-300 
-    ease-in-out
+    rounded-xl
+
+    /* FONT */
+    font-semibold
+    text-base 
+    sm:text-lg
+    text-white
+    
+    /* BACKGROUND */
+    bg-gradient-to-r
+    from-custom-purple-start 
+    to-custom-purple-end
+
+    /* HOVER */
     hover:text-purple-900
     hover:from-dark-purple-start
     hover:to-dark-purple-end
-    hover:shadow-custom-purple-start/40 
-    hover:-translate-y-1 
-    text-base sm:text-lg
+
+    /* FOCUS */
     focus:ring-custom-purple-start
     focus:outline-none 
     focus:ring-2 
-    focus:ring-offset-2;
-    /* Dark mode adjustments - Tailwind handles these automatically when dark mode is enabled */
-    @apply
-      dark:text-dark-purple-end
-     dark:from-dark-purple-start
-     dark:to-dark-purple-start/50
-     dark:hover:text-custom-purple-end 
-     dark:hover:from-dark-purple-end
-     dark:hover:to-dark-purple-start
-     dark:focus:ring-offset-dark-card;
+    focus:ring-offset-2
+    
+    /* Dark */
+    dark:text-slate-200
+    dark:from-dark-purple-start
+    dark:to-dark-purple-start/50
+
+    /* Dark Hover */
+    dark:hover:text-custom-purple-end 
+    dark:hover:from-dark-purple-end
+    dark:hover:to-dark-purple-start
+    dark:focus:ring-offset-dark-card;
   }
 
   .btn-secondary {

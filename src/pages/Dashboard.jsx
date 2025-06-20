@@ -79,7 +79,7 @@ function CreateDashboardContent({userData, profiles, contracts}) {
                     <li>Add detailed information about your projects.</li>
                     <li>Select a profile to make contracts with other users.</li>
                 </ul>
-                <Link to="/profile/create" className="btn-primary w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                <Link to="/profile/create" className="btn-primary btn-animation w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
                     Get Started
                 </Link>
             </div>
@@ -100,7 +100,7 @@ function CreateDashboardContent({userData, profiles, contracts}) {
                     <li>Add events and milestones to the contract.</li>
                     <li>Once ready, send it to your client for approval.</li>
                 </ul>
-                <Link to="/contract/create" className="btn-primary w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
+                <Link to="/contract/create" className="btn-primary btn-animation w-2/3 text-center font-semibold  py-2 px-4 rounded-lg hover:opacity-90 transition">
                     New Contract
                 </Link>
             </div>

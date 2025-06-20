@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 export default function profilesDashboard({userData, profiles}) {
+    console.log(profiles)
     const profileCards = profiles.slice(0, 3) // Map max. 3 profiles
         .map(profile =>
         <Link key={profile.id} to={`/profile/${profile.id}`} className="btn-profile p-4 rounded-xl text-center">
@@ -11,7 +12,7 @@ export default function profilesDashboard({userData, profiles}) {
                 {profile.name}
             </h4>
             <p className="text-xs">
-                Corporate Events
+                {profile.performance_type}
             </p>
         </Link>
     )
@@ -32,7 +33,7 @@ export default function profilesDashboard({userData, profiles}) {
                     {profileCards}
                     <Link to="/profile/create" 
                             className="border-2 border-dashed border-indigo-300 dark:border-gray-600 rounded-xl 
-                            flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-gray-700/50 cursor-pointer">
+                            flex flex-col items-center justify-center text-center p-4 text-brand-indigo dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-gray-700/50 cursor-pointer">
                         <div className="text-3xl">➕</div> 
                         <p className="font-semibold">Add New</p>
                     </Link>

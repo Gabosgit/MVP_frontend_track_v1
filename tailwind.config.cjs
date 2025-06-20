@@ -14,7 +14,7 @@ module.exports = {
         //'custom-purple-start': '#667eea',
         //'custom-purple-end': '#764ba2',
         'dark-purple-end':  '#dbaaff',
-        'dark-purple-start':  '#8a0bff',
+        'dark-purple-start':  '#a35af2',
 
         //Background Components
         'dark-card': '#000f32',
