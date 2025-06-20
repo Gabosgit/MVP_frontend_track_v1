@@ -62,7 +62,7 @@ function AboutContent() {
                     Join the Revolution
                 </h2>
                 <p className="text-lg sm:text-xl text-gray-700 dark:text-dark-text-secondary mb-10 leading-relaxed">
-                    CreativePro is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best – creating.
+                    <b>CreativePro</b> is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best <b>– creating!</b>
                 </p>
                 <a href="/sign_up"
                    className="btn-primary">

@@ -1,5 +1,6 @@
 import Content from "../components/Content";
 import Carousel from "../components/Carousel";
+import { Link } from "react-router-dom";
 
 export default function About() {
   return (
@@ -25,9 +26,10 @@ function AboutContent() {
                         We focus on intuitive design and powerful tools to streamline your workflow.
                     </p>
                 </div>
-                {/* Card left */}
+                
                 <div className="grid md:grid-cols-2 gap-10 lg:gap-12 items-start">
-                    <div className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl 
+                    {/* Card left */}
+                    <Link className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl 
                     transition-all ease-in-out duration-300 hover:shadow-2xl hover:-translate-y-1">
                         <div className="feature-icon-bg">
                             <span>🖥️</span>
@@ -38,9 +40,10 @@ function AboutContent() {
                         <p className="text-gray-600 dark:text-dark-text-secondary leading-relaxed">
                             Our intuitive, user-friendly interface is crafted to guide you step-by-step, enabling effortless creation of both professional profiles and comprehensive contracts. Say goodbye to complexity!
                         </p>
-                    </div>
+                    </Link>
+                    
                     {/* Card right */}
-                    <div className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl
+                    <Link className="group bg-custom-purple-start/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-xl
                     transition-all ease-in-out duration-300 hover:shadow-2xl hover:-translate-y-1">
                         <div className="feature-icon-bg">
                             <span>🗓️</span>
@@ -51,7 +54,7 @@ function AboutContent() {
                         <p className="text-gray-600 dark:text-dark-text-secondary leading-relaxed">
                             The innovative event itinerary feature empowers users to track all contract-related events, milestones, and deadlines with unparalleled ease and precision, ensuring you never miss a beat.
                         </p>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </section>
@@ -62,7 +65,7 @@ function AboutContent() {
                     Join the Revolution
                 </h2>
                 <p className="text-lg sm:text-xl text-gray-700 dark:text-dark-text-secondary mb-10 leading-relaxed">
-                    CreativePro is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best – creating.
+                    <b>CreativePro</b> is more than just a tool; it's your partner in professional contract management. Simplify your processes, enhance clarity, and focus on what you do best <b>– creating!</b>
                 </p>
                 <a href="/sign_up"
                    className="inline-block py-3.5 px-8 rounded-xl font-semibold text-white bg-gradient-to-r from-custom-purple-start to-custom-purple-end hover:from-custom-purple-end hover:to-custom-purple-start focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-purple-start dark:focus:ring-offset-dark-card 
