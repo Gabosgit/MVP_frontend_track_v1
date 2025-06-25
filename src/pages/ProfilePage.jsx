@@ -57,207 +57,144 @@ function ProfileContent({ profile }) {
     return <div className="text-gray-500">No profile data available.</div>;
 
   return (
-    <>
-      <div className="max-w-3xl mx-auto p-6">
-          <h2 className="text-4xl font-bold mb-6">{profile.name}</h2>
-          <p>
-              <strong>Performance Type:</strong> {profile.performance_type}
-          </p>
-          <p>
-              <strong>Description:</strong> {profile.description}
-          </p>
-          <p>
-              <strong>Bio:</strong> {profile.bio}
-          </p>
+    <div className="max-w-5xl mt-10 mx-auto px-4 sm:px-6 lg:px-8">
 
-          <div className="max-w-3xl mx-auto p-6 space-y-6">
-
-              {/* Social Media Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Social Media:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                  <ul className="ml-4">
-                      {profile.social_media.map((link, index) => (
-                      <li key={index} className="mb-1">
-                          <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
-                          >
-                          {link}
-                          </a>
-                      </li>
-                      ))}
-                  </ul>
-                  </div>
-              </div>
-
-              {/* Website Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Website:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                      <ul className="ml-4">
-                          <li className="mb-1">
-                              <a
-                              href= {profile.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline"
-                              >
-                                  {profile.website}
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
+        {/* Header Section*/}
+        <header className="rounded-3xl  p-10 mb-8 text-center">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">Jane Doe</h1>
+            <p className="text-xl sm:text-2xl font-medium text-indigo-700 mb-6">Singer-Songwriter</p>
+            <p className="text-gray-700 text-justify text-lg sm:text-xl leading-relaxed">
+                Jane Doe is an enchanting indie folk artist whose soulful voice and poetic lyrics weave intricate stories of love, loss, and the human spirit.
+                Her music blends acoustic melodies with contemporary electronic elements, creating a unique sound that resonates deeply with listeners.
+            </p>
+        </header>
 
 
-              {/* Photos Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Photos:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                  <ul className="ml-4">
-                      {profile.photos.map((url, index) => (
-                      <li key={index} className="mb-1">
-                          <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
-                          >
-                          {url}
-                          </a>
-                      </li>
-                      ))}
-                  </ul>
-                  </div>
-              </div>
+        {/* Online Presence Section */}
+        <section className="-2 border-slate-300 rounded-3xl p-10 mb-8">
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">Online Presence</h2>
+            <div className="flex flex-wrap justify-center items-center mb-4">
+                <a href="https://www.janedoeofficial.com" target="_blank" className="inline-flex items-center bg-indigo-700 text-white py-3 px-6 rounded-xl no-underline transition-colors duration-200 ease-in-out transform font-semibold mr-3 mb-3 hover:bg-indigo-500 hover:-translate-y-0.5">
+                    <i className="fas fa-globe mr-2"></i> Website
+                </a>
+                {/* Dummy Social Media Links */}
+                <a href="https://www.instagram.com/janedoeofficial" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
+                    <i className="fab fa-instagram mr-2"></i> Instagram
+                </a>
+                <a href="https://www.facebook.com/janedoeofficial" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
+                    <i className="fab fa-facebook mr-2"></i> Facebook
+                </a>
+                <a href="https://www.youtube.com/janedoeofficial" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
+                    <i className="fab fa-youtube mr-2"></i> YouTube
+                </a>
+                <a href="https://www.spotify.com/janedoe" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
+                    <i className="fab fa-spotify mr-2"></i> Spotify
+                </a>
+                <a href="https://soundcloud.com/" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
+                    <i className="fab fa-spotify mr-2"></i> Soundcloud
+                </a>
+            </div>
+        </section>
 
-              {/* Audios Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  {/* Left column: Label */}
-                  <div className="font-bold text-lg md:col-span-1">
-                    Audios:
-                  </div>
-                  {/* Right column: List of audio URLs */}
-                  <div className="md:col-span-2 text-right">
-                  <ul className="ml-4">
-                      {profile.audios.map((url, index) => (
-                      <li key={index} className="mb-1">
-                          <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
-                          >
-                          {url}
-                          </a>
-                      </li>
-                      ))}
-                  </ul>
-                  </div>
-              </div>
+        {/* Media Gallery Section */}
+        <section className=" rounded-3xl  p-10 mb-8">
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">Media Gallery</h2>
 
-              {/* Videos Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Videos:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                  <ul className="ml-4">
-                      {profile.videos.map((url, index) => (
-                      <li key={index} className="mb-1">
-                          <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
-                          >
-                          {url}
-                          </a>
-                      </li>
-                      ))}
-                  </ul>
-                  </div>
-              </div>
+            <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+                {/* Placeholder Photos */}
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <img src="https://placehold.co/400x250/a78bfa/ffffff?text=Photo+1" alt="Performance Photo 1" className="w-full h-52 object-cover rounded-xl"></img>
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <img src="https://placehold.co/400x250/c4b5fd/ffffff?text=Photo+2" alt="Studio Shot 2" className="w-full h-52 object-cover rounded-xl"></img>
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <img src="https://placehold.co/400x250/818cf8/ffffff?text=Photo+3" alt="Candid Shot 3" className="w-full h-52 object-cover rounded-xl"></img>
+                </div>
+            </div>
 
-              {/* Stage Plan Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Stage Plan:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                      <ul className="ml-4">
-                          <li className="mb-1">
-                              <a
-                              href= {profile.stage_plan}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline"
-                              >
-                                  {profile.stage_plan}
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
+            <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Videos</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+                {/* Placeholder Videos (YouTube embeds) */}
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/m7w5sI7F-XQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/3JWTaaS7LCE?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
+                </div>
+            </div>
 
+            <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Audios</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Placeholder Audios */}
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 1: "Echoes of Dawn"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 2: "Whispers in the Wind"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 3: "Midnight Serenade"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+            </div>
+        </section>
 
-              {/* Tech Rider Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Tech Rider:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                      <ul className="ml-4">
-                          <li className="mb-1">
-                              <a
-                              href= {profile.tech_rider}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline"
-                              >
-                                  {profile.tech_rider}
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
+        {/* Bio Section */}
+        <section className=" rounded-3xl  p-10 mb-8">
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+              Biography
+            </h2>
+            <p className="text-gray-600 text-md sm:text-lg leading-relaxed">
+            With a background in classical guitar and a passion for storytelling, Jane has captivated audiences across the globe,
+            earning critical acclaim for her live performances and deeply personal compositions.
+            </p>
+        </section>
 
-              {/* Online Press Section */}
-              <div className="border-t-1 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <div className="font-bold text-lg md:col-span-1">
-                    Online Press:
-                  </div>
-                  <div className="md:col-span-2 text-right">
-                    <ul className="ml-4">
-                        {profile.online_press.map((url, index) => (
-                        <li key={index} className="mb-1">
-                            <a
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:underline"
-                            >
-                            {url}
-                            </a>
-                        </li>
-                        ))}
-                    </ul>
-                  </div>
-              </div>
+        {/* Press Online */}
+        <section className=" rounded-3xl  p-10 mb-8">
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+              Press (online)
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 space-y-2">
+                <li><a href="https://www.example.com/press1" target="_blank" className="text-blue-600 hover:underline">"Jane Doe's New Album: A Breath of Fresh Air" - Indie Music Review</a></li>
+                <li><a href="https://www.example.com/press2" target="_blank" className="text-blue-600 hover:underline">"Live Performance Review: Jane Doe Electrifies the Crowd" - City Beat Magazine</a></li>
+                <li><a href="https://www.example.com/press3" target="_blank" className="text-blue-600 hover:underline">"Interview: The Story Behind Jane Doe's Lyrics" - Songwriters Daily</a></li>
+            </ul>
+        </section>
 
+        {/* Technic Section */}
+        <section className=" rounded-3xl  p-10 mb-8">
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">Technical Section</h2>
+            <div className="flex flex-wrap justify-center">
+                <a href="https://www.example.com/stage_plan.pdf" target="_blank" className="inline-flex items-center bg-indigo-700 text-white py-3 px-6 rounded-xl no-underline transition-colors duration-200 ease-in-out transform font-semibold mr-3 mb-3 hover:bg-indigo-500 hover:-translate-y-0.5">
+                    <i className="fas fa-ruler-combined mr-2"></i> Stage Plan
+                </a>
+                <a href="https://www.example.com/tech_rider.pdf" target="_blank" className="inline-flex items-center bg-indigo-700 text-white py-3 px-6 rounded-xl no-underline transition-colors duration-200 ease-in-out transform font-semibold mr-3 mb-3 hover:bg-indigo-500 hover:-translate-y-0.5">
+                    <i className="fas fa-file-invoice mr-2"></i> Tech Rider
+                </a>
+            </div>
+        </section>
 
-          </div>          
-      </div>
-  </>
+    </div>
 
   );
 }

@@ -78,18 +78,39 @@ body {
     ease-in-out 
     whitespace-nowrap;
   }
-
+  
+  /* --- ANIMATIONS --- */
   .btn-animation {
     @apply
-    /* ANIMATION */
     hover:-translate-y-0.5
     hover:translate-x-0.5
     hover:shadow-lg
-    hover:shadow-custom-purple-end
+    hover:shadow-slate-900
     transition-all 
     duration-300 
     ease-in-out;
-    
+  }
+
+  .btn-animation-t {
+    @apply
+    /* ANIMATION */
+    -translate-y-1
+    shadow-2xl
+    shadow-slate-900
+    transition-all 
+    duration-300 
+    ease-in-out;
+  }
+
+  .btn-animation-r-t {
+    @apply
+    hover:-translate-y-0.5
+    hover:translate-x-0.5
+    hover:shadow-lg
+    hover:shadow-slate-900
+    transition-all 
+    duration-300 
+    ease-in-out;
   }
 
   .btn-submit {

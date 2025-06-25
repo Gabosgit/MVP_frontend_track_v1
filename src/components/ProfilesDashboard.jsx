@@ -4,8 +4,13 @@ export default function profilesDashboard({userData, profiles}) {
     console.log(profiles)
     const profileCards = profiles.slice(0, 3) // Map max. 3 profiles
         .map(profile =>
-        <Link key={profile.id} to={`/profile/${profile.id}`} className="btn-profile p-4 rounded-xl text-center">
-            <div className="w-16 h-16 mx-auto mb-2 rounded-full btn-primary flex items-center justify-center font-bold">
+        <Link key={profile.id} to={`/profile/${profile.id}`} className="group btn-profile p-4 rounded-xl text-center">
+            <div className="flex items-center justify-center font-bold w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r 
+                text-slate-200 from-custom-purple-start to-custom-purple-end 
+                group-hover:from-dark-purple-start group-hover:to-dark-purple-end group-hover:btn-animation-t
+                dark:from-dark-purple-start dark:to-dark-purple-end
+                dark:group-hover:from-custom-purple-start dark:group-hover:to-custom-purple-end ">
+                    
                 Profile
             </div>
             <h4 className="font-semibold">

@@ -29,6 +29,7 @@ export default function Dashboard() {
       // You can add more specific error handling here if needed
       
       console.error("Dashboard error:", hasError);
+
       // Redirect to login if the error indicates unauthentication
       // You might want to check for specific error codes like 401 from your API
       if (hasError.message === "User is not authenticated" || hasError.response?.status === 401) {

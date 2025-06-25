@@ -17,10 +17,10 @@ const BackButton = () => {
   return (
     <button
       onClick={handleGoBack}
-      className="text-center p-4 md:pl-4 md:pr-5 py-2 btn-primary rounded-lg h-auto
+      className="group text-center p-4 md:pl-4 md:pr-5 py-2 btn-primary rounded-lg h-auto
       focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75"
     >
-        ⬅ Back
+        <p className="group-hover:btn-animation-t"> ⬅ Back</p>
     </button>
   );
 };
