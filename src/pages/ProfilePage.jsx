@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useParams } from "react-router-dom";
 import Content from "../components/Content";
+import ShowMoreContainer from "../components/ShowMoreContainer";
 
   
 export default function ProfilePage() {
@@ -36,8 +37,9 @@ export default function ProfilePage() {
       }
     }
 
-    fetchProfile();
+    fetchProfile(profile);
   }, [id]);
+  
 
   // ✅ RETURN the JSX to ensure React renders it
   return (
@@ -61,11 +63,10 @@ function ProfileContent({ profile }) {
 
         {/* Header Section*/}
         <header className="rounded-3xl  p-10 mb-8 text-center">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">Jane Doe</h1>
-            <p className="text-xl sm:text-2xl font-medium text-indigo-700 mb-6">Singer-Songwriter</p>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">{profile.name}</h1>
+            <p className="text-xl sm:text-2xl font-medium text-indigo-700 mb-6">{profile.performance_type}</p>
             <p className="text-gray-700 text-justify text-lg sm:text-xl leading-relaxed">
-                Jane Doe is an enchanting indie folk artist whose soulful voice and poetic lyrics weave intricate stories of love, loss, and the human spirit.
-                Her music blends acoustic melodies with contemporary electronic elements, creating a unique sound that resonates deeply with listeners.
+                {profile.description}
             </p>
         </header>
 
@@ -119,17 +120,17 @@ function ProfileContent({ profile }) {
                 {/* Placeholder Videos (YouTube embeds) */}
                 <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
                     <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
                     </div>
                 </div>
                 <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
                     <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
-                        <iframe src="https://www.youtube.com/embed/m7w5sI7F-XQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                        <iframe src="https://www.youtube.com/embed/m7w5sI7F-XQ?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
                     </div>
                 </div>
                 <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
                     <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
-                        <iframe src="https://www.youtube.com/embed/3JWTaaS7LCE?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                        <iframe src="https://www.youtube.com/embed/3JWTaaS7LCE?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
                     </div>
                 </div>
             </div>
@@ -163,10 +164,7 @@ function ProfileContent({ profile }) {
             <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
               Biography
             </h2>
-            <p className="text-gray-600 text-md sm:text-lg leading-relaxed">
-            With a background in classical guitar and a passion for storytelling, Jane has captivated audiences across the globe,
-            earning critical acclaim for her live performances and deeply personal compositions.
-            </p>
+            <ShowMoreContainer text={profile.bio}/>
         </section>
 
         {/* Press Online */}
@@ -174,11 +172,29 @@ function ProfileContent({ profile }) {
             <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
               Press (online)
             </h2>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
+            {/* <ul className="list-disc list-inside text-gray-700 space-y-2">
                 <li><a href="https://www.example.com/press1" target="_blank" className="text-blue-600 hover:underline">"Jane Doe's New Album: A Breath of Fresh Air" - Indie Music Review</a></li>
                 <li><a href="https://www.example.com/press2" target="_blank" className="text-blue-600 hover:underline">"Live Performance Review: Jane Doe Electrifies the Crowd" - City Beat Magazine</a></li>
                 <li><a href="https://www.example.com/press3" target="_blank" className="text-blue-600 hover:underline">"Interview: The Story Behind Jane Doe's Lyrics" - Songwriters Daily</a></li>
-            </ul>
+            </ul> */}
+            {profile.online_press.length > 0 ? (
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                    {profile.online_press.map((item, index) => (
+                        <li key={index}> {/* Using index as key is okay if items don't change order or get added/removed frequently */}
+                            <a 
+                                href={item.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer" // Recommended for security with target="_blank"
+                                className="text-blue-600 hover:underline"
+                            >
+                                {item.title}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="text-gray-500">No online press available yet.</p>
+            )}
         </section>
 
         {/* Technic Section */}
