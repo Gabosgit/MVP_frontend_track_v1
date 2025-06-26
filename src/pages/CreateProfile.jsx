@@ -285,12 +285,11 @@ function CreateProfileContent({
                 {photos.map((url, index) => (
                     <input
                     key={index}
-                    type="url"
+                    type="file"
                     placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) =>
-                        handleArrayChange(index, e.target.value, photos, setPhotos)
-                    }
+                    // onChange={(e) =>
+                    //     handleArrayChange(index, e.target.value, photos, setPhotos)
+                    // }
                     className="w-full border rounded px-3 py-2 mb-2"
                     />
                 ))}
