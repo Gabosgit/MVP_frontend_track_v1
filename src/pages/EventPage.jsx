@@ -74,7 +74,8 @@ function EventContent({event}) {
             <p>
               <strong>Accommodation ID: </strong>
               <span className={event.accommodation_id ? 'text-green-300' : 'text-orange-500'}>
-                {event.accommodation_id ? event.accommodation_id.join(", ") : "No accommodation yet"}
+                {/* {event.accommodation_id ? event.accommodation_id : "No accommodation yet"} */}
+                {event.accommodation_id ? event.accommodation.name : "No accommodation yet"}
               </span>
             </p>
         </div>
