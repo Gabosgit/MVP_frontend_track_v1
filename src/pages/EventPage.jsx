@@ -72,9 +72,8 @@ function EventContent({event}) {
             <p><strong>Meal Location Name:</strong> {event.meal_location_name}</p>
             <p><strong>Meal Location Address:</strong> {event.meal_location_address}</p>
             <p>
-              <strong>Accommodation ID: </strong>
+              <strong>Accommodation: </strong>
               <span className={event.accommodation_id ? 'text-green-300' : 'text-orange-500'}>
-                {/* {event.accommodation_id ? event.accommodation_id : "No accommodation yet"} */}
                 {event.accommodation_id ? event.accommodation.name : "No accommodation yet"}
               </span>
             </p>
