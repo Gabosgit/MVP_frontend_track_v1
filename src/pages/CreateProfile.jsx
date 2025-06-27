@@ -281,12 +281,11 @@ function CreateProfileContent({
         
                 {/* Photos */}
                 <div>
-                <label className="block text-lg font-medium mb-1">Photos URLs</label>
+                <label className="block text-lg font-medium mb-1">Upload Photos</label>
                 {photos.map((url, index) => (
                     <input
                     key={index}
                     type="file"
-                    placeholder="https://example.com"
                     // onChange={(e) =>
                     //     handleArrayChange(index, e.target.value, photos, setPhotos)
                     // }
