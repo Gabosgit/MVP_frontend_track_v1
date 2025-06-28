@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useNavigate } from "react-router-dom";
 import Content from "../components/Content";
-
+import PhotosSection from "../components/componentsCreateProfile/PhotosSection";
 
 // helper for generating unique IDs when adding press title/url
 let nextOnlinePressId = 0; // Start ID counter outside the component
@@ -28,62 +28,20 @@ export default function CreateProfile() {
     const [photos, setPhotos] = useState([""]);
     const [videos, setVideos] = useState([""]);
     const [audios, setAudios] = useState([""]);
-    // const [onlinePress, setOnlinePress] = useState([""]);
     const [onlinePress, setOnlinePress] = useState([{ id: nextOnlinePressId++, title: '', url: '' }]); // Array of objects with default item // 
     
-    // Store an array of objects, each containing the File and its preview URL
     const [filesToUpload, setFilesToUpload] = useState([]); // [{ file: File, previewUrl: string }, ...]
-    const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // State to store Cloudinary URLs
+    const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
-    // --- Effect for cleaning up object URLs ---
-    useEffect(() => {
-        // This effect runs when filesToUpload changes or component unmounts.
-        // It's crucial to revoke old URLs to prevent memory leaks.
-        return () => {
-        filesToUpload.forEach(item => URL.revokeObjectURL(item.previewUrl));
-        };
-    }, [filesToUpload]); // Depend on filesToUpload to re-run cleanup if it changes
-
-
-    // --- Handlers for file selection and removal ---
-    const handleFileChange = (event) => {
-        const newlySelectedFiles = Array.from(event.target.files);
-        const newFileItems = [];
-
-        newlySelectedFiles.forEach(newFile => {
-        // Basic check for duplicates based on name/size/lastModified
-        const isDuplicate = filesToUpload.some(item =>
-            item.file.name === newFile.name &&
-            item.file.size === newFile.size &&
-            item.file.lastModified === newFile.lastModified
-        );
-
-        if (!isDuplicate) {
-            newFileItems.push({
-            file: newFile,
-            previewUrl: URL.createObjectURL(newFile)
-            });
-        }
-        });
-
-        setFilesToUpload(prevFilesToUpload => [...prevFilesToUpload, ...newFileItems]);
-
-        // Clear the input's value to allow selecting the same files again
-        event.target.value = '';
-    };
-
-    // Remove image if needed
-    const handleRemoveImage = (urlToRemove) => {
-        // Revoke the object URL immediately
-        URL.revokeObjectURL(urlToRemove);
-
-        // Filter out the item (file + previewUrl) that matches the urlToRemove
-        setFilesToUpload(prevFilesToUpload =>
-        prevFilesToUpload.filter(item => item.previewUrl !== urlToRemove)
-        );
+    // This function will be passed down to PhotoSection
+    // PhotoSection will call this function to update filesToUpload in CreateProfile
+    const handleFilesReady = (files) => {
+        console.log('Files received in CreateProfile:', files);
+        setFilesToUpload(files);
     };
 
     function handleChangeSingle(event) {
@@ -132,91 +90,90 @@ export default function CreateProfile() {
         let finalImageUrls = []; // This will hold all Cloudinary URLs for the 'photos' field
 
         // Step 1: Upload Images to Cloudinary via FastAPI /upload endpoint
-        if (filesToUpload.length > 0) {
-        try {
-            const uploadPromises = filesToUpload.map(async (item) => { // Use filesToUpload
-            const formData = new FormData();
-            formData.append('file', item.file); // Access the actual File object here
+        if (filesToUpload.length > 0) { // filesToUpload now directly contains File objects
+            try {
+                const uploadPromises = filesToUpload.map(async (file) => { // Iterate directly over 'file'
+                    const formData = new FormData();
+                    formData.append('file', file); // 'file' is already the File object
 
-            const response = await fetch('http://localhost:8000/upload', { // Adjust your FastAPI URL
-                method: 'POST',
-                body: formData,
-            });
+                    const response = await fetch(`${apiBaseUrl}/upload`, {
+                        method: 'POST',
+                        body: formData,
+                    });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Failed to upload ${item.file.name}: ${errorData.detail || response.statusText}`);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Failed to upload ${file.name}: ${errorData.detail || response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    return data.url; // Returns the Cloudinary URL
+                });
+
+                finalImageUrls = await Promise.all(uploadPromises);
+                // This is crucial: Update the parent's state with the actual Cloudinary URLs
+                // This state can then be passed back down to PhotoSection if needed to show
+                // "successfully uploaded" images, or used elsewhere in CreateProfile.
+                setUploadedImageUrls(finalImageUrls); // Assuming you have this state in CreateProfile
+
+            } catch (uploadError) {
+                console.error('Error during image uploads:', uploadError);
+                setError(`Failed to upload images: ${uploadError.message}`);
+                setIsLoading(false);
+                return;
             }
-
-            const data = await response.json();
-            return data.url; // Returns the Cloudinary URL
-            });
-
-            finalImageUrls = await Promise.all(uploadPromises);
-            setUploadedImageUrls(finalImageUrls);
-
-        } catch (uploadError) {
-            console.error('Error during image uploads:', uploadError);
-            setError(`Failed to upload images: ${uploadError.message}`);
-            setIsLoading(false);
-            return;
-        }
         }
 
         // Create the payload to match the API's expected dictionary:
         const payload = {
-        name:formSingle.name,
-        performance_type:formSingle.performanceType,
-        description: formSingle.description,
-        bio: formSingle.bio,
-        website: formSingle.website || null, // Optional fields set to null if empty
-        social_media: socialMedia.filter((url) => url.trim() !== ""),
-        stage_plan: formSingle.stagePlan || null,
-        tech_rider: formSingle.techRider || null,
-        photos: finalImageUrls, // Send the Cloudinary URLs
-        videos: videos.filter((url) => url.trim() !== ""),
-        audios: audios.filter((url) => url.trim() !== ""),
-        online_press: onlinePress.filter(item => item.title && item.url)
-                           .map(item => ({ title: item.title, url: item.url })),
+            name: formSingle.name,
+            performance_type: formSingle.performanceType,
+            description: formSingle.description,
+            bio: formSingle.bio,
+            website: formSingle.website || null,
+            social_media: socialMedia.filter((url) => url.trim() !== ""),
+            stage_plan: formSingle.stagePlan || null,
+            tech_rider: formSingle.techRider || null,
+            photos: finalImageUrls, // Send the Cloudinary URLs from the upload process
+            videos: videos.filter((url) => url.trim() !== ""),
+            audios: audios.filter((url) => url.trim() !== ""),
+            online_press: onlinePress.filter(item => item.title && item.url)
+                                    .map(item => ({ title: item.title, url: item.url })),
         };
 
         try {
-            // Get the token from localStorage; adjust retrieval as necessary.
             const token = localStorage.getItem("token");
 
             const response = await fetch(`${apiBaseUrl}/profile`, {
                 method: "POST",
                 headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`, // Include token for authorization
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
-                const errorData = await response.json(); // Ensure error data exists
+                const errorData = await response.json();
                 throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
-            
+
             if (data && data.profile_id) {
                 console.log("Profile created successfully:", data);
-                // Optionally show a success message or redirect the user
                 alert("Profile created successfully!");
-                // Redirect to profile/{ profile_id: 1 }, redirect:
                 navigate(`/profile/${data.profile_id}`);
             } else {
                 throw new Error("Missing profile ID in API response.");
             }
 
-
-        } 
-        
-        catch (error) {
-        console.error("Error creating profile:", error);
-        // Optionally display an error message to the user
-        alert(`Error creating profile: ${error.message}`);
+        } catch (error) {
+            console.error("Error creating profile:", error);
+            alert(`Error creating profile: ${error.message}`);
+        } finally {
+            // Ensure loading state is reset in finally block
+            setIsLoading(false);
         }
     };
 
@@ -241,9 +198,8 @@ export default function CreateProfile() {
                     onlinePress={onlinePress} handleOnlinePressChange={handleOnlinePressChange} 
                     handleAddOnlinePress={handleAddOnlinePress} handleRemoveOnlinePress={handleRemoveOnlinePress}
                     handleArrayChange={handleArrayChange} addArrayField={addArrayField}
-                    handleSubmit={handleSubmit} isLoading={isLoading} error={error} success={success}
-                    handleFileChange={handleFileChange} filesToUpload={filesToUpload}
-                    uploadedImageUrls={uploadedImageUrls} handleRemoveImage={handleRemoveImage}
+                    handleSubmit={handleSubmit} 
+                    handleFilesReady={handleFilesReady}
                 />
             }
         />
@@ -256,16 +212,14 @@ function CreateProfileContent({
     socialMedia, setSocialMedia, videos, setVideos, audios, setAudios, 
     onlinePress, handleAddOnlinePress, handleOnlinePressChange, handleRemoveOnlinePress,
     handleArrayChange, addArrayField, handleSubmit, 
-    isLoading, error, success, handleFileChange, filesToUpload, uploadedImageUrls, handleRemoveImage
+    isLoading, handleFilesReady, 
+    error, success, filesToUpload, uploadedImageUrls, handleRemoveImage
 }) {
     return (
         <div className="max-w-3xl mx-auto p-6">
             <form className="space-y-6" onSubmit={handleSubmit}>
                 
-                {/* Added for upload files/images */}
-                {isLoading && <p style={{ color: 'blue' }}>Processing request...</p>}
-                {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-                {success && <p style={{ color: 'green' }}>Success: {success}</p>}
+                
 
                 {/* Profile Name */}
                 <div>
@@ -404,44 +358,9 @@ function CreateProfileContent({
                 </div>
         
 
-                {/* Image Upload Input (Crucial for Multiple) */}
-                {/* Image Upload Input and Previews */}
-                <div>
-                    <label htmlFor="profileImages">Upload Profile Images:</label>
-                    <input
-                    type="file"
-                    id="profileImages"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    />
-                </div>
-                <div className="image-previews" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
-                    {filesToUpload.map((item) => ( // Iterate over filesToUpload
-                    <div key={item.previewUrl} style={{ position: 'relative' }}>
-                        <img src={item.previewUrl} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '4px' }} />
-                        <button
-                        type="button"
-                        onClick={() => handleRemoveImage(item.previewUrl)} // Pass the specific previewUrl
-                        style={{ position: 'absolute', top: '-5px', right: '-5px', background: 'red', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', cursor: 'pointer' }}
-                        >
-                        &times;
-                        </button>
-                    </div>
-                    ))}
-                </div>
-
-                {/* Display Uploaded Image URLs (optional) */}
-                {uploadedImageUrls.length > 0 && (
-                    <div style={{ marginTop: '10px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-                    <h4>Successfully Uploaded Image URLs:</h4>
-                    <ul>
-                        {uploadedImageUrls.map((url, index) => (
-                        <li key={index}><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></li>
-                        ))}
-                    </ul>
-                    </div>
-                )}
+                {/* Photos */}
+                {/* Pass the callback function to PhotoSection as a prop */}
+                <PhotosSection onFilesReady={handleFilesReady} />
         
                 {/* Videos */}
                 <div>

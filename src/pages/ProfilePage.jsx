@@ -114,14 +114,14 @@ function ProfileContent({ profile }) {
                         >
                             <img
                                 src={photoUrl} // The URL for the current photo in the iteration
-                                alt={`Performance Photo ${index + 1}`} // Dynamic alt text
+                                alt={`Photo ${index + 1}`} // Dynamic alt text
                                 className="w-full h-52 object-cover rounded-xl"
                             />
                         </div>
                     ))
                 ) : (
                     // Optional: Display a message or a placeholder if no photos are available
-                    <p className="text-gray-500 col-span-full">No performance photos available yet.</p>
+                    <p className="text-gray-500 text-center mb-20 col-span-full">- No photos available yet. -</p>
                 )}
             </div>
 
