@@ -40,6 +40,7 @@ export default function ProfilePage() {
     fetchProfile(profile);
   }, [id]);
   
+  console.log(profile)
 
   // ✅ RETURN the JSX to ensure React renders it
   return (
@@ -104,15 +105,24 @@ function ProfileContent({ profile }) {
             <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
                 {/* Placeholder Photos */}
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
-                    <img src="https://placehold.co/400x250/a78bfa/ffffff?text=Photo+1" alt="Performance Photo 1" className="w-full h-52 object-cover rounded-xl"></img>
-                </div>
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
-                    <img src="https://placehold.co/400x250/c4b5fd/ffffff?text=Photo+2" alt="Studio Shot 2" className="w-full h-52 object-cover rounded-xl"></img>
-                </div>
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
-                    <img src="https://placehold.co/400x250/818cf8/ffffff?text=Photo+3" alt="Candid Shot 3" className="w-full h-52 object-cover rounded-xl"></img>
-                </div>
+                {/* Use a conditional check to ensure profile.photos exists and is an array */}
+                {profile.photos && profile.photos.length > 0 ? (
+                    profile.photos.map((photoUrl, index) => (
+                        <div
+                            key={index} // Use a unique key for each item in the list
+                            className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
+                        >
+                            <img
+                                src={photoUrl} // The URL for the current photo in the iteration
+                                alt={`Performance Photo ${index + 1}`} // Dynamic alt text
+                                className="w-full h-52 object-cover rounded-xl"
+                            />
+                        </div>
+                    ))
+                ) : (
+                    // Optional: Display a message or a placeholder if no photos are available
+                    <p className="text-gray-500 col-span-full">No performance photos available yet.</p>
+                )}
             </div>
 
             <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Videos</h3>
