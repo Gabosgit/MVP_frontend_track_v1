@@ -50,7 +50,8 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
             value={username} onChange={(e) => setUsername(e.target.value)} 
             type="text" 
             name="username"
-            id="username" 
+            id="username"
+            autoComplete="username" // For autocomplete in Chromium Browsers
             className="bg-gray-50 appearance-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
                       focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
                       dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
@@ -67,6 +68,7 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
             placeholder="Enter your password"
             name="password" 
             id="password"
+            autoComplete="current-password" // For autocomplete in Chromium Browsers
             className="bg-gray-50 appearance-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900
                       focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm
                       dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text 
