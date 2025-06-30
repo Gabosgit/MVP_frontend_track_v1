@@ -11,26 +11,16 @@ export default function Navbar() { // <-- Accept onHeightChange prop
   const [themeStatus, seThemeStatus] = useState("☀️ Light");
   const location = useLocation(); // Get the current location object
   const currentPathname = location.pathname; // Extract the pathname
-  const navbarRef = useRef(null); // <-- Create a ref for the navbar element
-  
-
-  const [navbarHeight, setNavbarHeight] = useState(0); // <-- State to store navbar height
+  const navbarRef = useRef(null); // Create a ref for the navbar element
+  const [navbarHeight, setNavbarHeight] = useState(0); // State to store navbar height
   const [isOpen, setIsOpen] = useState(false);
 
-
-   // Effect to measure navbar height after render
-// Effect to measure navbar height after render and handle scroll
+    // Effect to measure navbar height after render and handle scroll
     useEffect(() => {
-    //console.log('Navbar useEffect ran.');
-    //console.log('navbarRef.current at start of useEffect:', navbarRef.current);
-
-    if (navbarRef.current) {
-      //console.log(`Measured Navbar Height: ${height}px`); // This should now always show correct height
-        setNavbarHeight(navbarRef.current.offsetHeight);
-
-    }
-
-  }, []);
+        if (navbarRef.current) {
+            setNavbarHeight(navbarRef.current.offsetHeight); // This should now always show correct height
+        }
+    }, []);
   
   const darkModeHandler = () => {
       setDark(!dark);
@@ -42,16 +32,14 @@ export default function Navbar() { // <-- Accept onHeightChange prop
   const handleLogout = (e) => {
     e.preventDefault(); // Prevent default form submission or link navigation
     if (window.confirm('Are you sure you want to logout?')) {
-      //alert('Logging out...'); // This alert will show immediately
-      // Call the logout function from your AuthContext
+      // Call the logout function from AuthContext
       logout();
     }
   };
 
-
   return (
     <div>
-        <nav ref={navbarRef} // <-- Ensure this ref is attached to your <nav> element
+        <nav ref={navbarRef}
         id="navbar" className="fixed top-0 left-0 right-0 w-full z-[1000] min-h-[80px]
         bg-gradient-to-br from-[#f8f9ff] to-[rgb(147,130,173)] 
         dark:from-[#23003d] dark:to-[#12061c] backdrop-blur-xl  py-3.5 
@@ -69,12 +57,13 @@ export default function Navbar() { // <-- Accept onHeightChange prop
                             aria-label="Toggle sidebar"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                            ></path>
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                                >
+                                </path>
                             </svg>
                         </button>
                     }
@@ -87,7 +76,9 @@ export default function Navbar() { // <-- Accept onHeightChange prop
                 
                 <div className="xl:mr-44 nav-links hidden md:flex items-center space-x-8">
 
-                    <Greeting />
+                    {isAuthenticated &&
+                        <Greeting />
+                    }
 
                     {!user && (
                         <>
@@ -135,7 +126,6 @@ export default function Navbar() { // <-- Accept onHeightChange prop
         </nav>
         {isAuthenticated &&
             <Sidebar navbarHeight={navbarHeight} isOpen={isOpen}/>
-
         }
         
         {/* Sidebar Overlay (Dark backdrop when sidebar is open) */}

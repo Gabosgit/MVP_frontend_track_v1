@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 export default function ContractsDashboard({userData, contracts}) {
     const contractCards = contracts.slice(0, 3).map(contract => 
         <Link key={contract.id} to={`/contract/${contract.id}`} 
-        className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-gray-700/50">
+        className="flex items-center justify-between p-4 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-gray-700/50
+                    hover:btn-animation-r-t">
             <div>
                 <h4 className="font-semibold text-gray-800 dark:text-white">{contract.name}</h4>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Tech Corp • $12,500</p>

@@ -100,7 +100,9 @@ function ProfileContent({ profile }) {
 
         {/* Media Gallery Section */}
         <section className=" rounded-3xl  p-10 mb-8">
-            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">Media Gallery</h2>
+            <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+                Media Gallery
+            </h2>
 
             <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
@@ -182,11 +184,6 @@ function ProfileContent({ profile }) {
             <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
               Press (online)
             </h2>
-            {/* <ul className="list-disc list-inside text-gray-700 space-y-2">
-                <li><a href="https://www.example.com/press1" target="_blank" className="text-blue-600 hover:underline">"Jane Doe's New Album: A Breath of Fresh Air" - Indie Music Review</a></li>
-                <li><a href="https://www.example.com/press2" target="_blank" className="text-blue-600 hover:underline">"Live Performance Review: Jane Doe Electrifies the Crowd" - City Beat Magazine</a></li>
-                <li><a href="https://www.example.com/press3" target="_blank" className="text-blue-600 hover:underline">"Interview: The Story Behind Jane Doe's Lyrics" - Songwriters Daily</a></li>
-            </ul> */}
             {profile.online_press.length > 0 ? (
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                     {profile.online_press.map((item, index) => (
