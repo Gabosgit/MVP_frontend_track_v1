@@ -73,7 +73,7 @@ function SignUpContent({handleSubmit, form, handleChange}) {
             <input type="hidden" name="remember" value="true"/>
             <div className="rounded-md shadow-sm -space-y-px">
                 <div>
-                    <label htmlFor="full-name" className="sr-only">Username</label>
+                    <label htmlFor="username" className="sr-only">Username</label>
                     <input 
                       id="username"
                       type="text"
@@ -87,7 +87,63 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                     />
                 </div>
                 <div>
-                    <label htmlFor="email-address" className="sr-only">Email address</label>
+                    <label htmlFor="name" className="sr-only">Name</label>
+                    <input 
+                      id="name"
+                      type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      placeholder="Name"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
+                                rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
+                               dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="surname" className="sr-only">Surname</label>
+                    <input 
+                      id="surname"
+                      type="text"
+                      name="surname"
+                      value={form.surname}
+                      onChange={handleChange}
+                      placeholder="Surname"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
+                                rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
+                               dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="type_of_entity" className="sr-only">Type of entity</label>
+                    <input 
+                      id="type_of_entity"
+                      type="text"
+                      name="type_of_entity"
+                      value={form.type_of_entity}
+                      onChange={handleChange}
+                      placeholder="Type of entity"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
+                                rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
+                               dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="phone_number" className="sr-only">Phone number</label>
+                    <input 
+                      id="phone_number"
+                      type="text"
+                      name="phone_number"
+                      value={form.phone_number}
+                      onChange={handleChange}
+                      placeholder="Phone number"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 text-gray-900 bg-gray-50
+                                rounded-t-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start focus:z-10 sm:text-sm transition-colors
+                               dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text  dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="email_address" className="sr-only">Email address</label>
                     <input
                       id="email_address"
                       type="email"
@@ -121,7 +177,11 @@ function SignUpContent({handleSubmit, form, handleChange}) {
                 <div>
                     <label htmlFor="confirm-password" className="sr-only">Confirm Password</label>
                     <input id="confirm-password" name="confirm-password" type="password" autoComplete="new-password" required
-                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text bg-gray-50 dark:bg-dark-input-bg rounded-b-md focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start dark:focus:ring-indigo-400 dark:focus:border-indigo-400 focus:z-10 sm:text-sm transition-colors"
+                      className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 
+                              dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400 
+                              text-gray-900 dark:text-dark-text bg-gray-50 dark:bg-dark-input-bg rounded-b-md 
+                              focus:outline-none focus:ring-custom-purple-start focus:border-custom-purple-start 
+                              dark:focus:ring-indigo-400 dark:focus:border-indigo-400 focus:z-10 sm:text-sm transition-colors"
                       placeholder="Confirm Password"
                     />
                 </div>
