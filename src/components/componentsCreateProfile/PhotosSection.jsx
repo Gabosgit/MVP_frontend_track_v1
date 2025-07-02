@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 
 // The 'onFilesReady' prop is the only one PhotoSection receives from its parent now.
-export default function PhotoSection({ onFilesReady }) {
+export default function PhotoSection({ onFilesReady, imageError, setImageError }) {
     // This state holds the File objects, their local preview URLs, and a unique ID
     const [filesToProcess, setFilesToProcess] = useState([]);
 
@@ -11,6 +11,11 @@ export default function PhotoSection({ onFilesReady }) {
     const nextId = useRef(0);
 
     const handleFileChange = (event) => {
+        setImageError(null)
+        if (filesToProcess.length >= 3) {
+            setImageError("3 files max.")
+            return imageError
+        }
         const newlySelectedFiles = Array.from(event.target.files);
         const newFileItems = [];
 
@@ -68,6 +73,7 @@ export default function PhotoSection({ onFilesReady }) {
         <div>
             <h2>Upload Photos</h2>
             <input type="file" multiple onChange={handleFileChange} />
+            <p className="text-red-700">{imageError}</p>
 
             {filesToProcess.length > 0 && (
                 <div style={{ marginTop: '10px', borderTop: '1px solid #eee', paddingTop: '10px' }}>

@@ -37,6 +37,9 @@ export default function CreateProfile() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
+    const [imageError, setImageError ] = useState(null)
+
+
     // This function will be passed down to PhotoSection
     // PhotoSection will call this function to update filesToUpload in CreateProfile
     const handleFilesReady = (files) => {
@@ -89,38 +92,41 @@ export default function CreateProfile() {
 
         let finalImageUrls = []; // This will hold all Cloudinary URLs for the 'photos' field
 
-        // Step 1: Upload Images to Cloudinary via FastAPI /upload endpoint
+        // Step 1: Upload Images to Cloudinary via FastAPI /upload-multiple endpoint
         if (filesToUpload.length > 0) { // filesToUpload now directly contains File objects
             try {
-                const uploadPromises = filesToUpload.map(async (file) => { // Iterate directly over 'file'
-                    const formData = new FormData();
-                    formData.append('file', file); // 'file' is already the File object
-
-                    const response = await fetch(`${apiBaseUrl}/upload`, {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`Failed to upload ${file.name}: ${errorData.detail || response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    return data.url; // Returns the Cloudinary URL
+                const formData = new FormData();
+                // Append each file under the same key 'files'.
+                // The backend (FastAPI) expects multiple files under a single form field name.
+                filesToUpload.forEach((file) => {
+                    formData.append('files', file);
                 });
 
-                finalImageUrls = await Promise.all(uploadPromises);
-                // This is crucial: Update the parent's state with the actual Cloudinary URLs
-                // This state can then be passed back down to PhotoSection if needed to show
-                // "successfully uploaded" images, or used elsewhere in CreateProfile.
-                setUploadedImageUrls(finalImageUrls); // Assuming you have this state in CreateProfile
+                console.log("Sending multiple files to backend...");
+                // Make a single POST request to the new /upload-multiple endpoint
+                const response = await fetch(`${apiBaseUrl}/upload-multiple`, {
+                    method: 'POST',
+                    body: formData, // FormData automatically sets the correct Content-Type header
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to upload images: ${errorData.detail || response.statusText}`);
+                }
+
+                const data = await response.json();
+                // The backend now returns an array of URLs in a 'urls' property
+                finalImageUrls = data.urls; // Assuming backend returns { urls: [...] }
+
+                // Update the parent's state with the actual Cloudinary URLs.
+                // This state can then be used to display uploaded images or for other purposes.
+                setUploadedImageUrls(finalImageUrls);
 
             } catch (uploadError) {
                 console.error('Error during image uploads:', uploadError);
                 setError(`Failed to upload images: ${uploadError.message}`);
                 setIsLoading(false);
-                return;
+                return; // Stop execution if image upload fails
             }
         }
 
@@ -200,6 +206,7 @@ export default function CreateProfile() {
                     handleArrayChange={handleArrayChange} addArrayField={addArrayField}
                     handleSubmit={handleSubmit} 
                     handleFilesReady={handleFilesReady}
+                    imageError={imageError} setImageError={setImageError}
                 />
             }
         />
@@ -212,7 +219,7 @@ function CreateProfileContent({
     socialMedia, setSocialMedia, videos, setVideos, audios, setAudios, 
     onlinePress, handleAddOnlinePress, handleOnlinePressChange, handleRemoveOnlinePress,
     handleArrayChange, addArrayField, handleSubmit, 
-    isLoading, handleFilesReady, 
+    isLoading, handleFilesReady, imageError, setImageError,
     error, success, filesToUpload, uploadedImageUrls, handleRemoveImage
 }) {
     return (
@@ -360,7 +367,7 @@ function CreateProfileContent({
 
                 {/* Photos */}
                 {/* Pass the callback function to PhotoSection as a prop */}
-                <PhotosSection onFilesReady={handleFilesReady} />
+                <PhotosSection onFilesReady={handleFilesReady} imageError={imageError} setImageError={setImageError} />
         
                 {/* Videos */}
                 <div>
