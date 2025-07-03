@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useParams } from "react-router-dom";
 import Content from "../components/Content";
