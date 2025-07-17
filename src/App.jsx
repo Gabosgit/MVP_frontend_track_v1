@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
-import { Routes, Route, Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import User from "./pages/User";
 import SignUp from "./pages/SignUp";
+import ChangePassword from "./pages/ChangePassword";
 import Dashboard from "./pages/Dashboard";
 import CreateProfile from "./pages/CreateProfile";
 import ProfilePage from "./pages/ProfilePage";
@@ -34,6 +34,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/user" element={<User />} />
         <Route path="/sign_up" element={<SignUp />} />
+        <Route path="/change_password" element={<ChangePassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile/create" element={<CreateProfile />} />
         <Route path="/contract/create" element={<CreateContract />} />

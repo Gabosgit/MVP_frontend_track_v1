@@ -2,9 +2,11 @@ import { useEffect, useState, useContext } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { UserDataService, updateUserDataService } from "../services/UserDataService"; // Assuming you'll create updateUserDataService
 import Content from "../components/Content";
+import { Link } from "react-router-dom";
 
 
-function UserContent({ userData, setUserData }) { // setUserData passed as a prop to update the parent's state
+function UserContent({ userData, setUserData }) { 
+  // setUserData passed as a prop to update the parent's state
   const apiBaseUrl = useContext(ApiContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editableUserData, setEditableUserData] = useState({});
@@ -191,11 +193,9 @@ function UserContent({ userData, setUserData }) { // setUserData passed as a pro
             {isEditing ? (
               <span className="col-span-2  text-left px-1">xxxxxx</span>
             ) : (
-              <button 
-                className="col-span-2 text-red-500 text-left bg-gray-700 px-2 rounded">
-                Change password
-              </button>
-              
+              <Link to="/change_password" className="text-custom-purple-start hover:underline 
+                  dark:text-custom-purple-start"> Change password
+              </Link>
             )}
           </div>
         </div>
