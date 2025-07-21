@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import Content from "../components/Content";
 import { ApiContext } from "../context/ApiContext";
 import { AuthContext } from "../context/AuthContext";
@@ -14,12 +14,7 @@ function ChangePasswordContent() {
         old_password: "",
         new_password: ""
     });
-    const [showPassword, setShowPassword] = useState(false);
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-
+ 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prevForm) => ({

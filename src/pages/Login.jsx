@@ -85,9 +85,9 @@ function LoginContent({username, setUsername, password, setPassword, handleSubmi
                   Remember me
                 </label>
             </div>
-            <a href="#" className="ms-auto text-sm text-custom-purple-start hover:underline dark:text-custom-purple-start">
+            <Link to="/forgot_password" className="ms-auto text-sm text-custom-purple-start hover:underline dark:text-custom-purple-start">
               Lost Password?
-            </a>
+            </Link>
         </div>
         <button type="submit" className="btn-submit relative w-full flex justify-center py-3 px-4 text-sm font-medium rounded-md">
           Login to your account

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const PasswordField = ({ label, placeholder, value, onChange, name, id, autoComplete }) => {
+const PasswordField = ({ label, placeholder, value, onChange, name, id, autoComplete, minlength, error }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
@@ -26,6 +26,7 @@ const PasswordField = ({ label, placeholder, value, onChange, name, id, autoComp
                             dark:border-dark-input-border placeholder-gray-500 dark:placeholder-gray-400  dark:text-dark-text
                             dark:bg-dark-input-bg  dark:focus:ring-indigo-400 dark:focus:border-indigo-400 transition-colors rounded-lg pr-10"
                     required
+                    minlength={minlength}
                 />
                 <button
                     type="button"
@@ -44,6 +45,7 @@ const PasswordField = ({ label, placeholder, value, onChange, name, id, autoComp
                         </svg>
                     )}
                 </button>
+                {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
             </div>
         </div>
     );

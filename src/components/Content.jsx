@@ -6,6 +6,7 @@ import BackButton from "./BackButton"
 // Display load, error, or htmlContent
 export default function Content({pageName, loading, error, htmlContent }) {
   const { user, setUser } = useContext(AuthContext);
+  const currentPathname = location.pathname; // Extract the pathname
 
   if (loading) {
     return (
@@ -36,7 +37,11 @@ export default function Content({pageName, loading, error, htmlContent }) {
               <>
                 
                 <div className="flex mt-24 w-2/3 justify-between">
-                  <BackButton />
+                <div>
+                  {currentPathname !== "/dashboard" && (
+                    <BackButton />
+                  )}
+                </div>
                   <p className="text-xl text-right font-semibold">
                     You are in the section<br />
                     <span className="text-4xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
