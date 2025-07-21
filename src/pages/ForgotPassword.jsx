@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 // --- Message Display Component ---
-const MessageDisplay = ({ message, sent }) => {
+const MessageDisplay = ({ message}) => {
     if (!message) return null;
     const baseClasses = "p-3 rounded-md text-sm mb-4";
     return (
@@ -21,7 +21,6 @@ function ForgotPasswordContent() {
     const apiBaseUrl = useContext(ApiContext);
     const [emailAddress, setEmailAddress] = useState("")
     const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("");
     const [sent, setSent] = useState(false);
 
     const handleChange = (e) => {
@@ -62,7 +61,7 @@ function ForgotPasswordContent() {
                     Forgot Password
                 </h2>
 
-                <MessageDisplay message={message} type={messageType} />
+                <MessageDisplay message={message} />
 
                 {!sent && 
                     <>
