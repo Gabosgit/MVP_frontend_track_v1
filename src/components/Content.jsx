@@ -54,7 +54,11 @@ export default function Content({pageName, loading, error, htmlContent }) {
             
             )}
 
-            {htmlContent}
+            <div className="px-4">
+              {htmlContent}
+            </div>
+
+            
 
           </div>
           <Footer />

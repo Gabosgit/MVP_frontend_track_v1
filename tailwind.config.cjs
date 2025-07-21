@@ -60,6 +60,12 @@ module.exports = {
             '50%': { transform: 'translateY(-5px) translateX(-10px) scale(0.98)' },
             '75%': { transform: 'translateY(10px) translateX(5px) scale(1.01)' },
         },
+      },
+      lineHeight: {
+        '11': '2.75rem', // You can choose any name and value, e.g., 'extra-loose': '2.5'
+        '12': '3rem',
+        '13': '3.25rem', // For text-3xl (48px font-size) a line-height of 52px (3.25rem) or 56px (3.5rem) might be good
+        '14': '3.5rem',
       }
     },
   },
