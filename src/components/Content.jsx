@@ -58,8 +58,6 @@ export default function Content({pageName, loading, error, htmlContent }) {
               {htmlContent}
             </div>
 
-            
-
           </div>
           <Footer />
         </div>

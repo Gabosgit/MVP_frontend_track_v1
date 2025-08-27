@@ -229,87 +229,144 @@ function CreateProfileContent({
                 
 
                 {/* Profile Name */}
-                <div>
-                    <label htmlFor="name" className="block text-lg font-medium mb-1">
-                        Profile Name
-                    </label>
+                <div className="flex">
+                    {/* <label htmlFor="name" className="inline text-lg font-medium mb-1">
+                        Edit
+                    </label> */}
                     <input
+                        placeholder="+ Profile Name"
                         id="name"
                         name="name"
                         type="text"
                         value={name}
                         onChange={handleChangeSingle}
                         required
-                        className="w-full border rounded px-3 py-2"
+                        className="w-full border font-bold text-5xl bg-transparent px-3 py-2 border-l"
                     />
                 </div>
         
                 {/* Performance Type */}
                 <div>
-                <label htmlFor="performanceType" className="block text-lg font-medium mb-1">
+                {/* <label htmlFor="performanceType" className="block text-lg font-medium mb-1">
                     Performance Type
-                </label>
+                </label> */}
                 <input
+                    placeholder="+ Performance Type"
                     id="performanceType"
                     name="performanceType"
                     type="text"
-                    className="w-full border rounded px-3 py-2"
                     value={performanceType}
                     onChange={handleChangeSingle}
                     required
+                    className="w-full border rounded px-3 py-2 bg-transparent"
                 />
                 </div>
         
                 {/* Description */}
                 <div>
-                <label htmlFor="description" className="block text-lg font-medium mb-1">
+                {/* <label htmlFor="description" className="block text-lg font-medium mb-1">
                     Description
-                </label>
+                </label> */}
                 <textarea
+                placeholder="+ Description"
                     id="description"
                     name="description"
-                    className="w-full border rounded px-3 py-2"
                     rows="3"
                     value={description}
                     onChange={handleChangeSingle}
                     required
+                    className="w-full border rounded px-3 py-2 bg-transparent"
                 />
                 </div>
         
-                {/* Bio */}
-                <div>
-                <label htmlFor="bio" className="block text-lg font-medium mb-1">
-                    Bio
-                </label>
-                <textarea
-                    id="bio"
-                    name="bio"
-                    className="w-full border rounded px-3 py-2"
-                    rows="3"
-                    value={bio}
-                    onChange={handleChangeSingle}
-                    required
-                />
-                </div>
         
                 {/* Social Media */}
                 <div>
                 <label className="block text-lg font-medium mb-1">Social Media URLs</label>
-                {socialMedia.map((url, index) => (
-                    <input
-                    key={index}
-                    type="url"
-                    placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) =>
-                        handleArrayChange(index, e.target.value, socialMedia, setSocialMedia)
+                {socialMedia.map((media, index) => {
+                    // Get the titles that have already been selected, excluding the current item
+                    const selectedTitles = socialMedia
+                    .filter((_, i) => i !== index)
+                    .map(item => item.title);
+                    
+                    // Create the full list of unique options
+                    const allUniqueOptions = ['website', 'instagram', 'facebook', 'youtube', 'spotify', 'soundcloud'];
+                    
+                    // Filter the unique options
+                    const availableUniqueOptions = allUniqueOptions.filter(option => 
+                    !selectedTitles.includes(option)
+                    );
+                    
+                    // Always include 'other' and the currently selected unique option
+                    const availableOptions = [...availableUniqueOptions];
+                    if (media.title && !availableUniqueOptions.includes(media.title) && media.title !== 'other') {
+                    availableOptions.unshift(media.title);
                     }
-                    className="w-full border rounded px-3 py-2 mb-2"
-                    />
-                ))}
+                    availableOptions.push('other');
+                    
+                    return (
+                    <div key={index} className="flex mb-2 space-x-2 items-center">
+                        <select
+                        value={media.title || ''}
+                        onChange={(e) => {
+                            const newSocialMedia = [...socialMedia];
+                            newSocialMedia[index] = { ...newSocialMedia[index], title: e.target.value, customTitle: '' };
+                            setSocialMedia(newSocialMedia);
+                        }}
+                        className="border rounded px-3 py-2 flex-shrink-0"
+                        >
+                        <option value="" disabled>Select a title</option>
+                        {availableOptions.map(option => (
+                            <option key={option} value={option}>
+                            {option.charAt(0).toUpperCase() + option.slice(1)}
+                            </option>
+                        ))}
+                        </select>
+                        
+                        {media.title === 'other' ? (
+                        <>
+                            <input
+                            type="text"
+                            placeholder="Enter a custom title"
+                            value={media.customTitle || ''}
+                            onChange={(e) => {
+                                const newSocialMedia = [...socialMedia];
+                                newSocialMedia[index] = { ...newSocialMedia[index], customTitle: e.target.value };
+                                setSocialMedia(newSocialMedia);
+                            }}
+                            className="w-1/2 border rounded px-3 py-2"
+                            />
+                            <input
+                            type="url"
+                            placeholder="https://example.com"
+                            value={media.url || ''}
+                            onChange={(e) => {
+                                const newSocialMedia = [...socialMedia];
+                                // newSocialMedia[index] = { ...newSocialMedia[index], url: e.target.value };
+                                // setSocialMedia(newSocialMedia);
+                            }}
+                            className="w-1/2 border rounded px-3 py-2"
+                            />
+                        </>
+                        ) : (
+                        <input
+                            type="url"
+                            placeholder="https://example.com"
+                            value={media.url || ''}
+                            onChange={(e) => {
+                            const newSocialMedia = [...socialMedia];
+                            newSocialMedia[index] = { ...newSocialMedia[index], url: e.target.value };
+                            setSocialMedia(newSocialMedia);
+                            }}
+                            className="w-full border rounded px-3 py-2"
+                        />
+                        )}
+                    </div>
+                    );
+                })}
                 <button
                     type="button"
-                    onClick={() => addArrayField(socialMedia, setSocialMedia)}
+                    onClick={() => setSocialMedia([...socialMedia, { title: '', url: '', customTitle: '' }])}
                     className="text-blue-500 hover:underline"
                 >
                     Add another social media link
@@ -415,6 +472,23 @@ function CreateProfileContent({
                 >
                     Add another audio
                 </button>
+                </div>
+
+
+                {/* Bio */}
+                <div>
+                <label htmlFor="bio" className="block text-lg font-medium mb-1">
+                    Bio
+                </label>
+                <textarea
+                    id="bio"
+                    name="bio"
+                    className="w-full border rounded px-3 py-2"
+                    rows="3"
+                    value={bio}
+                    onChange={handleChangeSingle}
+                    required
+                />
                 </div>
         
 
