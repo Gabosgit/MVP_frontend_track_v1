@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Greeting from "./Greeting";
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar";
 
 
 export default function Navbar() { // <-- Accept onHeightChange prop
