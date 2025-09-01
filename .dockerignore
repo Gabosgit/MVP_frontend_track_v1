@@ -1,0 +1,15 @@
+.drufs
+.vscode
+node_modules
+.env.development
+.env.production
+.env.test
+
+# Git ignore file (not needed in the image)
+.gitignore
+
+# Environment variables (typically passed at runtime or managed differently)
+.env
+
+# Documentation and Dockerfile itself
+README.md
