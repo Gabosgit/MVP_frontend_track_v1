@@ -10,7 +10,8 @@ let nextOnlinePressId = 0; // Start ID counter outside the component
 export default function CreateProfile() {
     const apiBaseUrl = useContext(ApiContext);
     // Define navigate
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [currentMode, setCurrentMode ] = useState('show')
 
     // State variables for single fields:
     const [formSingle, setFormSingle] = useState({
@@ -225,8 +226,6 @@ function CreateProfileContent({
     return (
         <div className="max-w-3xl mx-auto p-6">
             <form className="space-y-6" onSubmit={handleSubmit}>
-                
-                
 
                 {/* Profile Name */}
                 <div className="flex">
