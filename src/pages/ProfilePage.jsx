@@ -76,7 +76,9 @@ function ProfileContent({ profile }) {
 
             {/* Online Presence Section */}
             <section className="-2 border-slate-300 rounded-3xl p-10 mb-8">
-                <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">Online Presence</h2>
+                <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+                    Online Presence
+                </h2>
                 <div className="flex flex-wrap justify-center items-center mb-4">
                     <a href="https://www.janedoeofficial.com" target="_blank" className="inline-flex items-center font-medium text-indigo-700 no-underline transition-colors duration-200 ease-in-out mr-4 mb-2 hover:text-indigo-500 hover:underline">
                         <i className="fab fa-instagram mr-2"></i> Website
@@ -112,16 +114,34 @@ function ProfileContent({ profile }) {
                     {/* Use a conditional check to ensure profile.photos exists and is an array */}
                     {profile.photos && profile.photos.length > 0 ? (
                         profile.photos.map((photoUrl, index) => (
-                            <div
-                                key={index} // Use a unique key for each item in the list
-                                className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
-                            >
-                                <img
-                                    src={photoUrl} // The URL for the current photo in the iteration
-                                    alt={`Photo ${index + 1}`} // Dynamic alt text
-                                    className="w-full h-52 object-cover rounded-xl"
-                                />
-                            </div>
+                            <>
+                                <div
+                                    key={index} // Use a unique key for each item in the list
+                                    data-popover-target="popover-photo"
+                                    className="cursor-pointer rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
+                                >
+                                    <img
+                                        src={photoUrl} // The URL for the current photo in the iteration
+                                        alt={`Photo ${index + 1}`} // Dynamic alt text
+                                        className="w-full h-52 object-cover rounded-xl"
+                                    />
+                                </div>
+                                <div
+                                    data-popover
+                                    id="popover-photo"
+                                    role="tooltip"
+                                    class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0"
+                                >
+                                    <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
+                                        <h3 class="font-semibold text-gray-900">Popover title</h3>
+                                    </div>
+                                    <div class="px-3 py-2">
+                                        <p>And here's some amazing content. It's very engaging. Right?</p>
+                                    </div>
+                                    <div data-popper-arrow></div>
+                                </div>
+                            </>
+                            
                         ))
                     ) : (
                         // Optional: Display a message or a placeholder if no photos are available

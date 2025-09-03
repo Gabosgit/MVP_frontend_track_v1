@@ -43,7 +43,7 @@ function App() {
         <Route path="/profile/create" element={<CreateProfile />} />
         <Route path="/contract/create" element={<CreateContract />} />
 
-        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/profile/:id" element={<CreateProfile />} />
         <Route path="/contract/:id" element={<ContractPage />} />
         <Route path="/user/:id/profiles" element={<UserProfiles />} />
         <Route path="/user/:id/contracts" element={<UserContracts />} />
