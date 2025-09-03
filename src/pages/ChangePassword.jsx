@@ -53,7 +53,7 @@ function ChangePasswordContent() {
     }
 
     return (
-        <div className="mt-24  max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
+        <div className="mt-10  max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
             <form className="space-y-6" onSubmit={handleSubmit} >
                 <h2 className="mt-6 text-center text-3xl sm:text-4xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
                 dark:from-indigo-300 dark:to-purple-400 dark:text-transparent dark:bg-gradient-to-r">
@@ -94,9 +94,9 @@ function ChangePasswordContent() {
                 />
 
                 <div className="flex items-start">
-                    <a href="#" className="ms-auto text-sm text-custom-purple-start hover:underline dark:text-custom-purple-start">
-                    Lost Password?
-                    </a>
+                    <Link to="/forgot_password" className="ms-auto text-sm text-custom-purple-start hover:underline dark:text-custom-purple-start">
+                        Lost Password?
+                    </Link>
                 </div>
 
                 <button
