@@ -27,7 +27,9 @@ body {
     dark:to-dark-bg-end;
 }
 
+/* - - - - - - COMPONENTS - - - - - - */
 @layer components {
+  /* GRADIETNS */
   .title-gradient {
     @apply
     text-gradient 
@@ -54,7 +56,7 @@ body {
     color: transparent;
   }
 
-  /* BUTTONS */
+  /* BUTTONS settings */
   .hero-buttons {
     @apply 
     flex 
@@ -79,7 +81,7 @@ body {
     whitespace-nowrap;
   }
   
-  /* --- ANIMATIONS --- */
+  /* BUTTONS animations --- */
   .btn-animation {
     @apply
     hover:-translate-y-0.5
@@ -113,6 +115,7 @@ body {
     ease-in-out;
   }
 
+  /* BUTTONS styles */
   .btn-submit {
     @apply 
      text-white 
@@ -205,6 +208,7 @@ body {
      dark:hover:to-dark-purple-start;
   }
 
+  /* --- OTHERS --- */
   .feature-icon-bg {
       @apply 
       w-16 h-16 
@@ -252,7 +256,7 @@ body {
 }
 
 
-/* Animations */
+/* - - - - - - ANIMATIONS - - - - - - */
   @keyframes slideInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
