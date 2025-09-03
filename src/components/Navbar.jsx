@@ -125,7 +125,7 @@ export default function Navbar() { // <-- Accept onHeightChange prop
 
             </nav>
             {isAuthenticated &&
-                <Sidebar navbarHeight={navbarHeight} isOpen={isOpen}/>
+                <Sidebar navbarHeight={navbarHeight} isOpen={isOpen} setIsOpen={setIsOpen}/>
             }
             
             {/* Sidebar Overlay (Dark backdrop when sidebar is open) */}

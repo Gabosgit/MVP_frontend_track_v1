@@ -4,12 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 
-export default function Sidebar({ navbarHeight, isOpen }) { // <-- Accept navbarHeight prop
+export default function Sidebar({ navbarHeight, isOpen, setIsOpen }) { // <-- Accept navbarHeight prop
   const location = useLocation();
   const { user, loading, isAuthenticated, logout } = useContext(AuthContext);
-  
 
-  
   // Define navigation links
   const menuSections = [
     {
@@ -62,8 +60,6 @@ export default function Sidebar({ navbarHeight, isOpen }) { // <-- Accept navbar
 
   return (
     <>
-      
-
       {/* Sidebar Menu */}
       <aside
         id="sidebar"
