@@ -36,7 +36,7 @@ export default function Login() {
 
 function LoginContent({username, setUsername, password, setPassword, handleSubmit}) {
   return (
-    <div className="mt-44  max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
+    <div className="mt-20  max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 dark:border-dark-nav-border animate-slideInUp">
       <form className="space-y-6" onSubmit={handleSubmit} >
         <h2 className="mt-6 text-center text-3xl sm:text-4xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
          dark:from-indigo-300 dark:to-purple-400 dark:text-transparent dark:bg-gradient-to-r">

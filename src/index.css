@@ -10,13 +10,10 @@ body {
   @apply 
     font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif]
     text-slate-700
-    backdrop-blur-xl
     bg-slate-200
     min-h-screen
     w-screen 
     overflow-x-hidden
-    transition-all 
-    duration-500;
 }
 
 .dark body {

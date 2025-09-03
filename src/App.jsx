@@ -20,7 +20,6 @@ import EventPage from "./pages/EventPage";
 import './index.css'
 
 function App() {
-  
 
   return (
     // THIS WRAPPING DIV IS CRUCIAL FOR THE LAYOUT
@@ -28,29 +27,29 @@ function App() {
       <Navbar />
       {/* Sidebar is fixed, so it doesn't need to be inside the flex container to work. */}
       {/* However, the flex container for main is important for ensuring it takes space. */}
-      
-      <Routes>
-        {/* Your Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/sign_up" element={<SignUp />} />
-        <Route path="/change_password" element={<ChangePassword />} />
-        <Route path="/forgot_password" element={<ForgotPassword />} />
-        <Route path="/reset_password" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile/create" element={<CreateProfile />} />
-        <Route path="/contract/create" element={<CreateContract />} />
+      <main className="pt-[90px]">
+        <Routes>
+          {/* Your Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/user" element={<User />} />
+          <Route path="/sign_up" element={<SignUp />} />
+          <Route path="/change_password" element={<ChangePassword />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/reset_password" element={<ResetPassword />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile/create" element={<CreateProfile />} />
+          <Route path="/contract/create" element={<CreateContract />} />
 
-        <Route path="/profile/:id" element={<CreateProfile />} />
-        <Route path="/contract/:id" element={<ContractPage />} />
-        <Route path="/user/:id/profiles" element={<UserProfiles />} />
-        <Route path="/user/:id/contracts" element={<UserContracts />} />
-        <Route path="/contract/:contract_id/event/create" element={<CreateEvent />} />
-        <Route path="contract/:contract_id/event/:event_id" element={<EventPage />} />
-      </Routes>
-
+          <Route path="/profile/:id" element={<CreateProfile />} />
+          <Route path="/contract/:id" element={<ContractPage />} />
+          <Route path="/user/:id/profiles" element={<UserProfiles />} />
+          <Route path="/user/:id/contracts" element={<UserContracts />} />
+          <Route path="/contract/:contract_id/event/create" element={<CreateEvent />} />
+          <Route path="contract/:contract_id/event/:event_id" element={<EventPage />} />
+        </Routes>
+      </main>
     </>
   );
 }

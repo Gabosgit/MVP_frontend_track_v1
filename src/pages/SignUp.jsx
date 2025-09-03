@@ -57,7 +57,7 @@ export default function SignUp() {
 
 function SignUpContent({handleSubmit, form, handleChange}) {
   return (
-    <div className="mt-36 max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 
+    <div className="mt-3 max-w-md w-full space-y-8 bg-white/80 dark:bg-dark-card backdrop-blur-lg shadow-2xl rounded-2xl p-8 sm:p-10 border border-gray-200/60 
     dark:border-dark-nav-border animate-slideInUp">
         <div>
             <h2 className="mt-6 text-center text-3xl sm:text-4xl font-bold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
