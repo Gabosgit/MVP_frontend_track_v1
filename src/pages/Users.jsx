@@ -4,18 +4,33 @@ import { UserDataService, updateUserDataService } from "../services/UserDataServ
 import Content from "../components/Content";
 import { Link } from "react-router-dom";
 
+// Now, let's look at the front-end, built with React. 
+// In this code, we have 
+// two key functions: !User and !UserContent.
 
-export default function User() {
+// The main component User
+// is responsible 
+// for the initial user data fetch
+export default function User() { 
   const apiBaseUrl = useContext(ApiContext);
   const [userData, setUserData] = useState(null);
+  // and handling !loading and 
   const [loading, setLoading] = useState(true);
+  // !error states.
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  // It uses the !useEffect hook
+  useEffect(() => { //  to call a service 
     const fetchData = async () => {
-      try {
+      try {               // this !UserDataService
         const data = await UserDataService(apiBaseUrl);
+        // It retrieves the data from the API.
+        // Once the data is successfully fetched,
+        // it is stored in the 
+        // UserData state variable
+        // using !setUserData
         setUserData(data);
+        // Then we set !loading to !false
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -25,38 +40,82 @@ export default function User() {
     };
 
     fetchData();
-  }, [apiBaseUrl]); // Add apiBaseUrl to dependency array
+  }, [apiBaseUrl]);
 
   return (
+    // The User component then 
+    // renders the !Content component
     <Content
       pageName={"User Data"}
       loading={loading}
       error={error}
-      htmlContent={<UserContent userData={userData} setUserData={setUserData} />} // Pass setUserData
+      // Inside that, it renders the
+      // !UserContent component.
+      // This is where the crucial part happens
+      // We pass down the !userData and !setUserData variables
+      // as !props
+      // from this (User Component)
+      // to the child UserContent component.
+      htmlContent={<UserContent userData={userData} setUserData={setUserData} />}
     />
   );
 }
 
 
-function UserContent({ userData, setUserData }) { 
-  // setUserData passed as a prop to update the parent's state
-  const apiBaseUrl = useContext(ApiContext);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableUserData, setEditableUserData] = useState({});
 
+// So, UserContent doesn't fetch the data itself; 
+// it receives it directly from its parent.
+function UserContent({ userData, setUserData }) { 
+  // it receives userData and also
+  // !setUserData as a prop
+  // to update the parent's state
+  const apiBaseUrl = useContext(ApiContext);
+  // We are using here the !useState hook
+  // !isEditing: which is a boolean flag 
+  // that controls which view the user sees
+  // either the static data or the editable form fields.
+  const [isEditing, setIsEditing] = useState(false);
+  // We use also useState
+  // !editableUserData: This will be a copy of the user data.
+  // We make changes to this copy in the form fields.
+  const [editableUserData, setEditableUserData] = useState({});
+  // This is an important design choice because 
+	// it allows us to cancel any edits and 
+	// revert to the original userData without 
+	// making any API calls or permanent changes.
+
+
+  // We use here the !useEffect hook 
+  // to synchronize the !editableUserData state with
+  // the userData prop of the parent component.
   useEffect(() => {
     if (userData) {
       setEditableUserData(userData);
+        // This is a common pattern to ensure 
+        // that if the original userData changes 
+        // in the parent component, 
+        // like after a successful save operation, 
+        // the editableUserData state in the 
+        // child component is also updated,
+        // keeping everything in sync.
     }
-  }, [userData]);
+    // This is why we add userData 
+    // ( hier! ) to the dependency array of the useEffect hook.
+  }, [userData]); 
 
   if (!userData)
     return <div className="text-gray-500">No user data available.</div>;
 
+  // When the user clicks the "Edit" button, 
+  // the !handleEditClick function sets
+  // isEditing to true, 
   const handleEditClick = () => {
     setIsEditing(true);
+    // which reveals the input fields.
   };
-
+  // As the user types, 
+  // the !handleChange function updates
+  // the !editableUserData state.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditableUserData((prevData) => ({
@@ -65,38 +124,67 @@ function UserContent({ userData, setUserData }) {
     }));
   };
 
+  // If the user clicks "Save", 
+  // the !handleSaveClick function
+  // calls the !updateUserDataService. 
   const handleSaveClick = async () => {
     try {
-      // Assuming you have an updateUserDataService in your UserDataService file
       const updatedData = await updateUserDataService(apiBaseUrl, editableUserData);
-      setUserData(updatedData); // Update the parent component's state
+      // This service sends a PATCH request
+      // with the !editableUserData
+      // to the API.
+
+      // If the API call is successful, 
+      // we receive the updated data back and use 
+      // !setUserData to update 
+      // the parent component's state       
+      setUserData(updatedData);
+      // we set than !isEditing back to !false
+      // which hides the fields and shows the new data.
       setIsEditing(false);
+      
     } catch (error) {
+      // !Errors are handled here, if occur.
       console.error("Error saving user data:", error);
-      // Optionally, show an error message to the user
     }
   };
 
+
+  // If the user clicks "Cancel", 
+  // the !handleCancelClick function simply 
+  // reverts !editableUserData back
+  // to the original !userData
   const handleCancelClick = () => {
-    setEditableUserData(userData); // Revert changes
+    setEditableUserData(userData);
+    // and sets !isEditing to !false, 
+    // discarding all changes.
     setIsEditing(false);
   };
+
+  
 
   return (
     <div className="bg-transparent mt-20 p-8 pb-14 backdrop-blur-lg rounded-2xl animate-slideInUp">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-        {/* Personal Information Column */}
+
         <div className="card-data">
           <h3 className="text-2xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end dark:from-dark-purple-start dark:to-dark-purple-end mb-4">
             Personal Information
           </h3>
 
-          {/* Each data row now uses grid for alignment */}
-          {/* Username */}
+
           <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Username:</strong>
+            {/* The conditional rendering 
+                is managed by the 
+                !isEditing state.  */}
+            
+            {/* We use a ternary operator 
+            to dynamically render either  
+              */}
             {isEditing ? (
+              // an !<input> field for editing.
               <input
                 type="text"
                 name="username"
@@ -105,9 +193,27 @@ function UserContent({ userData, setUserData }) {
                 className="col-span-2  text-left bg-gray-700 text-white px-1 rounded"
               />
             ) : (
+              // or a simple !<span> to display the data
               <span className="col-span-2  text-left">{userData.username}</span>
             )}
           </div>
+
+            {/* This solution 
+                gives us a user-friendly page 
+                that uses a single component 
+                to handle both 
+                the viewing and editing 
+                of user data seamlessly, 
+                and all in one place. 
+                
+                I hope this explanation was clear and helpful.
+                
+            */}
+
+
+
+
+
           {/* Name */}
           <div className="data-field">
             <strong className="col-span-1 text-left sm:text-right">Name:</strong>

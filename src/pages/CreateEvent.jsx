@@ -65,7 +65,6 @@ export default function CreateEvent() {
             // Get the token from localStorage; adjust retrieval as necessary.
             const token = localStorage.getItem("token");
             
-
             const response = await fetch(`${apiBaseUrl}/event`, {
                 method: "POST",
                 headers: {
