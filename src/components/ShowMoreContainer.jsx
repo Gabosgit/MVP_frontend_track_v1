@@ -13,10 +13,14 @@ export default function ShowMoreContainer({text}) {
                 {!showMore ? text : text.slice(0, 300) + " ..."}
             </p>
             <div className="flex justify-end mt-1">
-                <button onClick={toggleShowMore} className="p-2 font-bold text-blue-700">
+                <button 
+                    onClick={toggleShowMore}
+                    type="button"
+                    className="p-2 font-bold text-blue-700"
+                >
                     {!showMore ? "show less" : "show more"}
                 </button>
-            </div>
+            </div> 
         </div>
     )
 }

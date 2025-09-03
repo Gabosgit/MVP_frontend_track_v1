@@ -75,7 +75,7 @@ export default function Content({pageName, loading, error, htmlContent, editing,
               </div>
             )}
 
-            <div className="flex flex-col mt-10 items-center w-full sm:w-3/5">
+            <div className="flex flex-col items-center w-full sm:w-3/5 pb-10">
               {contentWithProps}
             </div>
 

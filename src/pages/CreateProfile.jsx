@@ -5,6 +5,7 @@ import Content from "../components/Content";
 import PhotosSection from "../components/componentsCreateProfile/PhotosSection";
 import { useParams } from "react-router-dom";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import ShowMoreContainer from "../components/ShowMoreContainer"; // Used for Bio
 
 // helper for generating unique IDs when adding press title/url
 let nextOnlinePressId = 0; // Start ID counter outside the component
@@ -293,14 +294,19 @@ function CreateProfileContent({
     }, [profile]); // Re-calculate when text changes
     
     // Determine the current UI state based on `profile` and `editing`
-    let profileInfo;
-    let onlinePresence;
-    let photos;
+    let profileInfoProfile;
+    let onlinePresenceProfile;
+    let photosProfile;
+    let videosProfile;
+    let audiosProfile;
+    let bioProfile;
+    let pressProfile;
+    let technicProfile;
 
     // CREATE
     // Condition 1: If no profile exists, show the create form
     if (!profile) {
-        profileInfo = (
+        profileInfoProfile = (
             <>
                 {/* Profile Name */}
                 <div className="flex">
@@ -354,7 +360,7 @@ function CreateProfileContent({
                 </div>
             </>
         );
-        onlinePresence = (
+        onlinePresenceProfile = (
             <>
                 {/* Social Media (optional) */}
                 <div>
@@ -466,7 +472,7 @@ function CreateProfileContent({
                 </div>
             </>
         )
-        photos = (
+        photosProfile = (
             <>
                 {/* Photos */}
                 {/* Pass the callback function to PhotoSection as a prop */}
@@ -474,12 +480,124 @@ function CreateProfileContent({
             </>
             
         )
+        videosProfile = (
+            <div>
+                <label className="block text-lg font-medium mb-1">Videos URLs</label>
+                {videos.map((url, index) => (
+                    <input
+                    key={index}
+                    type="url"
+                    placeholder="https://example.com"
+                    value={url}
+                    onChange={(e) =>
+                        handleArrayChange(index, e.target.value, videos, setVideos)
+                    }
+                    className="w-full border rounded px-3 py-2 mb-2"
+                    />
+                ))}
+                <button
+                    type="button"
+                    onClick={() => addArrayField(videos, setVideos)}
+                    className="text-blue-500 hover:underline"
+                >
+                    Add another video
+                </button>
+            </div>
+
+        )
+        audiosProfile = (
+            <div>
+                <label className="block text-lg font-medium mb-1">Audios URLs</label>
+                {audios.map((url, index) => (
+                    <input
+                    key={index}
+                    type="url"
+                    placeholder="https://example.com"
+                    value={url}
+                    onChange={(e) =>
+                        handleArrayChange(index, e.target.value, audios, setAudios)
+                    }
+                    className="w-full border rounded px-3 py-2 mb-2"
+                    />
+                ))}
+                <button
+                    type="button"
+                    onClick={() => addArrayField(audios, setAudios)}
+                    className="text-blue-500 hover:underline"
+                >
+                    Add another audio
+                </button>
+            </div>
+        )
+        bioProfile = (
+            <div>
+                <label htmlFor="bio" className="block text-lg font-medium mb-1">
+                    Bio
+                </label>
+                <textarea
+                    id="bio"
+                    name="bio"
+                    className="w-full border rounded px-3 py-2"
+                    rows="3"
+                    value={bio}
+                    onChange={handleChangeSingle}
+                    required
+                />
+            </div>
+        )
+        pressProfile = (
+            <div>
+                <label style={{ display: 'block', marginBottom: '10px' }}>Online Press (Title & URL):</label> {/* <-- Make label a block element and add margin */}
+                {onlinePress.map((item) => ( // <-- Map now just takes 'item'
+                <div key={item.id} style={{ border: '1px dashed #eee', padding: '10px', marginBottom: '10px' }}> {/* <-- Use item.id as key */}
+                    <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'title', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
+                    <input type="url" placeholder="https://..." value={item.url} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'url', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
+                    <button type="button" onClick={() => handleRemoveOnlinePress(item.id)}>Remove</button> {/* <-- Pass item.id */}
+                </div>
+                ))}
+                <button type="button" onClick={handleAddOnlinePress}> + Add Online Press Item</button>
+            </div>
+        )
+        technicProfile = (
+            <div>
+                <div>
+                    <label htmlFor="stagePlan" className="block text-lg font-medium mb-1">
+                        Stage Plan (optional)
+                    </label>
+                    <input
+                        id="stagePlan"
+                        name="stagePlan"
+                        type="url"
+                        placeholder="https://example.com"
+                        className="w-full border rounded px-3 py-2"
+                        value={stagePlan}
+                        onChange={handleChangeSingle}
+                    />
+                </div>
+        
+                {/* Tech Rider (optional) */}
+                <div>
+                    <label htmlFor="techRider" className="block text-lg font-medium mb-1">
+                        Tech Rider (optional)
+                    </label>
+                    <input
+                        id="techRider"
+                        name="techRider"
+                        type="url"
+                        placeholder="https://example.com"
+                        className="w-full border rounded px-3 py-2"
+                        value={techRider}
+                        onChange={handleChangeSingle}
+                    />
+                </div>
+            </div>
+        )
     } 
 
     // EDIT 
     // Condition 2: If a profile exists AND we are editing, show the update form
     else if (editing) {
-        profileInfo = (
+        profileInfoProfile = (
             <>
                 {/* Prifile Name */}
                 <div className="flex">
@@ -542,7 +660,7 @@ function CreateProfileContent({
                 </div>
             </>
         );
-        onlinePresence = (
+        onlinePresenceProfile = (
             <section className="border-slate-300 rounded-3xl mb-8">
                 <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 border-gray-200 pb-3">
                     Online Presence
@@ -570,7 +688,7 @@ function CreateProfileContent({
                 </div>
             </section>
         )
-        photos = (
+        photosProfile = (
             <>
                 <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
@@ -629,14 +747,14 @@ function CreateProfileContent({
                                     <button
                                     type="button"
                                     onClick={() => setOpen(false)}
-                                    className="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto"
+                                    className="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold !text-white hover:bg-red-400 sm:ml-3 sm:w-auto"
                                     >
                                     delete
                                     </button>
                                     <button
                                     type="button"
                                     onClick={() => setOpen(false)}
-                                    className="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-400 sm:ml-3 sm:w-auto"
+                                    className="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold !text-white hover:bg-blue-400 sm:ml-3 sm:w-auto"
                                     >
                                     change
                                     </button>
@@ -644,7 +762,7 @@ function CreateProfileContent({
                                     type="button"
                                     data-autofocus
                                     onClick={() => setOpen(false)}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold !text-white ring-1 ring-inset ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
                                     >
                                     Cancel
                                     </button>
@@ -656,12 +774,124 @@ function CreateProfileContent({
                 </div>
             </>
         )
+        videosProfile = (
+            <div>
+                <label className="block text-lg font-medium mb-1">Videos URLs</label>
+                {videos.map((url, index) => (
+                    <input
+                    key={index}
+                    type="url"
+                    placeholder="https://example.com"
+                    value={url}
+                    onChange={(e) =>
+                        handleArrayChange(index, e.target.value, videos, setVideos)
+                    }
+                    className="w-full border rounded px-3 py-2 mb-2"
+                    />
+                ))}
+                <button
+                    type="button"
+                    onClick={() => addArrayField(videos, setVideos)}
+                    className="text-blue-500 hover:underline"
+                >
+                    Add another video
+                </button>
+            </div>
+
+        )
+        audiosProfile = (
+            <div>
+                <label className="block text-lg font-medium mb-1">Audios URLs</label>
+                {audios.map((url, index) => (
+                    <input
+                    key={index}
+                    type="url"
+                    placeholder="https://example.com"
+                    value={url}
+                    onChange={(e) =>
+                        handleArrayChange(index, e.target.value, audios, setAudios)
+                    }
+                    className="w-full border rounded px-3 py-2 mb-2"
+                    />
+                ))}
+                <button
+                    type="button"
+                    onClick={() => addArrayField(audios, setAudios)}
+                    className="text-blue-500 hover:underline"
+                >
+                    Add another audio
+                </button>
+            </div>
+        )
+        bioProfile = (
+            <div>
+                <label htmlFor="bio" className="block text-lg font-medium mb-1">
+                    Bio
+                </label>
+                <textarea
+                    id="bio"
+                    name="bio"
+                    className="w-full border rounded px-3 py-2"
+                    rows="3"
+                    value={bio}
+                    onChange={handleChangeSingle}
+                    required
+                />
+            </div>
+        )
+        pressProfile = (
+            <div>
+                <label style={{ display: 'block', marginBottom: '10px' }}>Online Press (Title & URL):</label> {/* <-- Make label a block element and add margin */}
+                {onlinePress.map((item) => ( // <-- Map now just takes 'item'
+                <div key={item.id} style={{ border: '1px dashed #eee', padding: '10px', marginBottom: '10px' }}> {/* <-- Use item.id as key */}
+                    <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'title', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
+                    <input type="url" placeholder="https://..." value={item.url} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'url', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
+                    <button type="button" onClick={() => handleRemoveOnlinePress(item.id)}>Remove</button> {/* <-- Pass item.id */}
+                </div>
+                ))}
+                <button type="button" onClick={handleAddOnlinePress}> + Add Online Press Item</button>
+            </div>
+        )
+        technicProfile = (
+            <div>
+                <div>
+                    <label htmlFor="stagePlan" className="block text-lg font-medium mb-1">
+                        Stage Plan (optional)
+                    </label>
+                    <input
+                        id="stagePlan"
+                        name="stagePlan"
+                        type="url"
+                        placeholder="https://example.com"
+                        className="w-full border rounded px-3 py-2"
+                        value={stagePlan}
+                        onChange={handleChangeSingle}
+                    />
+                </div>
+        
+                {/* Tech Rider (optional) */}
+                <div>
+                    <label htmlFor="techRider" className="block text-lg font-medium mb-1">
+                        Tech Rider (optional)
+                    </label>
+                    <input
+                        id="techRider"
+                        name="techRider"
+                        type="url"
+                        placeholder="https://example.com"
+                        className="w-full border rounded px-3 py-2"
+                        value={techRider}
+                        onChange={handleChangeSingle}
+                    />
+                </div>
+            </div>
+        )
     }
 
     // SHOW 
     // Condition 3: If a profile exists AND we are NOT editing, show the static data
     else {
-        profileInfo = (
+        profileInfoProfile = (
             <>
                 {/* Prifile Name */}
                 <div className="flex">
@@ -691,7 +921,7 @@ function CreateProfileContent({
                 </div>
             </>
         );
-        onlinePresence = (
+        onlinePresenceProfile = (
             <section className="-2 border-slate-300 rounded-3xl mb-8">
                 <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
                     Online Presence
@@ -719,45 +949,120 @@ function CreateProfileContent({
                 </div>
             </section>
         )
-        photos = (
-            <>
-                <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    {/* Placeholder Photos */}
-                    {/* Use a conditional check to ensure profile.photos exists and is an array */}
-                    {profile.photos && profile.photos.length > 0 ? (
-                        profile.photos.map((photoUrl, index) => (
-                            <div
-                                key={index} // Use a unique key for each item in the list
-                                className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
-                            >
-                                <img
-                                    src={photoUrl} // The URL for the current photo in the iteration
-                                    alt={`Photo ${index + 1}`} // Dynamic alt text
-                                    className="w-full h-52 object-cover rounded-xl"
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        // Optional: Display a message or a placeholder if no photos are available
-                        <p className="text-gray-500 text-center mb-20 col-span-full">- No photos available yet. -</p>
-                    )}
+        photosProfile = (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+                {/* Placeholder Photos */}
+                {/* Use a conditional check to ensure profile.photos exists and is an array */}
+                {profile.photos && profile.photos.length > 0 ? (
+                    profile.photos.map((photoUrl, index) => (
+                        <div
+                            key={index} // Use a unique key for each item in the list
+                            className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
+                        >
+                            <img
+                                src={photoUrl} // The URL for the current photo in the iteration
+                                alt={`Photo ${index + 1}`} // Dynamic alt text
+                                className="w-full h-52 object-cover rounded-xl"
+                            />
+                        </div>
+                    ))
+                ) : (
+                    // Optional: Display a message or a placeholder if no photos are available
+                    <p className="text-gray-500 text-center mb-20 col-span-full">- No photos available yet. -</p>
+                )}
+            </div>
+        )
+        videosProfile = (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+                {/* Placeholder Videos (YouTube embeds) */}
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
                 </div>
-            </>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/m7w5sI7F-XQ?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                    <div className="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/3JWTaaS7LCE?controls=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full rounded-xl"></iframe>
+                    </div>
+                </div>
+            </div>
+        )
+        audiosProfile = (            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Placeholder Audios */}
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 1: "Echoes of Dawn"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 2: "Whispers in the Wind"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
+                    <p className="text-gray-800 font-medium mb-2">Track 3: "Midnight Serenade"</p>
+                    <audio controls className="w-full max-w-md rounded-xl"></audio>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></source>
+                    Your browser does not support the audio element.
+                </div>
+            </div>
+        )
+        bioProfile = (
+            <ShowMoreContainer text={profile.bio}/>
+        )
+        pressProfile = (
+            <div>
+                {profile.online_press.length > 0 ? (
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                    {profile.online_press.map((item, index) => (
+                        <li key={index}> {/* Using index as key is okay if items don't change order or get added/removed frequently */}
+                            <a 
+                                href={item.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer" // Recommended for security with target="_blank"
+                                className="text-blue-600 hover:underline"
+                            >
+                                {item.title}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="text-gray-500">No online press available yet.</p>
+            )}
+            </div>
+        )
+        technicProfile = (
+            <div className="flex flex-wrap justify-center">
+                <a href="https://www.example.com/stage_plan.pdf" target="_blank" className="inline-flex items-center bg-indigo-700 text-white py-3 px-6 rounded-xl no-underline transition-colors duration-200 ease-in-out transform font-semibold mr-3 mb-3 hover:bg-indigo-500 hover:-translate-y-0.5">
+                    <i className="fas fa-ruler-combined mr-2"></i> Stage Plan
+                </a>
+                <a href="https://www.example.com/tech_rider.pdf" target="_blank" className="inline-flex items-center bg-indigo-700 text-white py-3 px-6 rounded-xl no-underline transition-colors duration-200 ease-in-out transform font-semibold mr-3 mb-3 hover:bg-indigo-500 hover:-translate-y-0.5">
+                    <i className="fas fa-file-invoice mr-2"></i> Tech Rider
+                </a>
+            </div>
         )
     }
 
     return (
-        <div className="w-full mx-auto p-6">
+        <div className="w-full mt-16">
             <form className="space-y-6" onSubmit={handleSubmit}>
                 {/* Profile INFO Name, Performance type, Description */}
                 <div>
-                    {profileInfo}
+                    {profileInfoProfile}
                 </div>
 
                 {/* Online Presence */}
                 <div>
-                    {onlinePresence}
+                    {onlinePresenceProfile}
                 </div>
         
                 {/* Media Gallery */}
@@ -765,137 +1070,47 @@ function CreateProfileContent({
                     <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
                         Media Gallery
                     </h2>
-                    {photos}
+
+                    {/* Photos */}
+                    <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
+                    {photosProfile}
+
+                    {/* Videos */}
+                    <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Videos</h3>
+                    {videosProfile}
+
+                    {/* Audios */}
+                    <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Audios</h3>
+                    {audiosProfile}
                 </div>
-                
-
-
-                {/* Videos */}
-                <div>
-                <label className="block text-lg font-medium mb-1">Videos URLs</label>
-                {videos.map((url, index) => (
-                    <input
-                    key={index}
-                    type="url"
-                    placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) =>
-                        handleArrayChange(index, e.target.value, videos, setVideos)
-                    }
-                    className="w-full border rounded px-3 py-2 mb-2"
-                    />
-                ))}
-                <button
-                    type="button"
-                    onClick={() => addArrayField(videos, setVideos)}
-                    className="text-blue-500 hover:underline"
-                >
-                    Add another video
-                </button>
-                </div>
-        
-                {/* Audios */}
-                <div>
-                <label className="block text-lg font-medium mb-1">Audios URLs</label>
-                {audios.map((url, index) => (
-                    <input
-                    key={index}
-                    type="url"
-                    placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) =>
-                        handleArrayChange(index, e.target.value, audios, setAudios)
-                    }
-                    className="w-full border rounded px-3 py-2 mb-2"
-                    />
-                ))}
-                <button
-                    type="button"
-                    onClick={() => addArrayField(audios, setAudios)}
-                    className="text-blue-500 hover:underline"
-                >
-                    Add another audio
-                </button>
-                </div>
-
-
 
                 {/* Bio */}
                 <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
                     Biography
                 </h2>
-                <div>
-                <label htmlFor="bio" className="block text-lg font-medium mb-1">
-                    Bio
-                </label>
-                <textarea
-                    id="bio"
-                    name="bio"
-                    className="w-full border rounded px-3 py-2"
-                    rows="3"
-                    value={bio}
-                    onChange={handleChangeSingle}
-                    required
-                />
-                </div>
-        
-
+                {bioProfile}
+                
                 {/* Online Press Dynamic Inputs */}
                 <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
                     Press (online)
                 </h2>
-                <div>
-                    <label style={{ display: 'block', marginBottom: '10px' }}>Online Press (Title & URL):</label> {/* <-- Make label a block element and add margin */}
-                    {onlinePress.map((item) => ( // <-- Map now just takes 'item'
-                    <div key={item.id} style={{ border: '1px dashed #eee', padding: '10px', marginBottom: '10px' }}> {/* <-- Use item.id as key */}
-                        <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'title', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
-                        <input type="url" placeholder="https://..." value={item.url} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'url', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
-                        <button type="button" onClick={() => handleRemoveOnlinePress(item.id)}>Remove</button> {/* <-- Pass item.id */}
-                    </div>
-                    ))}
-                    <button type="button" onClick={handleAddOnlinePress}> + Add Online Press Item</button>
-                </div>
+                {pressProfile}
+                
 
                 {/* Technical Section */}
                 <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
                     Technical Section
                 </h2>
+                {technicProfile}
                 {/* Stage Plan (optional) */}
-                <div>
-                <label htmlFor="stagePlan" className="block text-lg font-medium mb-1">
-                    Stage Plan (optional)
-                </label>
-                <input
-                    id="stagePlan"
-                    name="stagePlan"
-                    type="url"
-                    placeholder="https://example.com"
-                    className="w-full border rounded px-3 py-2"
-                    value={stagePlan}
-                    onChange={handleChangeSingle}
-                />
-                </div>
-        
-                {/* Tech Rider (optional) */}
-                <div>
-                <label htmlFor="techRider" className="block text-lg font-medium mb-1">
-                    Tech Rider (optional)
-                </label>
-                <input
-                    id="techRider"
-                    name="techRider"
-                    type="url"
-                    placeholder="https://example.com"
-                    className="w-full border rounded px-3 py-2"
-                    value={techRider}
-                    onChange={handleChangeSingle}
-                />
-                </div>
+                
+                
+
                 {profile ? (
                     <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    className="w-full bg-indigo-600 !text-white py-2 px-4 rounded hover:bg-indigo-500"
                     >
                     {isLoading ? 'Creating Profile...' : 'Edit Profile'}
                     </button>

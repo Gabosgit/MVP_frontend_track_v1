@@ -17,11 +17,25 @@ body {
 }
 
 .dark body {
-  @apply 
-    dark:text-slate-300
+  @apply
     dark:bg-gradient-to-br 
     dark:from-dark-bg-start 
     dark:to-dark-bg-end;
+}
+
+.dark H1, .dark H2, .dark H3, .dark p {
+  @apply 
+    dark:text-stone-300
+}
+
+.dark label {
+  @apply 
+    dark:text-purple-200
+}
+
+.dark button {
+  @apply 
+    dark:text-indigo-500
 }
 
 /* - - - - - - COMPONENTS - - - - - - */
