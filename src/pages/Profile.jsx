@@ -10,7 +10,7 @@ import ShowMoreContainer from "../components/ShowMoreContainer"; // Used for Bio
 // helper for generating unique IDs when adding press title/url
 let nextOnlinePressId = 0; // Start ID counter outside the component
 
-export default function CreateProfile() {
+export default function Profile() {
     const apiBaseUrl = useContext(ApiContext);
     // Define navigate
     const navigate = useNavigate();
@@ -25,27 +25,28 @@ export default function CreateProfile() {
         techRider: "",
         website: ""
     })
-
-    // State variables for list fields:
+    // State variables for array fields:
     const [socialMedia, setSocialMedia] = useState([""]);
     const [photos, setPhotos] = useState([""]);
     const [videos, setVideos] = useState([""]);
     const [audios, setAudios] = useState([""]);
-    const [onlinePress, setOnlinePress] = useState([{ id: nextOnlinePressId++, title: '', url: '' }]); // Array of objects with default item // 
+    // Array of objects with default item
+    const [onlinePress, setOnlinePress] = useState([{ id: nextOnlinePressId++, title: '', url: '' }]); 
     
     const [filesToUpload, setFilesToUpload] = useState([]); // [{ file: File, previewUrl: string }, ...]
     const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setloading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
     const [imageError, setImageError ] = useState(null)
 
     const { id } = useParams(); // Gets the "id" from the URL (e.g., /profile/1)
-    const [profile, setProfile] = useState(null);
+    const [profileData, setProfile] = useState(null);
     const [editing, setEditing] = useState(null)
 
+    // Fetch Profile Data
     useEffect(() => {
         // 1. Check if the URL has a valid ID
         if (id) {
@@ -69,22 +70,19 @@ export default function CreateProfile() {
             } catch (err) {
                 setError(err.message);
             } finally {
-                setIsLoading(false);
+                setloading(false);
             }
             }
             // 2. Call the fetch function only if an ID is present
-            fetchProfile(profile);
+            fetchProfile(profileData);
         } else {
             // 3. If there is no ID, it means the user is on the create page.
             //    You can set the loading state to false immediately.
-            setIsLoading(false);
+            setloading(false);
             //    You might also want to set a state to indicate it's a "create" view
             //    e.g., setFormMode('create')
             }
     }, [id]); // The dependency array ensures this effect runs when `id` changes.
-    
-    console.log(profile)
-
 
     // This function will be passed down to PhotoSection
     // PhotoSection will call this function to update filesToUpload in CreateProfile
@@ -93,30 +91,31 @@ export default function CreateProfile() {
         setFilesToUpload(files);
     };
 
+    // Updates single data
     function handleChangeSingle(event) {
-        console.log(event.target.name)
         const tempFormSingle = {...formSingle}
         tempFormSingle[event.target.name] = event.target.value
         setFormSingle(tempFormSingle)
     }
 
-    // Helper for updating array-based fields:
+    // Updates array-based data
     const handleArrayChange = (index, value, array, setArray) => {
         const updated = [...array];
         updated[index] = value;
         setArray(updated);
     };
 
+    // Adds array field
     const addArrayField = (array, setArray) => {
         setArray([...array, ""]);
     };
 
-
-    // ONLINE PRESS:
+    // Adds Online Press
     const handleAddOnlinePress = () => {
         setOnlinePress(prev => [...prev, { id: nextOnlinePressId++, title: '', url: '' }]);
     };
 
+    // Updates Online Press
     const handleOnlinePressChange = (index, field, value) => {
         const newOnlinePress = [...onlinePress];
         // Find the item by index and update it
@@ -124,15 +123,15 @@ export default function CreateProfile() {
         setOnlinePress(newOnlinePress);
     };
 
+    // Removes Online Press
     const handleRemoveOnlinePress = (idToRemove) => { // <-- Now remove by ID
         setOnlinePress(prev => prev.filter(item => item.id !== idToRemove));
     };
 
-
     // Submit handler that sends a POST request to the API
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
+        setloading(true);
         setError(null);
         setSuccess(null);
 
@@ -171,7 +170,7 @@ export default function CreateProfile() {
             } catch (uploadError) {
                 console.error('Error during image uploads:', uploadError);
                 setError(`Failed to upload images: ${uploadError.message}`);
-                setIsLoading(false);
+                setloading(false);
                 return; // Stop execution if image upload fails
             }
         }
@@ -225,14 +224,16 @@ export default function CreateProfile() {
             alert(`Error creating profile: ${error.message}`);
         } finally {
             // Ensure loading state is reset in finally block
-            setIsLoading(false);
+            setloading(false);
         }
     };
 
-    // ✅ RETURN the JSX to ensure React renders it
+    // ✅ RETURN
     return (
         <Content 
             pageName={"Create Profile"}
+            loading={loading}
+            error={error}
             editing={editing} // Pass the 'editing' state down to the Content component as a prop
             setEditing={setEditing} // Pass the setter function down as a prop
             htmlContent={
@@ -256,20 +257,20 @@ export default function CreateProfile() {
                     handleSubmit={handleSubmit} 
                     handleFilesReady={handleFilesReady}
                     imageError={imageError} setImageError={setImageError}
-                    profile={profile}
+                    profileData={profileData}
                 />
             }
         />
     );
 }
 
-
+// CONTENT TO RENDER CRUD PAGE ----------------------------
 function CreateProfileContent({
     handleChangeSingle, name, bio, description, stagePlan, techRider, performanceType, website,
     socialMedia, setSocialMedia, videos, setVideos, audios, setAudios, 
     onlinePress, handleAddOnlinePress, handleOnlinePressChange, handleRemoveOnlinePress,
     handleArrayChange, addArrayField, handleSubmit, 
-    isLoading, handleFilesReady, imageError, setImageError, profile, editing
+    loading, handleFilesReady, imageError, setImageError, profileData, editing
 }) {
     const [textareaHeight, setTextareaHeight] = useState('auto');
     const [textareaWidth, setTextareaWidth] = useState('auto');
@@ -291,7 +292,7 @@ function CreateProfileContent({
         // Set the textarea height to match the dummy p tag's scrollHeight
         setProfileNameHeight(profileNameRef.current.scrollHeight - 3 + 'px');
         }
-    }, [profile]); // Re-calculate when text changes
+    }, [profileData]); // Re-calculate when text changes
     
     // Determine the current UI state based on `profile` and `editing`
     let profileInfoProfile;
@@ -305,7 +306,7 @@ function CreateProfileContent({
 
     // CREATE
     // Condition 1: If no profile exists, show the create form
-    if (!profile) {
+    if (!profileData) {
         profileInfoProfile = (
             <>
                 {/* Profile Name */}
@@ -608,7 +609,7 @@ function CreateProfileContent({
                         rows="1"
                         //type="text"
                         // Pre-fill the input with the existing profile data
-                        value={name || profile.name} 
+                        value={name || profileData.name} 
                         onChange={handleChangeSingle}
                         required
                         className="
@@ -628,7 +629,7 @@ function CreateProfileContent({
                         name="performanceType"
                         type="text"
                         // Pre-fill the input with the existing profile data
-                        value={performanceType || profile.performance_type}
+                        value={performanceType || profileData.performance_type}
                         onChange={handleChangeSingle}
                         required
                         className="
@@ -647,7 +648,7 @@ function CreateProfileContent({
                         name="description"
                         rows="3"
                         // Pre-fill the input with the existing profile data
-                        value={description || profile.description}
+                        value={description || profileData.description}
                         onChange={handleChangeSingle}
                         required
                         className="
@@ -693,9 +694,9 @@ function CreateProfileContent({
                 <h3 className="text-xl font-semibold text-center text-gray-800 mb-3 mt-6">Photos</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
                     {/* Placeholder Photos */}
-                    {/* Use a conditional check to ensure profile.photos exists and is an array */}
-                    {profile.photos && profile.photos.length > 0 ? (
-                        profile.photos.map((photoUrl, index) => (
+                    {/* Use a conditional check to ensure profileData.photos exists and is an array */}
+                    {profileData.photos && profileData.photos.length > 0 ? (
+                        profileData.photos.map((photoUrl, index) => (
                             <div
                                 key={index}
                                 onClick={() => setOpen(true)}
@@ -900,14 +901,14 @@ function CreateProfileContent({
                         p-0 m-0 border border-transparent rounded leading-none"
                         ref={profileNameRef}
                     >
-                        {profile.name}
+                        {profileData.name}
                     </h1>
                 </div>
                 {/* Performance Type */}
                 <div className="flex">
                     <p className="w-full text-center text-xl sm:text-2xl font-medium text-indigo-700 
                     p-0 border border-transparent leading-none">
-                        {profile.performance_type}
+                        {profileData.performance_type}
                     </p>
                 </div>
                 {/* Description */}
@@ -916,7 +917,7 @@ function CreateProfileContent({
                     px-1 py-0 border border-transparent rounded text-lg sm:text-xl" 
                     ref={dummyRef}
                     >
-                        {profile.description}
+                        {profileData.description}
                     </p>
                 </div>
             </>
@@ -952,9 +953,9 @@ function CreateProfileContent({
         photosProfile = (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
                 {/* Placeholder Photos */}
-                {/* Use a conditional check to ensure profile.photos exists and is an array */}
-                {profile.photos && profile.photos.length > 0 ? (
-                    profile.photos.map((photoUrl, index) => (
+                {/* Use a conditional check to ensure profileData.photos exists and is an array */}
+                {profileData.photos && profileData.photos.length > 0 ? (
+                    profileData.photos.map((photoUrl, index) => (
                         <div
                             key={index} // Use a unique key for each item in the list
                             className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
@@ -1016,13 +1017,13 @@ function CreateProfileContent({
             </div>
         )
         bioProfile = (
-            <ShowMoreContainer text={profile.bio}/>
+            <ShowMoreContainer text={profileData.bio}/>
         )
         pressProfile = (
             <div>
-                {profile.online_press.length > 0 ? (
+                {profileData.online_press.length > 0 ? (
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    {profile.online_press.map((item, index) => (
+                    {profileData.online_press.map((item, index) => (
                         <li key={index}> {/* Using index as key is okay if items don't change order or get added/removed frequently */}
                             <a 
                                 href={item.url} 
@@ -1106,21 +1107,21 @@ function CreateProfileContent({
                 
                 
 
-                {profile ? (
+                {profileData ? (
                     <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={loading}
                     className="w-full bg-indigo-600 !text-white py-2 px-4 rounded hover:bg-indigo-500"
                     >
-                    {isLoading ? 'Creating Profile...' : 'Edit Profile'}
+                    {loading ? 'Creating Profile...' : 'Edit Profile'}
                     </button>
                 ) : (
                     <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={loading}
                     className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
                     >
-                    {isLoading ? 'Creating Profile...' : 'Create Profile'}
+                    {loading ? 'Creating Profile...' : 'Create Profile'}
                     </button>
                 )}
                     

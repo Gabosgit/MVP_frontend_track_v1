@@ -9,8 +9,7 @@ import ChangePassword from "./pages/ChangePassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
-import CreateProfile from "./pages/CreateProfile";
-import ProfilePage from "./pages/ProfilePage";
+import Profile from "./pages/Profile";
 import UserProfiles from "./pages/UserProfiles";
 import CreateContract from "./pages/CreateContract";
 import ContractPage from "./pages/ContractPage";
@@ -39,10 +38,10 @@ function App() {
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile/create" element={<CreateProfile />} />
+          <Route path="/profile/create" element={<Profile />} />
           <Route path="/contract/create" element={<CreateContract />} />
 
-          <Route path="/profile/:id" element={<CreateProfile />} />
+          <Route path="/profile/:id" element={<Profile />} />
           <Route path="/contract/:id" element={<ContractPage />} />
           <Route path="/user/:id/profiles" element={<UserProfiles />} />
           <Route path="/user/:id/contracts" element={<UserContracts />} />
