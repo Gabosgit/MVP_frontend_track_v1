@@ -6,17 +6,26 @@ import BackButton from "./BackButton"
 
  
 // Display load, error, or htmlContent, and accept the `editing` prop
-export default function Content({pageName, loading, error, htmlContent, editing, setEditing }) {
+export default function Content({
+  pageName, 
+  loading, 
+  error, 
+  htmlContent, 
+  editing, 
+  setEditing, 
+  handleSaveClick, 
+  handleCancelClick, 
+  editableProfileData}) {
   const { user, setUser } = useContext(AuthContext);
   const currentPathname = location.pathname; // Extract the pathname
 
   // Add a conditional checking if htmlContent is a valid React element
     let contentWithProps = htmlContent;
     if (React.isValidElement(htmlContent)) {
-        contentWithProps = React.cloneElement(htmlContent, { editing });
+        contentWithProps = React.cloneElement(htmlContent, { editing, setEditing });
     }
 
-  const buttonText = editing ? 'Save' : 'Edit';
+  const buttonText = editing ? 'cancel' : 'edit';
   const buttonShareCancel = editing ? 'cancel' : 'share';
 
   if (loading) {
@@ -42,7 +51,6 @@ export default function Content({pageName, loading, error, htmlContent, editing,
     setEditing((prev => !prev))
   }
   
-
   return (
       <>
         <div className="flex flex-col min-h-screen justify-between">
@@ -54,14 +62,38 @@ export default function Content({pageName, loading, error, htmlContent, editing,
                     <BackButton />
                   )}
                   {currentPathname.startsWith("/profile/") && currentPathname !== "/profile/create" && (
-                  <div className='flex gap-3'>
-                    <button className="btn btn-secondary" onClick={toggleEditingMode}>
-                    {buttonText}
-                    </button>
-                    <button className="btn btn-secondary">
-                      {buttonShareCancel}
-                    </button>
-                  </div>
+                    !editing ? (
+                      <button
+                        onClick={toggleEditingMode}
+                        className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary"
+                      >
+                        Edit
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => handleSaveClick(editableProfileData)}
+                          className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary bg-green-600 hover:bg-green-700"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelClick}
+                          className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary bg-red-600 hover:bg-red-700"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )
+
+                  // <div className='flex gap-3'>
+                  //   <button className="btn btn-secondary" onClick={toggleEditingMode}>
+                  //   {buttonText}
+                  //   </button>
+                  //   <button className="btn btn-secondary">
+                  //     {buttonShareCancel}
+                  //   </button>
+                  // </div>
                 )}
                 </div>
 

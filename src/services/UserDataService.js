@@ -25,7 +25,6 @@ export const updateUserDataService = async (apiBaseUrl, updatedData) => {
   if (!token) {
     throw new Error("User is not authenticated");
   }
-
   try {
     // Assuming your backend expects a PUT request to /user/me/ to update user data.
     // Adjust the endpoint and method (e.g., PATCH) if your API differs.
@@ -35,7 +34,6 @@ export const updateUserDataService = async (apiBaseUrl, updatedData) => {
         Authorization: `Bearer ${token}`, // Send Bearer Token
       },
     });
-
     return response.data; // Return the updated data from the backend
   } catch (error) {
     console.error("Failed to update user data:", error.response ? error.response.data : error.message);
