@@ -56,54 +56,54 @@ export default function Content({
         <div className="flex flex-col min-h-screen justify-between">
           <div className="flex flex-col items-center w-screen">
             {user && (
-              <div className="flex w-full px-4 sm:w-2/3 sm:px0 justify-between">
-                <div className='flex items-center gap-3'>
-                  {currentPathname !== "/dashboard" && (
-                    <BackButton />
-                  )}
-                  {currentPathname.startsWith("/profile/") && currentPathname !== "/profile/create" && (
-                    !editing ? (
-                      <button
-                        onClick={toggleEditingMode}
-                        className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary"
-                      >
-                        Edit
-                      </button>
-                    ) : (
-                      <>
+              <div className="fixed w-full px-4 sm:w-2/3 sm:px0 z-0">
+                <div className='flex justify-between'>
+                  <div className='flex items-center gap-3'>
+                    {currentPathname !== "/dashboard" && (
+                      <BackButton />
+                    )}
+                    {currentPathname.startsWith("/profile/") && currentPathname !== "/profile/create" && (
+                      !editing ? (
                         <button
-                          onClick={() => handleSaveClick(editableProfileData)}
-                          className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary bg-green-600 hover:bg-green-700"
+                          onClick={toggleEditingMode}
+                          className="inline-flex justify-center py-2.5 px-6 
+                          text-sm font-medium rounded-md btn-primary
+                          dark:!text-stone-200"
                         >
-                          Save
+                          Edit
                         </button>
-                        <button
-                          onClick={handleCancelClick}
-                          className="inline-flex justify-center py-2.5 px-6 text-sm font-medium rounded-md btn-primary bg-red-600 hover:bg-red-700"
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    )
-
-                  // <div className='flex gap-3'>
-                  //   <button className="btn btn-secondary" onClick={toggleEditingMode}>
-                  //   {buttonText}
-                  //   </button>
-                  //   <button className="btn btn-secondary">
-                  //     {buttonShareCancel}
-                  //   </button>
-                  // </div>
-                )}
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleSaveClick(editableProfileData)}
+                            className="inline-flex justify-center py-2.5 px-6 text-sm 
+                            font-medium rounded-md btn-primary bg-green-600 hover:bg-green-700
+                            dark:!text-stone-200"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={handleCancelClick}
+                            className="inline-flex justify-center py-2.5 px-6 
+                            text-sm font-medium rounded-md btn-primary bg-red-600 hover:bg-red-700
+                            dark:!text-stone-200"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )
+                    )}
+                  </div>
+                  <p className="text-xl text-right font-semibold">
+                    You are in the section<br />
+                    <span className="text-4xl font-extrabold text-gradient
+                    bg-gradient-to-r from-custom-purple-start to-custom-purple-end
+                    dark:from-custom-purple-start dark:to-[#740dbf] text-transparent"
+                    >
+                      {pageName}
+                    </span>
+                  </p>
                 </div>
-
-                <p className="text-xl text-right font-semibold">
-                  You are in the section<br />
-                  <span className="text-4xl font-extrabold text-gradient bg-gradient-to-r from-custom-purple-start to-custom-purple-end 
-                dark:from-custom-purple-start dark:to-[#740dbf] text-transparent">
-                    {pageName}
-                  </span>
-                </p>
               </div>
             )}
 

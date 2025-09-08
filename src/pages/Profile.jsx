@@ -202,7 +202,6 @@ function CreateProfileContent({
     profileData, 
     apiBaseUrl, 
     editing, 
-    setEditing, 
     loading, 
     setloading, 
     setError, 
@@ -641,113 +640,106 @@ function CreateProfileContent({
             </>
         )
         photosProfile = (
-            <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add photos -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    {/* Render previews from the state returned by the hook */}
-                    {filesToProcess.length > 0 && filesToProcess.map(item => (
-                        <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
-                            <div className=" rounded-xl overflow-hidden shadow-md">
-                                <img
-                                    src={item.previewUrl}
-                                    alt={`Preview of ${item.file.name}`}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <button
-                                onClick={() => handleRemoveFile(item.id)}
-                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                            >
-                                &times;
-                            </button>
+                {/* Render previews from the state returned by the hook */}
+                {filesToProcess.length > 0 && filesToProcess.map(item => (
+                    <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
+                        <div className=" rounded-xl overflow-hidden shadow-md">
+                            <img
+                                src={item.previewUrl}
+                                alt={`Preview of ${item.file.name}`}
+                                className="w-full h-full object-cover"
+                            />
                         </div>
-                    ))}
-                    {/* Your file input that uses the function from the hook */}
-                    <input
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                    className="hidden" // Hides the default browser input
-                    id="photo-upload-input" // The unique ID to link with the label
-                    />
-                    {/* ustom button/label that users will see */}
-                    <label
-                    htmlFor="photo-upload-input" // This attribute links the label to the hidden input
-                    className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
-                    flex justify-center items-center text-center transition-transform duration-200 
-                    ease-in-out hover:-translate-y-1.5" // Your custom styling
-                    >
-                    ╋ <br /> Add photos
-                    </label>
-                </div>
-
-                
+                        <button
+                            onClick={() => handleRemoveFile(item.id)}
+                            className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                ))}
+                {/* Your file input that uses the function from the hook */}
+                <input
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                className="hidden" // Hides the default browser input
+                id="photo-upload-input" // The unique ID to link with the label
+                />
+                {/* ustom button/label that users will see */}
+                <label
+                htmlFor="photo-upload-input" // This attribute links the label to the hidden input
+                className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
+                flex justify-center items-center text-center transition-transform duration-200 
+                ease-in-out hover:-translate-y-1.5" // Your custom styling
+                >
+                ╋ <br /> Add photos
+                </label>
             </div>
         );
         videosProfile = (
-            <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add videos -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    {/* Map through the videos array to display each input and preview */}
-                    {editableProfileData.videos.map((url, index) => {
-                        const embedUrl = getYouTubeEmbedUrl(url);
+                {/* Map through the videos array to display each input and preview */}
+                {editableProfileData.videos.map((url, index) => {
+                    const embedUrl = getYouTubeEmbedUrl(url);
 
-                        return (
-                            <div key={index} className="flex flex-col gap-2">
-                                {/* Video Preview */}
-                                <div className="aspect-video rounded-xl overflow-hidden shadow-md">
-                                    {embedUrl ? (
-                                        <iframe
-                                            src={embedUrl}
-                                            title="YouTube video player"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                            className="w-full h-full"
-                                        ></iframe>
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                            Add a valid Youtube URL
-                                        </div>
-                                    )}
-                                </div>
-                                {/* Input Field with Delete Button */}
-                                <div className="relative">
-                                    {/* Add url input field */}
-                                    <input
-                                        type="url"
-                                        placeholder="https://youtube.com/watch?v=..."
-                                        value={url}
-                                        onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
-                                        className="w-full bg-orange-400 border rounded px-3 py-2"
-                                    />
-                                    {/* Delete Video */}
-                                    <button
-                                        type="button"
-                                        onClick={() => handleDeleteArrayField(index, 'videos')}
-                                        className="absolute right-0 top-0 mt-2.5 mr-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
+                    return (
+                        <div key={index} className="flex flex-col gap-2">
+                            {/* Video Preview */}
+                            <div className="aspect-video rounded-xl overflow-hidden shadow-md">
+                                {embedUrl ? (
+                                    <iframe
+                                        src={embedUrl}
+                                        title="YouTube video player"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="w-full h-full"
+                                    ></iframe>
+                                ) : (
+                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                        Add a valid Youtube URL
+                                    </div>
+                                )}
                             </div>
-                        );
-                    })}
-                    {/* Add input fiel button */}
-                    <button
-                        type="button"
-                        onClick={() => addArrayField('videos')}
-                        className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
-                    flex justify-center items-center transition-transform duration-200 
-                    ease-in-out hover:-translate-y-1.5"
-                    >
-                        ╋ <br /> Add video
-                    </button>
-                </div>
+                            {/* Input Field with Delete Button */}
+                            <div className="relative">
+                                {/* Add url input field */}
+                                <input
+                                    type="url"
+                                    placeholder="https://youtube.com/watch?v=..."
+                                    value={url}
+                                    onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
+                                    className="w-full bg-orange-400 border rounded px-3 py-2"
+                                />
+                                {/* Delete Video */}
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteArrayField(index, 'videos')}
+                                    className="absolute right-0 top-0 mt-2.5 mr-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
+                {/* Add input fiel button */}
+                <button
+                    type="button"
+                    onClick={() => addArrayField('videos')}
+                    className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
+                flex justify-center items-center transition-transform duration-200 
+                ease-in-out hover:-translate-y-1.5"
+                >
+                    ╋ <br /> Add video
+                </button>
             </div>
-
         )
         audiosProfile = (
-            <div>
+            <div className="z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add audios -</p>
                 {audios.map((url, index) => (
                     <input
@@ -940,131 +932,137 @@ function CreateProfileContent({
             </section>
         )
         photosProfile = (
-            <div>
-                <p className="text-gray-500 text-center col-span-full pb-5">- Add and remove photos -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    {/* **Display Existing Photos from the Database** */}
-                    {(editableProfileData.photos || []).map((url, index) => (
-                        <div key={url} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
+                <p className="text-gray-500 text-center col-span-full">- Add and remove photos -</p>
+                {/* **Display Existing Photos from the Database** */}
+                {(editableProfileData.photos || []).map((url, index) => (
+                    <div key={url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
+                        <img
+                            src={url}
+                            alt={`photo ${index + 1} not available`}
+                            className="w-full h-full object-cover"
+                        />
+                        {/* You might want a button to delete these photos as well */}
+                        <button
+                            type="button"
+                            onClick={() => handleDeleteArrayField(index, 'photos')} // Assuming this function exists
+                            className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                ))}
+
+                {/* **Display Newly Selected Photos from the Local State** */}
+                {filesToProcess.length > 0 && filesToProcess.map(item => (
+                    <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
+                        <div className="rounded-xl overflow-hidden shadow-md">
                             <img
-                                src={url}
-                                alt={`Saved photo ${index + 1}`}
+                                src={item.previewUrl}
+                                alt={`Preview of ${item.file.name}`}
                                 className="w-full h-full object-cover"
                             />
-                            {/* You might want a button to delete these photos as well */}
-                            <button
-                                onClick={() => handleDeleteArrayField(index, 'photos')} // Assuming this function exists
-                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                            >
-                                &times;
-                            </button>
                         </div>
-                    ))}
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveFile(item.id)}
+                            className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                ))}
 
-                    {/* **Display Newly Selected Photos from the Local State** */}
-                    {filesToProcess.length > 0 && filesToProcess.map(item => (
-                        <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
-                            <div className="rounded-xl overflow-hidden shadow-md">
-                                <img
-                                    src={item.previewUrl}
-                                    alt={`Preview of ${item.file.name}`}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <button
-                                onClick={() => handleRemoveFile(item.id)}
-                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                    ))}
-
-                    {/* The file input and custom label */}
-                    <input
-                        type="file"
-                        multiple
-                        onChange={handleFileChange}
-                        className="hidden"
-                        id="photo-upload-input"
-                    />
-                    <label
-                        htmlFor="photo-upload-input"
-                        className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
-                        flex justify-center items-center text-center transition-transform duration-200 
-                        ease-in-out hover:-translate-y-1.5"
-                    >
-                        ╋ <br /> Add photos
-                    </label>
-                </div>
+                {/* The file input and custom label */}
+                <input
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="photo-upload-input"
+                />
+                <label
+                    htmlFor="photo-upload-input"
+                    className="btn-primary bg-red w-full aspect-video rounded-xl
+                    justify-center items-center text-center overflow-hidden -md flex hover:bg-violet-200
+                    transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
+                >   
+                    <div className="flex flex-col">
+                        <div className="text-3xl">&#43;</div> 
+                        <p className="font-semibold">Add New</p>
+                    </div>
+                </label>
             </div>
         );
         videosProfile = (
-            <div>
-                <p className="text-gray-500 text-center col-span-full pb-5">- Add, change or remove video -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-                    {editableProfileData.videos.map((url, index) => {
-                        const embedUrl = getYouTubeEmbedUrl(url);
-                        return (
-                            <div key={index} className="flex flex-col gap-2 relative">
-                                {/* Video Preview */}
-                                <div className="aspect-video rounded-xl overflow-hidden shadow-md">
-                                    {embedUrl ? (
-                                        <iframe
-                                            src={embedUrl}
-                                            title="YouTube video player"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                            className="w-full h-full"
-                                        ></iframe>
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                            Add a valid Youtube URL
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Input Field with Delete Button */}
-                                <div className="relative">
-                                    {/* Add url input field */}
-                                    <input
-                                        type="url"
-                                        placeholder="https://youtube.com/watch?v=..."
-                                        value={url}
-                                        onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
-                                        required
-                                        className="w-full bg-orange-400 border rounded pr-10 pl-3 py-2"
-                                    />
-                                    {/* Delete Video */}
-                                    <button
-                                        type="button"
-                                        onClick={() => handleDeleteArrayField(index, 'videos')}
-                                        className="absolute right-0 top-0 mt-2.5 mr-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
+                <p className="text-gray-500 text-center col-span-full">- Add, change or remove video -</p>
+                {editableProfileData.videos.map((url, index) => {
+                    const embedUrl = getYouTubeEmbedUrl(url);
+                    return (
+                        <div key={index} className="flex flex-col gap-2 relative">
+                            {/* Video Preview */}
+                            <div className="aspect-video rounded-xl overflow-hidden shadow-md">
+                                {embedUrl ? (
+                                    <iframe
+                                        src={embedUrl}
+                                        title="YouTube video player"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
+                                        gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="w-full h-full"
+                                    ></iframe>
+                                ) : (
+                                    <div className="w-full h-full bg-gray-300 flex items-center justify-center 
+                                    text-gray-500">
+                                        Add a valid Youtube URL
+                                    </div>
+                                )}
                             </div>
-                        );
-                    })}
-                    
-                    {/* The standalone add button */}
-                    {/* Add input fiel button */}
-                    <button
-                        type="button"
-                        onClick={() => addArrayField('videos')}
-                        className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
-                    flex justify-center items-center transition-transform duration-200 
-                    ease-in-out hover:-translate-y-1.5"
-                    >
-                        ╋ <br /> Add video
-                    </button>
-                </div>
+
+                            {/* Input Field with Delete Button */}
+                            <div className="flex relative items-center justify-center">
+                                {/* Add url input field */}
+                                <input
+                                    type="url"
+                                    placeholder="https://youtube.com/watch?v=..."
+                                    value={url}
+                                    onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
+                                    required
+                                    className="w-full bg-orange-200 border rounded pr-10 pl-3 py-2"
+                                />
+                                {/* Delete Video */}
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteArrayField(index, 'videos')}
+                                    className="absolute right-1 text-gray-500 hover:text-red-500 text-2xl font-bold"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
+                
+                {/* The standalone add button */}
+                {/* Add input fiel button */}
+                <button
+                    type="button"
+                    onClick={() => addArrayField('videos')}
+                    className="btn-primary w-full aspect-video rounded-xl overflow-hidden -md 
+                flex justify-center items-center transition-transform duration-200 
+                ease-in-out hover:-translate-y-1.5"
+                >
+                    <div className="flex flex-col">
+                        <div className="text-3xl">&#43;</div> 
+                        <p className="font-semibold">Add New</p>
+                    </div>
+                </button>
             </div>
         );
         audiosProfile = (
-            <div>
-                <p className="text-gray-500 text-center col-span-full pb-5">- Add, change or remove audios -</p>
+            <div className="z-1">
+                <p className="text-gray-500 text-center col-span-full">- Add, change or remove audios -</p>
                 {audios.map((url, index) => (
                     <input
                     key={index}
@@ -1078,7 +1076,7 @@ function CreateProfileContent({
                 <button
                     type="button"
                     onClick={() => addArrayField('audios')}
-                    className="text-blue-500 hover:underline"
+                    className="dark:text-indigo-500 hover:underline"
                 >
                     Add another audio
                 </button>
@@ -1086,9 +1084,6 @@ function CreateProfileContent({
         )
         bioProfile = (
             <div>
-                <label htmlFor="bio" className="block text-lg font-medium mb-1">
-                    Bio
-                </label>
                 <textarea
                     id="bio"
                     name="bio"
@@ -1102,15 +1097,44 @@ function CreateProfileContent({
         )
         pressProfile = (
             <div>
-                <label style={{ display: 'block', marginBottom: '10px' }}>Online Press (Title & URL):</label> {/* <-- Make label a block element and add margin */}
                 {onlinePress.map((item) => ( // <-- Map now just takes 'item'
-                <div key={item.id} style={{ border: '1px dashed #eee', padding: '10px', marginBottom: '10px' }}> {/* <-- Use item.id as key */}
-                    <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'title', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
-                    <input type="url" placeholder="https://..." value={item.url} onChange={(e) => handleOnlinePressChange(onlinePress.indexOf(item), 'url', e.target.value)} style={{ display: 'block', marginBottom: '5px', width: '100%' }} />
-                    <button type="button" onClick={() => handleRemoveOnlinePress(item.id)}>Remove</button> {/* <-- Pass item.id */}
+                <div key={item.id} 
+                    style={{ border: '1px dashed #eee', padding: '10px', marginBottom: '10px' }}
+                > {/* <-- Use item.id as key */}
+                    <input 
+                        type="text" 
+                        placeholder="Title" 
+                        value={item.title} 
+                        onChange={(e) => handleOnlinePressChange(
+                            onlinePress.indexOf(item), 'title', e.target.value
+                        )}
+                        style={{ display: 'block', marginBottom: '5px', width: '100%' }} 
+                    />
+                    <input 
+                        type="url" 
+                        placeholder="https://..." 
+                        value={item.url} 
+                        onChange={(e) => handleOnlinePressChange(
+                            onlinePress.indexOf(item), 'url', e.target.value
+                        )} 
+                        style={{ display: 'block', marginBottom: '5px', width: '100%' }} 
+                    />
+                    <button 
+                        type="button" 
+                        onClick={() => handleRemoveOnlinePress(item.id)}
+                        className="dark:text-indigo-500"
+                    >
+                        Remove
+                    </button> {/* <-- Pass item.id */}
                 </div>
                 ))}
-                <button type="button" onClick={handleAddOnlinePress}> + Add Online Press Item</button>
+                <button 
+                    type="button" 
+                    onClick={handleAddOnlinePress}
+                    className="dark:text-indigo-500"
+                >
+                     + Add Online Press Item
+                </button>
             </div>
         )
         technicProfile = (
@@ -1211,49 +1235,49 @@ function CreateProfileContent({
             </section>
         )
         photosProfile = (
-            <div>
-                <p className="text-gray-500 text-center col-span-full pb-5">- Some pictures describing the project -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-                    {/* Placeholder Photos */}
-                    {/* Use a conditional check to ensure profileData.photos exists and is an array */}
-                    {profileData.photos && profileData.photos.length > 0 ? (
-                        profileData.photos.map((photoUrl, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
+                {/* Placeholder Photos */}
+                {/* Use a conditional check to ensure profileData.photos exists and is an array */}
+                {profileData.photos && profileData.photos.length > 0 ? (
+                    <>
+                        <p className="text-gray-500 text-center col-span-full">
+                            - Some pictures describing the project -
+                        </p>
+                        {profileData.photos.map((photoUrl, index) => (
                             <div
                                 key={index} // Use a unique key for each item in the list
-                                className="rounded-xl overflow-hidden shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
+                                className="aspect-video rounded-xl overflow-hidden shadow-md bg-gray-200
+                                transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
                             >
                                 <img
                                     src={photoUrl} // The URL for the current photo in the iteration
-                                    alt={`Photo ${index + 1}`} // Dynamic alt text
-                                    className="w-full h-52 object-cover rounded-xl"
+                                    alt={`Photo ${index + 1} not available`} // Dynamic alt text
+                                    className="w-full h-full object-cover rounded-xl"
                                 />
                             </div>
-                        ))
-                    ) : (
-                        // Display a message and a placeholder if no photos are available
-                        <>
-                            <p className="text-gray-500 text-center col-span-full">- No photos available yet. -</p>
-                            <div
-                                className="bg-slate-400 w-full aspect-video rounded-xl overflow-hidden -md 
-                                flex justify-center items-center"
-                            >
-                                No photos available yet
-                            </div>
-                        </>
-                        
-                    )}
-                </div>
+                        ))}
+                    </>
+                ) : (
+                    // Display a message and a placeholder if no photos are available
+                    <>
+                        <p className="text-gray-500 text-center col-span-full">- No photos available yet. -</p>
+                        <div
+                            className="bg-slate-400 w-full aspect-video rounded-xl overflow-hidden -md 
+                            flex justify-center items-center"
+                        >
+                            No photos available yet
+                        </div>
+                    </>
+                )}
             </div>
         )
         videosProfile = (
-            <div>
-                <p className="text-gray-500 text-center col-span-full pb-5">- Descriptions in motion -</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-                    {/* Map through the videos array to display each input and preview */
-                    console.log("videos are:" + editableProfileData.videos)
-                    }
-                    {editableProfileData.videos.length > 0 ?
-                        editableProfileData.videos.map((url, index) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
+                {/* Map through the videos array to display each input and preview */}
+                {editableProfileData.videos.length > 0 ? (
+                    <>
+                        <p className="text-gray-500 text-center col-span-full">- Descriptions in motion -</p>
+                        {editableProfileData.videos.map((url, index) => {
                             const embedUrl = getYouTubeEmbedUrl(url);
 
                             return (
@@ -1264,36 +1288,37 @@ function CreateProfileContent({
                                             <iframe
                                                 src={embedUrl}
                                                 title="YouTube video player"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
+                                                gyroscope; picture-in-picture"
                                                 allowFullScreen
                                                 className="w-full h-full"
                                             ></iframe>
                                         ) : (
-                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                                Add a valid Youtube URL
+                                            <div className="w-full h-full bg-slate-400 flex items-center 
+                                            justify-center text-gray-500">
+                                                Video not available
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             );
-                        }) : 
-                        <>
-                            <p className="text-gray-500 text-center col-span-full">- No videos available yet. -</p>
-                            <div
-                                className="bg-slate-400 w-full aspect-video rounded-xl overflow-hidden -md 
-                                flex justify-center items-center"
-                            >
-                                No videos available yet
-                            </div>
-                        </>
-                    }
-                    
-                </div>
+                        })}
+                    </> ) : (
+                    <>
+                        <p className="text-gray-500 text-center col-span-full">- No videos available yet. -</p>
+                        <div
+                            className="bg-slate-400 w-full aspect-video rounded-xl overflow-hidden -md 
+                            flex justify-center items-center"
+                        >
+                            No videos available yet
+                        </div>
+                    </>
+                )} 
             </div>
         )
         audiosProfile = (            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-                <p className="text-gray-500 text-center col-span-full pb-5">- Sounds that talk -</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 z-1">
+                <p className="text-gray-500 text-center col-span-full">- Sounds that talk -</p>
                 {/* Placeholder Audios */}
                 <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
                     <p className="text-gray-800 font-medium mb-2">Track 1: "Echoes of Dawn"</p>
@@ -1354,8 +1379,8 @@ function CreateProfileContent({
 
     // ---- RENDER ----
     return (
-        <div className="w-full mt-16">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="w-full mt-28">
+            <form className="space-y-36" onSubmit={handleSubmit}>
                 {/* Profile INFO Name, Performance type, Description */}
                 <div>
                     {profileInfoProfile}
@@ -1367,44 +1392,53 @@ function CreateProfileContent({
                 </div>
         
                 {/* Media Gallery */}
-                <h2 className="text-3xl font-bold text-left text-gray-900 border-gray-200 pb-3">
-                    Media Gallery
-                </h2>
                 <div>
-                    {/* Photos */}
-                    <h3 className="text-xl font-semibold text-center text-gray-800">Photos</h3>
-                    {photosProfile}
+                    <h2 className="text-3xl font-bold text-left text-gray-900 border-gray-200 pb-3">
+                        Media Gallery
+                    </h2>
+                    <div>
+                        {/* Photos */}
+                        <h3 className="text-xl font-semibold text-center text-gray-800">Photos</h3>
+                        {photosProfile}
 
-                    {/* Videos */}
-                    <h3 className="text-xl font-semibold text-center text-gray-800">Videos</h3>
-                    {videosProfile}
+                        {/* Videos */}
+                        <h3 className="text-xl font-semibold text-center text-gray-800">Videos</h3>
+                        {videosProfile}
 
-                    {/* Audios */}
-                    <h3 className="text-xl font-semibold text-center text-gray-800">Audios</h3>
-                    {audiosProfile}
+                        {/* Audios */}
+                        <h3 className="text-xl font-semibold text-center text-gray-800">Audios</h3>
+                        {audiosProfile}
+                    </div>
                 </div>
+                
 
                 {/* Bio */}
-                <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
-                    Biography
-                </h2>
-                {bioProfile}
+                <div>
+                    <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+                        Biography
+                    </h2>
+                    {bioProfile}
+                </div>
+                
                 
                 {/* Online Press Dynamic Inputs */}
-                <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
-                    Press (online)
-                </h2>
-                {pressProfile}
+                <div>
+                    <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+                        Online Press
+                    </h2>
+                    {pressProfile}
+                </div>
+                
                 
 
                 {/* Technical Section */}
-                <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
-                    Technical Section
-                </h2>
-                {technicProfile}
-                {/* Stage Plan (optional) */}
+                <div>
+                    <h2 className="text-3xl font-bold text-left text-gray-900 mb-6 -2 border-gray-200 pb-3">
+                        Technical Section
+                    </h2>
+                    {technicProfile}
+                </div>
                 
-
                 {profileData ? (
                     <button
                     type="submit"
