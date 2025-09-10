@@ -3,8 +3,8 @@ import { ApiContext } from "../context/ApiContext";
 import { useNavigate } from "react-router-dom";
 import Content from "../components/Content";
 import { usePhotosService } from "../services/PhotoService";
+import { useAudioService } from "../services/AudioService";
 import { useParams } from "react-router-dom";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import ShowMoreContainer from "../components/ShowMoreContainer"; // Used for Bio
 
 // helper for generating unique IDs when adding press title/url
@@ -13,15 +13,17 @@ let nextOnlinePressId = 0; // Start ID counter outside the component
 export default function Profile() {
     const apiBaseUrl = useContext(ApiContext);
 
-    const [loading, setloading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const { id } = useParams(); // Gets the "id" from the URL (e.g., /profile/1)
     const [profileData, setProfileData] = useState(null);
     const [editing, setEditing] = useState(null)
 
-    // PHOTO HOCK
-    const { filesToProcess, handleFileChange, handleRemoveFile } = usePhotosService();
+    // PHOTO & AUDIO HOCK
+    const { imageFiles, setImageFiles, handleFileChange, handleRemoveFile } = usePhotosService();
+    const { audioFiles, setAudioFiles, handleAudioChange, handleRemoveAudio } = useAudioService();
+    const [urlsToDelete, setUrlsToDelete] = useState([]);
 
     // Fetch Profile Data
     useEffect(() => {
@@ -47,7 +49,7 @@ export default function Profile() {
             } catch (err) {
                 setError(err.message);
             } finally {
-                setloading(false);
+                setLoading(false);
             }
             }
             // 2. Call the fetch function only if an ID is present
@@ -55,7 +57,7 @@ export default function Profile() {
         } else {
             // 3. If there is no ID, it means the user is on the create page.
             //    You can set the loading state to false immediately.
-            setloading(false);
+            setLoading(false);
             //    You might also want to set a state to indicate it's a "create" view
             //    e.g., setFormMode('create')
             }
@@ -63,6 +65,7 @@ export default function Profile() {
 
     // To have a copy of profileData to manage updates
     const [editableProfileData, setEditableProfileData] = useState({});
+
     // Set Editable Profile Data
     useEffect(() => {
         if (profileData) {
@@ -92,12 +95,28 @@ export default function Profile() {
     const handleSaveClick = async (editableProfileData) => {
         // A temporary array to hold the new URLs
         let newImageUrls = [];
+        let newAudiosUrls = [];
 
-        // Step 1: Upload new photos if they exist
-        if (filesToProcess.length > 0) {
+        // Step 1: Delete files from Cloudinary and the database
+        // Step 1: Perform batch deletion of URLs
+        if (urlsToDelete.length > 0) {
+            const response = await fetch(`${apiBaseUrl}/delete-multiple-assets`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ urls: urlsToDelete }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to delete assets: ${errorData.detail}`);
+            }
+        }
+
+        // Step 2 Images: Upload new photos if they exist
+        if (imageFiles.length > 0) {
             try {
                 const formData = new FormData();
-                filesToProcess.forEach(item => {
+                imageFiles.forEach(item => {
                     formData.append('files', item.file);
                 });
 
@@ -119,19 +138,52 @@ export default function Profile() {
             }
         }
 
-        // Step 2: Combine the existing photos with the new ones
+        // Step 2 Audios: Upload new photos if they exist
+        if (audioFiles.length > 0) {
+            try {
+                const formData = new FormData();
+                audioFiles.forEach(item => {
+                    formData.append('files', item.file);
+                });
+
+                const response = await fetch(`${apiBaseUrl}/upload-multiple-audios`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to upload new images: ${errorData.detail}`);
+                }
+
+                const data = await response.json();
+                newAudiosUrls = data.urls;
+            } catch (uploadError) {
+                setError(`Error uploading new photos: ${uploadError.message}`);
+                return; // Stop the save process
+            }
+        }
+
+        // Step 3 Images: Combine the existing photos with the new ones
         const combinedPhotos = [
             ...(editableProfileData.photos || []),
             ...newImageUrls
         ];
 
-        // Step 3: Create the payload for the PATCH request
+        // Step 3 Audios: Combine the existing audios with the new ones
+        const combinedAudios = [
+            ...(editableProfileData.audios || []),
+            ...newAudiosUrls
+        ];
+
+        // Step 4 Images & Audios: Create the payload for the PATCH request
         const payload = {
             ...editableProfileData,
             photos: combinedPhotos,
+            audios: combinedAudios,
         };
 
-        // Step 4: Send the PATCH request to the server
+        // Step 5: Send the PATCH request to the server
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(`${apiBaseUrl}/profile/${id}`, {
@@ -152,6 +204,7 @@ export default function Profile() {
             // Here you can update the state with the new data
             setProfileData(updatedData);
             setEditing(false)
+            setUrlsToDelete([]); // Clear the deletion queue
             alert("Profile updated successfully!");
         } catch (err) {
             setError(err.message);
@@ -162,6 +215,9 @@ export default function Profile() {
     // CANCEL
     const handleCancelClick = () => {
         setEditableProfileData(profileData);
+        setImageFiles([]); // Clear newly selected files
+        setAudioFiles([]); // Clear newly selected files
+        setUrlsToDelete([]); // Clear the deletion queue
         setEditing(false);
     };
 
@@ -170,7 +226,7 @@ export default function Profile() {
         <Content 
             pageName={"Profile"}
             loading={loading}
-            setloading={setloading}
+            setLoading={setLoading}
             error={error}
             editing={editing} // Pass the 'editing' state down to the Content component as a prop
             setEditing={setEditing} // Pass the setter function down as a prop
@@ -185,12 +241,17 @@ export default function Profile() {
                     setEditing={setEditing}
                     loading={loading}
                     setError={setError}
-                    setloading={setloading}
+                    setLoading={setLoading}
                     editableProfileData={editableProfileData}
                     setEditableProfileData={setEditableProfileData}
-                    filesToProcess={filesToProcess}
+                    imageFiles={imageFiles}
                     handleFileChange={handleFileChange}
                     handleRemoveFile={handleRemoveFile}
+                    audioFiles={audioFiles}
+                    handleAudioChange={handleAudioChange}
+                    handleRemoveAudio={handleRemoveAudio}
+                    urlsToDelete={urlsToDelete}
+                    setUrlsToDelete={setUrlsToDelete}
                 />
             }
         />
@@ -203,13 +264,17 @@ function CreateProfileContent({
     apiBaseUrl, 
     editing, 
     loading, 
-    setloading, 
+    setLoading, 
     setError, 
     editableProfileData, 
     setEditableProfileData,
-    filesToProcess,
+    imageFiles,
     handleFileChange,
-    handleRemoveFile
+    handleRemoveFile,
+    audioFiles,
+    handleAudioChange, 
+    handleRemoveAudio,
+    setUrlsToDelete
 }) {
     // Define navigate
     const navigate = useNavigate();
@@ -339,6 +404,15 @@ function CreateProfileContent({
 
     // Deletes an element from an array within editableProfileData
     const handleDeleteArrayField = (index, fieldName) => {
+        // 1. Get the URL of the file to be deleted
+        const urlToDelete = editableProfileData[fieldName][index];
+
+        // 2. Add the full URL to the list of files to be deleted on save
+        if (urlToDelete) {
+            setUrlsToDelete(prev => [...prev, urlToDelete]);
+        }
+        
+        // 3. Remove the file from the local, editable state for immediate UI update
         setEditableProfileData(prev => {
             const updatedArray = prev[fieldName].filter((_, i) => i !== index);
             return {
@@ -347,9 +421,6 @@ function CreateProfileContent({
             };
         });
     };
-
-    // PHOTO POPOVER SETTING
-    const [open, setOpen] = useState(false)
 
     // Textarea height and width match paragraph sizes on show mode. 
     useEffect(() => {
@@ -367,27 +438,23 @@ function CreateProfileContent({
     // SUBMIT handler. Sends a POST request to the API
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setloading(true);
+        setLoading(true);
         setError(null);
 
-        let finalImageUrls = []; // This will hold all Cloudinary URLs for the 'photos' field
+        let finalImageUrls = [];
+        let finalAudioUrls = [];
 
         // Step 1: Upload Images to Cloudinary via FastAPI /upload-multiple endpoint
-        if (filesToProcess.length > 0) { // filesToUpload now directly contains File objects
+        if (imageFiles.length > 0) {
             try {
                 const formData = new FormData();
-                // Append each file under the same key 'files'.
-                // The backend (FastAPI) expects multiple files under a single form field name.
-                // USE THE HOOK'S STATE: filesToProcess
-                filesToProcess.forEach((item) => {
-                    formData.append('files', item.file); // Make sure to append the actual `File` object
+                imageFiles.forEach((item) => {
+                    formData.append('files', item.file);
                 });
 
-                console.log("Sending multiple files to backend...");
-                // Make a single POST request to the new /upload-multiple endpoint
                 const response = await fetch(`${apiBaseUrl}/upload-multiple`, {
                     method: 'POST',
-                    body: formData, // FormData automatically sets the correct Content-Type header
+                    body: formData,
                 });
 
                 if (!response.ok) {
@@ -396,31 +463,58 @@ function CreateProfileContent({
                 }
 
                 const data = await response.json();
-                // The backend now returns an array of URLs in a 'urls' property
-                finalImageUrls = data.urls; // Assuming backend returns { urls: [...] }
+                finalImageUrls = data.urls;
 
             } catch (uploadError) {
                 console.error('Error during image uploads:', uploadError);
                 setError(`Failed to upload images: ${uploadError.message}`);
-                setloading(false);
-                return; // Stop execution if image upload fails
+                setLoading(false);
+                return;
             }
         }
 
-        // Create the payload to match the API's expected dictionary:
+        // --- NEW: Step 2: Upload Audio Files ---
+        if (audioFiles.length > 0) {
+            try {
+                const formData = new FormData();
+                audioFiles.forEach((item) => {
+                    formData.append('files', item.file);
+                });
+
+                const response = await fetch(`${apiBaseUrl}/upload-multiple-audios`, { // Assuming a new backend endpoint for audios
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to upload audios: ${errorData.detail || response.statusText}`);
+                }
+
+                const data = await response.json();
+                finalAudioUrls = data.urls;
+
+            } catch (uploadError) {
+                console.error('Error during audio uploads:', uploadError);
+                setError(`Failed to upload audios: ${uploadError.message}`);
+                setLoading(false);
+                return;
+            }
+        }
+
+        // Step 3: Create the payload with both photo and audio URLs
         const payload = {
             name: editableProfileData.name || null,
-            performance_type: editableProfileData.performance_type || null, // Corrected key name
+            performance_type: editableProfileData.performance_type || null,
             description: editableProfileData.description || null,
             bio: editableProfileData.bio || null,
             website: editableProfileData.website || null,
-            // Use the centralized state
             social_media: (editableProfileData.social_media || []).filter((url) => url.trim() !== ""),
             stage_plan: editableProfileData.stage_plan || null,
             tech_rider: editableProfileData.tech_rider || null,
             photos: finalImageUrls,
+            audios: finalAudioUrls, // Use the uploaded audio URLs here
             videos: (editableProfileData.videos || []).filter((url) => url.trim() !== ""),
-            audios: (editableProfileData.audios || []).filter((url) => url.trim() !== ""),
             online_press: (editableProfileData.online_press || []).filter(item => item.title && item.url)
                                     .map(item => ({ title: item.title, url: item.url })),
         };
@@ -456,8 +550,7 @@ function CreateProfileContent({
             console.error("Error creating profile:", error);
             alert(`Error creating profile: ${error.message}`);
         } finally {
-            // Ensure loading state is reset in finally block
-            setloading(false);
+            setLoading(false);
         }
     };
     
@@ -643,7 +736,7 @@ function CreateProfileContent({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add photos -</p>
                 {/* Render previews from the state returned by the hook */}
-                {filesToProcess.length > 0 && filesToProcess.map(item => (
+                {imageFiles.length > 0 && imageFiles.map(item => (
                     <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
                         <div className=" rounded-xl overflow-hidden shadow-md">
                             <img
@@ -663,6 +756,7 @@ function CreateProfileContent({
                 {/* Your file input that uses the function from the hook */}
                 <input
                 type="file"
+                accept="image/*"
                 multiple
                 onChange={handleFileChange}
                 className="hidden" // Hides the default browser input
@@ -739,26 +833,49 @@ function CreateProfileContent({
             </div>
         )
         audiosProfile = (
-            <div className="z-1">
-                <p className="text-gray-500 text-center col-span-full pb-5">- Add audios -</p>
-                {audios.map((url, index) => (
+            <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
+                    <p className="text-gray-500 text-center col-span-full pb-5">- Add audios -</p>
+                    {/* Render previews from the state returned by the hook */}
+                    {audioFiles.length > 0 && audioFiles.map(item => (
+                        <div key={item.id} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
+                            <button
+                                onClick={() => handleRemoveAudio(item.id)}
+                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                            >
+                                &times;
+                            </button>
+                            <p className="bg-red-600 mt-16 text-center" >{item.file.name}</p>
+                            
+                            <audio
+                                controls
+                                src={item.previewUrl}
+                                className="w-full h-full object-cover"
+                            >
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    ))}
+                    {/* Your file input that uses the function from the hook */}
                     <input
-                    key={index}
-                    type="url"
-                    placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) => handleArrayChange(index, e.target.value, 'audios')}
-                    className="w-full border rounded px-3 py-2 mb-2"
+                        type="file"
+                        multiple
+                        accept="audio/*" // Changed to accept audio files
+                        onChange={handleAudioChange}
+                        className="hidden" // Hides the default browser input
+                        id="audio-upload-input" // The unique ID to link with the label
                     />
-                ))}
-                <button
-                    type="button"
-                    onClick={() => addArrayField('audios')}
-                    className="text-blue-500 hover:underline"
-                >
-                    Add another audio
-                </button>
-            </div>
+                    {/* Custom button/label that users will see */}
+                    <label
+                        htmlFor="audio-upload-input" // This attribute links the label to the hidden input
+                        className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
+                        flex justify-center items-center text-center transition-transform duration-200 
+                        ease-in-out hover:-translate-y-1.5" // Your custom styling
+                    >
+                        ╋ <br /> Add audio
+                    </label>
+                </div>
+            </>
         )
         bioProfile = (
             <div>
@@ -942,7 +1059,7 @@ function CreateProfileContent({
                             alt={`photo ${index + 1} not available`}
                             className="w-full h-full object-cover"
                         />
-                        {/* You might want a button to delete these photos as well */}
+                        {/* Button to delete photos */}
                         <button
                             type="button"
                             onClick={() => handleDeleteArrayField(index, 'photos')} // Assuming this function exists
@@ -954,7 +1071,7 @@ function CreateProfileContent({
                 ))}
 
                 {/* **Display Newly Selected Photos from the Local State** */}
-                {filesToProcess.length > 0 && filesToProcess.map(item => (
+                {imageFiles.length > 0 && imageFiles.map(item => (
                     <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
                         <div className="rounded-xl overflow-hidden shadow-md">
                             <img
@@ -1061,26 +1178,71 @@ function CreateProfileContent({
             </div>
         );
         audiosProfile = (
-            <div className="z-1">
-                <p className="text-gray-500 text-center col-span-full">- Add, change or remove audios -</p>
-                {audios.map((url, index) => (
+            <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
+                    <p className="text-gray-500 text-center col-span-full pb-5">- Add and remove audios -</p>
+                    {/* **Display Existing Photos from the Database** */}
+                    {(editableProfileData.audios || []).map((url, index) => (
+                        <div key={url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
+                            <audio
+                                controls
+                                src={url}
+                                className="w-full h-full object-cover"
+                            >
+                                Your browser does not support the audio element.
+                            </audio>
+                            {/* You might want a button to delete these photos as well */}
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteArrayField(index, 'audios')} // function to delete field
+                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                    ))}
+
+                    {/* Display Newly Selected Audios from the Local State */}
+                    {audioFiles.length > 0 && audioFiles.map(item => (
+                        <div key={item.id} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
+                            <button
+                                onClick={() => handleRemoveAudio(item.id)}
+                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                            >
+                                &times;
+                            </button>
+                            <p className="bg-red-600 mt-16 text-center" >{item.file.name}</p>
+                            
+                            <audio
+                                controls
+                                src={item.previewUrl}
+                                className="w-full h-full object-cover"
+                            >
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    ))}
+
+                    {/* Your file input that uses the function from the hook */}
                     <input
-                    key={index}
-                    type="url"
-                    placeholder="https://example.com"
-                    value={url}
-                    onChange={(e) => handleArrayChange(index, e.target.value, 'audios')}
-                    className="w-full border rounded px-3 py-2 mb-2"
+                        type="file"
+                        multiple
+                        accept="audio/*" // Changed to accept audio files
+                        onChange={handleAudioChange}
+                        className="hidden" // Hides the default browser input
+                        id="audio-upload-input" // The unique ID to link with the label
                     />
-                ))}
-                <button
-                    type="button"
-                    onClick={() => addArrayField('audios')}
-                    className="dark:text-indigo-500 hover:underline"
-                >
-                    Add another audio
-                </button>
-            </div>
+                    {/* Custom button/label that users will see */}
+                    <label
+                        htmlFor="audio-upload-input" // This attribute links the label to the hidden input
+                        className="text-blue-500 bg-indigo-200 w-full aspect-video rounded-xl overflow-hidden -md 
+                        flex justify-center items-center text-center transition-transform duration-200 
+                        ease-in-out hover:-translate-y-1.5" // Your custom styling
+                    >
+                        ╋ <br /> Add audio
+                    </label>
+                </div>
+            </>
         )
         bioProfile = (
             <div>
@@ -1283,7 +1445,7 @@ function CreateProfileContent({
                             return (
                                 <div key={index} className="flex flex-col gap-2">
                                     {/* Video Preview */}
-                                    <div className="aspect-video rounded-xl overflow-hidden shadow-md">
+                                    <div className="flex items-center justify-center aspect-video rounded-xl overflow-hidden shadow-md">
                                         {embedUrl ? (
                                             <iframe
                                                 src={embedUrl}
@@ -1291,7 +1453,7 @@ function CreateProfileContent({
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
                                                 gyroscope; picture-in-picture"
                                                 allowFullScreen
-                                                className="w-full h-full"
+                                                className="w-full h-full "
                                             ></iframe>
                                         ) : (
                                             <div className="w-full h-full bg-slate-400 flex items-center 
@@ -1316,29 +1478,42 @@ function CreateProfileContent({
                 )} 
             </div>
         )
-        audiosProfile = (            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 z-1">
-                <p className="text-gray-500 text-center col-span-full">- Sounds that talk -</p>
-                {/* Placeholder Audios */}
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
-                    <p className="text-gray-800 font-medium mb-2">Track 1: "Echoes of Dawn"</p>
-                    <audio controls className="w-full max-w-md rounded-xl"></audio>
-                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></source>
-                    Your browser does not support the audio element.
+        audiosProfile = (
+            <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
+                    {/* Render previews from the database */}
+                    {profileData.audios && profileData.audios.length > 0 ? (
+                        <>
+                            <p className="text-gray-500 text-center col-span-full">
+                                - Some audios describing the project -
+                            </p>
+                            {profileData.audios.map((audioUrl, index) => (
+                            <div key={index} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
+                                {/* <p className="bg-red-600 mt-16 text-center" >{item.file.name}</p> */}
+                                <audio
+                                    controls
+                                    src={audioUrl}
+                                    className="w-full h-full object-cover"
+                                >
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                            ))}
+                        </> 
+                    ) : (
+                    // Display a message and a placeholder if no audios are available
+                    <>
+                        <p className="text-gray-500 text-center col-span-full">- No audios available yet. -</p>
+                        <div
+                            className="bg-slate-400 w-full aspect-video rounded-xl overflow-hidden -md 
+                            flex justify-center items-center"
+                        >
+                            No audios available yet
+                        </div>
+                    </>
+                )}
                 </div>
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
-                    <p className="text-gray-800 font-medium mb-2">Track 2: "Whispers in the Wind"</p>
-                    <audio controls className="w-full max-w-md rounded-xl"></audio>
-                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></source>
-                    Your browser does not support the audio element.
-                </div>
-                <div className="rounded-xl overflow-hidden -md transition-transform duration-200 ease-in-out hover:-translate-y-1.5 p-4 bg-gray-50 flex flex-col justify-center items-center">
-                    <p className="text-gray-800 font-medium mb-2">Track 3: "Midnight Serenade"</p>
-                    <audio controls className="w-full max-w-md rounded-xl"></audio>
-                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></source>
-                    Your browser does not support the audio element.
-                </div>
-            </div>
+            </>
         )
         bioProfile = (
             <ShowMoreContainer text={profileData.bio}/>

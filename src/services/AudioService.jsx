@@ -1,19 +1,19 @@
-// PhotoService.jsx
+// AudioService.jsx
 
 import { useState, useEffect, useRef } from "react";
 
-export function usePhotosService() {
-    const [imageFiles, setImageFiles] = useState([]);
+export function useAudioService() {
+    const [audioFiles, setAudioFiles] = useState([]);
     const nextId = useRef(0);
 
-    const handleFileChange = (event) => {
+    const handleAudioChange = (event) => {
         // --- Add this line back in ---
         const newFileItems = [];
         // ---
         const newlySelectedFiles = Array.from(event.target.files);
 
         newlySelectedFiles.forEach(newFile => {
-            const isDuplicate = imageFiles.some(item =>
+            const isDuplicate = audioFiles.some(item =>
                 item.file.name === newFile.name &&
                 item.file.size === newFile.size &&
                 item.file.lastModified === newFile.lastModified
@@ -29,23 +29,23 @@ export function usePhotosService() {
             }
         });
         
-        const updatedFiles = [...imageFiles, ...newFileItems];
-        setImageFiles(updatedFiles);
+        const updatedFiles = [...audioFiles, ...newFileItems];
+        setAudioFiles(updatedFiles);
 
         // This no longer calls onFilesReady, it just updates its own state.
         event.target.value = '';
     };
 
-    const handleRemoveFile = (idToRemove) => {
-        const updatedFiles = imageFiles.filter(item => item.id !== idToRemove);
-        setImageFiles(updatedFiles);
+    const handleRemoveAudio = (idToRemove) => {
+        const updatedFiles = audioFiles.filter(item => item.id !== idToRemove);
+        setAudioFiles(updatedFiles);
     };
 
     useEffect(() => {
         return () => {
-            imageFiles.forEach(item => URL.revokeObjectURL(item.previewUrl));
+            audioFiles.forEach(item => URL.revokeObjectURL(item.previewUrl));
         };
-    }, [imageFiles]);
+    }, [audioFiles]);
 
-    return { imageFiles, setImageFiles, handleFileChange, handleRemoveFile };
+    return { audioFiles, setAudioFiles, handleAudioChange, handleRemoveAudio };
 }
