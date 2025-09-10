@@ -14,7 +14,15 @@ export const useUserProfiles = (userId) => {
       try {
         setLoading(true);
         const data = await fetchUserProfiles(apiBaseUrl, userId);
-        setProfiles(data);
+
+        // Sort the profiles by updated_at in descending order (most recent first)
+        const sortedData = [...data].sort((a, b) => {
+          const dateA = new Date(a.updated_at);
+          const dateB = new Date(b.updated_at);
+          return dateB - dateA;
+        });
+
+        setProfiles(sortedData);
       } catch (err) {
         setError(err.message);
       } finally {

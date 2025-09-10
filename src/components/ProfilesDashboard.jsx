@@ -10,7 +10,6 @@ export default function profilesDashboard({userData, profiles}) {
                 group-hover:from-dark-purple-start group-hover:to-dark-purple-end group-hover:btn-animation-t
                 dark:from-dark-purple-start dark:to-dark-purple-end
                 dark:group-hover:from-custom-purple-start dark:group-hover:to-custom-purple-end ">
-                    
                 Profile
             </div>
             <h4 className="font-semibold">
