@@ -111,7 +111,7 @@ export default function Profile() {
 
 
     // SAVE Update handler
-    const handleSaveClick = async () => { // Removed editableProfileData from the argument, as it's a state variable
+    const handleSaveClick = async () => {
         try {
             // Step 1: Delete files from Cloudinary and the database
             // This logic correctly handles deletions independently of uploads.
@@ -193,8 +193,10 @@ export default function Profile() {
             // Step 4: Create the final payload for the PATCH request
             const payload = {
                 ...editableProfileData,
-                photos: combinedPhotos,
-                audios: combinedAudios,
+                photos: combinedPhotos.filter(photo => photo.url), // Filter out any photos with an empty URL
+                audios: combinedAudios.filter(audio => audio.url), // Filter out any audios with an empty URL
+                social_media: editableProfileData.social_media.filter(item => item.url),
+                videos: editableProfileData.videos.filter(item => item.url)
             };
 
             // Step 5: Send the PATCH request to the server
@@ -1142,40 +1144,65 @@ function CreateProfileContent({
                 <p className="text-gray-500 text-center col-span-full">- Add and remove photos -</p>
                 {/* **Display Existing Photos from the Database** */}
                 {(editableProfileData.photos || []).map((item, index) => (
-                    <div key={item.url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
-                        <img
-                            src={item.url}
-                            alt={`photo ${index + 1} not available`}
-                            className="w-full h-full object-cover"
-                        />
-                        {/* Button to delete photos */}
-                        <button
-                            type="button"
-                            onClick={() => handleDeleteArrayField(index, 'photos')} // Assuming this function exists
-                            className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                        >
-                            &times;
-                        </button>
+                    <div key={item.url} className="flex flex-col gap-2">
+                        <div className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
+                            <img
+                                src={item.url}
+                                alt={`photo ${index + 1} not available`}
+                                className="w-full h-full object-cover"
+                            />
+                            {/* Button to delete photos */}
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteArrayField(index, 'photos')} // Assuming this function exists
+                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                        
+                        <div className="flex items-center justify-center gap-2">
+                            <input
+                                type="text"
+                                placeholder="Title"
+                                value={item.title || ''}
+                                onChange={(e) => handleArrayDictChange(
+                                    index, e.target.value, 'photos', 'title'
+                                )}
+                                className="w-full text-center border-dashed bg-transparent"
+                            />
+                        </div>
                     </div>
                 ))}
 
                 {/* **Display Newly Selected Photos from the Local State** */}
                 {photosToUpload.length > 0 && photosToUpload.map(newItem => (
-                    <div key={newItem.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
-                        <div className="rounded-xl overflow-hidden shadow-md">
+                    <div key={newItem.id} className="flex flex-col gap-2">
+                        <div className="relative aspect-video overflow-hidden rounded-xl shadow-md">
                             <img
                                 src={newItem.previewUrl}
                                 alt={`Preview of ${newItem.file.name}`}
-                                className="w-full h-full object-cover"
+                                className="w-full object-cover"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveSelectedPhoto(newItem.id)}
+                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                        <div className="flex items-center justify-center">
+                            <p className="font-bold">title: </p>
+                            <input
+                                type="text"
+                                placeholder="Title"
+                                value={newItem.title || ''}
+                                onChange={(e) => handleArrayDictChange(
+                                    index, e.target.value, 'videos', 'title'
+                                )}
                             />
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveSelectedPhoto(newItem.id)}
-                            className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                        >
-                            &times;
-                        </button>
                     </div>
                 ))}
 
@@ -1207,9 +1234,9 @@ function CreateProfileContent({
                 {editableProfileData.videos.map((item, index) => {
                     const embedUrl = getYouTubeEmbedUrl(item.url);
                     return (
-                        <div key={index} className="flex flex-col gap-2 relative">
+                        <div key={index} className="flex flex-col gap-2">
                             {/* Video Preview */}
-                            <div className="flex flex-col aspect-video rounded-xl overflow-hidden shadow-md">
+                            <div className="relative flex flex-col aspect-video rounded-xl overflow-hidden shadow-md">
                                 {/* Input Field with Delete Button */}
                                 <div className="flex items-center justify-center">
                                     {/* Add url input field */}
@@ -1247,7 +1274,6 @@ function CreateProfileContent({
                                 )}
                             </div>
                             <div className="flex items-center justify-center">
-                                <p className="font-bold">title: </p>
                                 <input
                                     type="text"
                                     placeholder="Title"
@@ -1255,6 +1281,7 @@ function CreateProfileContent({
                                     onChange={(e) => handleArrayDictChange(
                                         index, e.target.value, 'videos', 'title'
                                     )}
+                                    className="w-full text-center border-dashed bg-transparent"
                                 />
                             </div>
                         </div>
@@ -1280,37 +1307,40 @@ function CreateProfileContent({
         audiosProfile = (
             <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
-                    <p className="text-gray-500 text-center col-span-full pb-5">- Add and remove audios -</p>
+                    <p className="text-gray-500 text-center col-span-full">- Add and remove audios -</p>
                     {/* **Display Existing Audios from the Database** */}
                     {(editableProfileData.audios || []).map((item, index) => (
-                        <div key={index} className="flex flex-col relative aspect-video 
+                        <div key={index} className="flex flex-col gap-2">
+                            <div className="relative flex flex-col aspect-video 
                                 bg-slate-500 overflow-hidden rounded-xl shadow-md">
-                            {/* Delete button */}
-                            <button
-                                type="button"
-                                onClick={() => handleDeleteArrayField(index, 'audios')} // function to delete field
-                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                            >
-                                &times;
-                            </button>
-                            <div className="flex items-center h-full justify-center">
-                                <p className="font-bold">title: </p>
-                                <input
-                                    type="text"
-                                    placeholder="Title"
-                                    value={item.title || ''}
-                                    onChange={(e) => handleArrayDictChange(
-                                        index, e.target.value, 'audios', 'title'
-                                    )}
-                                />
+                                {/* Delete button */}
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteArrayField(index, 'audios')} // function to delete field
+                                    className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                                >
+                                    &times;
+                                </button>
+                                <div className="flex items-center h-full justify-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        value={item.title || ''}
+                                        onChange={(e) => handleArrayDictChange(
+                                            index, e.target.value, 'audios', 'title'
+                                        )}
+                                        className="w-full text-center border-dashed bg-transparent"
+                                    />
+                                </div>
+                                <audio
+                                    controls
+                                    src={item.url}
+                                    className="w-full h-full object-cover bg-transparent"
+                                >
+                                    Your browser does not support the audio element.
+                                </audio>
                             </div>
-                            <audio
-                                controls
-                                src={item.url}
-                                className="w-full h-full object-cover"
-                            >
-                                Your browser does not support the audio element.
-                            </audio>
+                            
                         </div>
                     ))}
 
@@ -1372,11 +1402,15 @@ function CreateProfileContent({
                 <textarea
                     id="bio"
                     name="bio"
-                    className="w-full border rounded px-3 py-2"
-                    rows="3"
+                    rows="5"
                     value={editableProfileData.bio || ''}
                     onChange={handleChangeSingle}
                     required
+                    className="
+                        w-full text-gray-500 text-justify px-1 py-1 text-lg sm:text-xl leading-none
+                        border border-3 border-dashed outline-none border-custom-purple-start rounded 
+                        focus:border-solid focus:border-x-amber-500 focus:bg-violet-200
+                        hover:bg-purple-300 bg-transparent overflow-hidden"
                 />
             </div>
         )
@@ -1529,17 +1563,25 @@ function CreateProfileContent({
                             - Some pictures describing the project -
                         </p>
                         {profileData.photos.map((item, index) => (
-                            <div
-                                key={index} // Use a unique key for each item in the list
-                                className="aspect-video rounded-xl overflow-hidden shadow-md bg-gray-200
-                                transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
-                            >
-                                <img
-                                    src={item.url} // The URL for the current photo in the iteration
-                                    alt={`Photo ${index + 1} not available`} // Dynamic alt text
-                                    className="w-full h-full object-cover rounded-xl"
-                                />
-                            </div>
+                                <div
+                                    key={index} // Use a unique key for each item in the list
+                                    className="flex flex-col gap-2"
+                                >
+                                    <div className="aspect-video rounded-xl overflow-hidden shadow-md bg-gray-200
+                                    transition-transform duration-200 ease-in-out hover:-translate-y-1.5">
+                                        <img
+                                        src={item.url} // The URL for the current photo in the iteration
+                                        alt={`Photo ${index + 1} not available`} // Dynamic alt text
+                                        className="w-full h-full object-cover rounded-xl"
+                                    />
+                                    </div>
+                                    
+                                    <div className="flex items-center justify-center">
+                                        <p className="py-2 w-full text-center border border-emerald-800">{item.title}</p>
+                                    </div>
+                                </div>
+                                
+                            
                         ))}
                     </>
                 ) : (
@@ -1586,7 +1628,7 @@ function CreateProfileContent({
                                         )}
                                     </div>
                                     <div className="flex items-center justify-center">
-                                        <p>{item.title}</p>
+                                        <p className="py-2 w-full text-center border border-emerald-800">{item.title}</p>
                                     </div>
                                 </div>
                             );
@@ -1614,7 +1656,7 @@ function CreateProfileContent({
                                 - Some audios describing the project -
                             </p>
                             {profileData.audios.map((item, index) => (
-                            <div key={index} className="flex flex-col relative aspect-video
+                            <div key={index} className="flex flex-col aspect-video
                              overflow-hidden rounded-xl shadow-md"
                             >
                                 <div className="flex h-full bg-slate-500 items-center justify-center">

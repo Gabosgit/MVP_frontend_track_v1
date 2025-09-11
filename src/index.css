@@ -122,6 +122,17 @@ body {
     ease-in-out;
   }
 
+  .btn-animation-l {
+    @apply
+    /* ANIMATION */
+    -translate-x-1
+    shadow-2xl
+    shadow-slate-900
+    transition-all 
+    duration-300 
+    ease-in-out;
+  }
+
   /* BUTTONS styles */
   .btn-submit {
     @apply 

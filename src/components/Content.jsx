@@ -56,7 +56,7 @@ export default function Content({
         <div className="flex flex-col min-h-screen justify-between">
           <div className="flex flex-col items-center w-screen">
             {user && (
-              <div className="fixed w-full px-4 sm:w-2/3 sm:px0 z-0">
+              <div className="fixed w-full px-4 sm:w-2/3 sm:px0 z-10">
                 <div className='flex justify-between'>
                   <div className='flex items-center gap-3'>
                     {currentPathname !== "/dashboard" && (

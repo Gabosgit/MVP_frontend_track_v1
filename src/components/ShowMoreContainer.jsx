@@ -9,7 +9,8 @@ export default function ShowMoreContainer({text}) {
 
     return (
         <div>
-            <p className="text-gray-600 text-justify text-md sm:text-lg leading-relaxed overflow-hidden">
+            <p className="text-gray-600 text-justify text-md sm:text-lg 
+            leading-relaxed overflow-hidden whitespace-pre-line">
                 {!showMore ? text : text.slice(0, 300) + " ..."}
             </p>
             <div className="flex justify-end mt-1">
