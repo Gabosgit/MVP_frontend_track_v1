@@ -55,7 +55,7 @@ export default function Dashboard() {
   
 function CreateDashboardContent({userData, profiles, contracts}) {
   return(
-    <div className="grid grid-cols-1 max-w-screen-xl mt-16">
+    <div className="grid grid-cols-1 max-w-screen-xl mt-32">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-24 xl:gap-8 mb-8">
             <ProfilesDashboard userData={userData}  profiles={profiles} />
 

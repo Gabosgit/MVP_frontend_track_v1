@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 export default function profilesDashboard({userData, profiles}) {
-    console.log(profiles)
     const profileCards = profiles.slice(0, 3) // Map max. 3 profiles
         .map(profile =>
         <Link key={profile.id} to={`/profile/${profile.id}`} className="group btn-profile p-4 rounded-xl text-center">
