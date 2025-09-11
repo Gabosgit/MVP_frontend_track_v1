@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { ApiContext } from "../context/ApiContext";
 import { useNavigate } from "react-router-dom";
 import Content from "../components/Content";
-import { usePhotosService } from "../services/PhotoService";
-import { useAudioService } from "../services/AudioService";
+import { useFilesUploadService } from "../hooks/useFilesUploadService";
 import { useParams } from "react-router-dom";
 import ShowMoreContainer from "../components/ShowMoreContainer"; // Used for Bio
 
@@ -20,9 +19,29 @@ export default function Profile() {
     const [profileData, setProfileData] = useState(null);
     const [editing, setEditing] = useState(null)
 
-    // PHOTO & AUDIO HOCK
-    const { imageFiles, setImageFiles, handleFileChange, handleRemoveFile } = usePhotosService();
-    const { audioFiles, setAudioFiles, handleAudioChange, handleRemoveAudio } = useAudioService();
+    // UPLOAD FILES HOCK
+    // Images Hook
+    const { 
+        filesToUpload: photosToUpload, 
+        setFilesToUpload: setPhotoToUpload,
+        handleSelectedFileChange: handleSelectedPhotoChange, 
+        handleRemoveSelectedFile: handleRemoveSelectedPhoto,
+        clearFilesToUpload: clearPhotosToUpload
+    } = useFilesUploadService();
+
+    // Audios Hook
+    const { 
+        filesToUpload: audiosToUpdate,
+        setFilesToUpload: setAudiosToUpload ,
+        handleSelectedFileChange: handleSelectedAudioChange, 
+        handleRemoveSelectedFile: handleRemoveSelectedAudio,
+        clearFilesToUpload: clearAudiosToUpload
+    } = useFilesUploadService();
+
+    // Refs for the file input elements
+    const imageInputRef = useRef(null);
+    const audioInputRef = useRef(null);
+
     const [urlsToDelete, setUrlsToDelete] = useState([]);
 
     // Fetch Profile Data
@@ -87,104 +106,98 @@ export default function Profile() {
                 online_press: [], // Use consistent key name
             });
         }
-        console.log(editableProfileData)
         // If the original profileData changes the editableProfileData is also updated, keeping in sync.
     }, [profileData]);
 
+
     // SAVE Update handler
-    const handleSaveClick = async (editableProfileData) => {
-        // A temporary array to hold the new URLs
-        let newImageUrls = [];
-        let newAudiosUrls = [];
-
-        // Step 1: Delete files from Cloudinary and the database
-        // Step 1: Perform batch deletion of URLs
-        if (urlsToDelete.length > 0) {
-            const response = await fetch(`${apiBaseUrl}/delete-multiple-assets`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ urls: urlsToDelete }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Failed to delete assets: ${errorData.detail}`);
+    const handleSaveClick = async () => { // Removed editableProfileData from the argument, as it's a state variable
+        try {
+            // Step 1: Delete files from Cloudinary and the database
+            // This logic correctly handles deletions independently of uploads.
+            if (urlsToDelete.length > 0) {
+                const response = await fetch(`${apiBaseUrl}/delete-multiple-assets`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ urls: urlsToDelete }),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error(`Failed to delete assets: ${errorData.detail}`);
+                }
             }
-        }
 
-        // Step 2 Images: Upload new photos if they exist
-        if (imageFiles.length > 0) {
-            try {
+            // Temporary arrays to hold new uploads with their titles
+            let newPhotosWithTitles = [];
+            let newAudiosWithTitles = [];
+
+            // Step 2 Images: Upload new photos and get their URLs
+            if (photosToUpload.length > 0) { // Changed from photosToUpload to photosToUpload
                 const formData = new FormData();
-                imageFiles.forEach(item => {
+                photosToUpload.forEach(item => { // Changed from photosToUpload to photosToUpload
                     formData.append('files', item.file);
                 });
-
                 const response = await fetch(`${apiBaseUrl}/upload-multiple`, {
                     method: 'POST',
                     body: formData,
                 });
-
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(`Failed to upload new images: ${errorData.detail}`);
                 }
-
                 const data = await response.json();
-                newImageUrls = data.urls;
-            } catch (uploadError) {
-                setError(`Error uploading new photos: ${uploadError.message}`);
-                return; // Stop the save process
+                const newImageUrls = data.urls;
+                
+                // Map the new URLs back to the original files to get their titles
+                newPhotosWithTitles = photosToUpload.map((item, index) => ({ // Changed from photosToUpload to photosToUpload
+                    url: newImageUrls[index], // Use the URL from the server response
+                    title: item.title,       // Use the title from the local state
+                }));
             }
-        }
 
-        // Step 2 Audios: Upload new photos if they exist
-        if (audioFiles.length > 0) {
-            try {
+            // Step 2 Audios: Upload new audios and get their URLs
+            if (audiosToUpdate.length > 0) { // Changed from audiosToUpdate to audiosToUpdate
                 const formData = new FormData();
-                audioFiles.forEach(item => {
+                audiosToUpdate.forEach(item => { // Changed from audiosToUpdate to audiosToUpdate
                     formData.append('files', item.file);
                 });
-
                 const response = await fetch(`${apiBaseUrl}/upload-multiple-audios`, {
                     method: 'POST',
                     body: formData,
                 });
-
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(`Failed to upload new images: ${errorData.detail}`);
+                    throw new Error(`Failed to upload new audios: ${errorData.detail}`);
                 }
-
                 const data = await response.json();
-                newAudiosUrls = data.urls;
-            } catch (uploadError) {
-                setError(`Error uploading new photos: ${uploadError.message}`);
-                return; // Stop the save process
+                const newAudiosUrls = data.urls;
+                
+                // Map the new URLs back to the original files to get their titles
+                newAudiosWithTitles = audiosToUpdate.map((item, index) => ({ // Changed from audiosToUpdate to audiosToUpdate
+                    url: newAudiosUrls[index], // Use the URL from the server response
+                    title: item.title,       // Use the title from the local state
+                }));
             }
-        }
 
-        // Step 3 Images: Combine the existing photos with the new ones
-        const combinedPhotos = [
-            ...(editableProfileData.photos || []),
-            ...newImageUrls
-        ];
+            // Step 3: Combine all data into the final payload
+            // This is the most critical change. The new arrays are now formatted correctly.
+            const combinedPhotos = [
+                ...(editableProfileData.photos || []),
+                ...newPhotosWithTitles
+            ];
+            const combinedAudios = [
+                ...(editableProfileData.audios || []),
+                ...newAudiosWithTitles
+            ];
+            
+            // Step 4: Create the final payload for the PATCH request
+            const payload = {
+                ...editableProfileData,
+                photos: combinedPhotos,
+                audios: combinedAudios,
+            };
 
-        // Step 3 Audios: Combine the existing audios with the new ones
-        const combinedAudios = [
-            ...(editableProfileData.audios || []),
-            ...newAudiosUrls
-        ];
-
-        // Step 4 Images & Audios: Create the payload for the PATCH request
-        const payload = {
-            ...editableProfileData,
-            photos: combinedPhotos,
-            audios: combinedAudios,
-        };
-
-        // Step 5: Send the PATCH request to the server
-        try {
+            // Step 5: Send the PATCH request to the server
             const token = localStorage.getItem("token");
             const response = await fetch(`${apiBaseUrl}/profile/${id}`, {
                 method: "PATCH",
@@ -201,22 +214,37 @@ export default function Profile() {
             }
 
             const updatedData = await response.json();
-            // Here you can update the state with the new data
             setProfileData(updatedData);
-            setEditing(false)
-            setUrlsToDelete([]); // Clear the deletion queue
-            alert("Profile updated successfully!");
+            setEditing(false);
+            setUrlsToDelete([]);
+            
+            // Step 6: Clear the files and the inputs after a successful upload
+            clearPhotosToUpload();
+            clearAudiosToUpload();
+            if (imageInputRef.current) {
+                imageInputRef.current.value = null;
+            }
+            if (audioInputRef.current) {
+                audioInputRef.current.value = null;
+            }
         } catch (err) {
             setError(err.message);
-            alert("Error updating profile: " + err.message);
         }
     }
 
     // CANCEL
     const handleCancelClick = () => {
+        clearPhotosToUpload();
+        clearAudiosToUpload();
+        if (imageInputRef.current) {
+            imageInputRef.current.value = null;
+        }
+        if (audioInputRef.current) {
+            audioInputRef.current.value = null;
+        }
         setEditableProfileData(profileData);
-        setImageFiles([]); // Clear newly selected files
-        setAudioFiles([]); // Clear newly selected files
+        setPhotoToUpload([]); // Clear newly selected files
+        setAudiosToUpload([]); // Clear newly selected files
         setUrlsToDelete([]); // Clear the deletion queue
         setEditing(false);
     };
@@ -244,14 +272,17 @@ export default function Profile() {
                     setLoading={setLoading}
                     editableProfileData={editableProfileData}
                     setEditableProfileData={setEditableProfileData}
-                    imageFiles={imageFiles}
-                    handleFileChange={handleFileChange}
-                    handleRemoveFile={handleRemoveFile}
-                    audioFiles={audioFiles}
-                    handleAudioChange={handleAudioChange}
-                    handleRemoveAudio={handleRemoveAudio}
+                    photosToUpload={photosToUpload}
+                    handleSelectedPhotoChange={handleSelectedPhotoChange}
+                    handleRemoveSelectedPhoto={handleRemoveSelectedPhoto}
+                    audiosToUpdate={audiosToUpdate}
+                    setAudiosToUpload={setAudiosToUpload}
+                    handleSelectedAudioChange={handleSelectedAudioChange}
+                    handleRemoveSelectedAudio={handleRemoveSelectedAudio}
                     urlsToDelete={urlsToDelete}
                     setUrlsToDelete={setUrlsToDelete}
+                    imageInputRef={imageInputRef}
+                    audioInputRef={audioInputRef}
                 />
             }
         />
@@ -268,13 +299,16 @@ function CreateProfileContent({
     setError, 
     editableProfileData, 
     setEditableProfileData,
-    imageFiles,
-    handleFileChange,
-    handleRemoveFile,
-    audioFiles,
-    handleAudioChange, 
-    handleRemoveAudio,
-    setUrlsToDelete
+    photosToUpload,
+    handleSelectedPhotoChange,
+    handleRemoveSelectedPhoto,
+    audiosToUpdate,
+    setAudiosToUpload,
+    handleSelectedAudioChange, 
+    handleRemoveSelectedAudio,
+    setUrlsToDelete,
+    imageInputRef,
+    audioInputRef
 }) {
     // Define navigate
     const navigate = useNavigate();
@@ -310,6 +344,10 @@ function CreateProfileContent({
 
     // Function to convert a standard YouTube URL to an embed URL
     const getYouTubeEmbedUrl = (url) => {
+        // Add a defensive check to ensure the URL is a valid string
+        if (!url || typeof url !== 'string') {
+            return null; // Return null to prevent the crash
+        }
         // Regular expression to find the video ID
         const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
         const match = url.match(regExp);
@@ -362,14 +400,47 @@ function CreateProfileContent({
             };
         });
     };
+    
+    // This is the updated function to handle the new object-based arrays.
+    const handleArrayDictChange = (index, value, fieldName, key) => {
+        setEditableProfileData(prev => {
+            // Ensure the property exists and is an array, otherwise default to an empty array
+            const currentArray = prev[fieldName] || [];
+            
+            // Create a deep copy of the array and the object to modify it
+            const updatedArray = [...currentArray];
+            const updatedObject = { ...updatedArray[index], [key]: value };
+
+            // Replace the old object with the new, updated one
+            updatedArray[index] = updatedObject;
+            
+            // Return the new state object with the updated array
+            return {
+                ...prev,
+                [fieldName]: updatedArray,
+            };
+        });
+    };
+
+    // Handles title changes for newly added files
+    const handleNewAudioChange = (index, value) => {
+        setAudiosToUpload(prev => {
+            const updatedArray = [...prev];
+            // Ensure the object and its properties exist
+            if (updatedArray[index]) {
+                updatedArray[index] = { ...updatedArray[index], title: value };
+            }
+            return updatedArray;
+        });
+    };
 
     // Adds Online Press
-    const handleAddOnlinePress = () => {
-    setEditableProfileData(prev => ({
-        ...prev,
-        online_press: [...(prev.online_press || []), { title: '', url: '' }]
-    }));
-};
+        const handleAddOnlinePress = () => {
+        setEditableProfileData(prev => ({
+            ...prev,
+            online_press: [...(prev.online_press || []), { title: '', url: '' }]
+        }));
+    };
 
     // Updates Online Press
     const handleOnlinePressChange = (index, field, value) => {
@@ -401,23 +472,39 @@ function CreateProfileContent({
         });
     };
 
-
     // Deletes an element from an array within editableProfileData
+    // Handling both string and object formats
     const handleDeleteArrayField = (index, fieldName) => {
-        // 1. Get the URL of the file to be deleted
-        const urlToDelete = editableProfileData[fieldName][index];
-
-        // 2. Add the full URL to the list of files to be deleted on save
-        if (urlToDelete) {
-            setUrlsToDelete(prev => [...prev, urlToDelete]);
-        }
-        
-        // 3. Remove the file from the local, editable state for immediate UI update
+        // setEditableProfileData take a function as its argument with prev state as input.
         setEditableProfileData(prev => {
-            const updatedArray = prev[fieldName].filter((_, i) => i !== index);
+            const currentArray = prev[fieldName] || []; // Falls back to an empty array, null or undefined.
+            const itemToDelete = currentArray[index]; // Get item by index
+
+            // Immutability process
+            // Removes item from the local state create a new array
+            // Includes items in updatedArray only if the condition in the callback function is true.
+            // _: convention to indicate that we don't need to use the actual item's value in this operation.
+            // i: The second argument, i, is the index of the current item in the array.
+            // i !== index: This is the condition.
+            const updatedArray = currentArray.filter((_, i) => i !== index);
+
+            // Get the URL to delete, handling both string and object formats
+            // If is an Object, it retrieves the URL from the url property
+            // If it's not an Object, uses the item itself as the URL
+            const url = typeof itemToDelete === 'object' && itemToDelete !== null ? itemToDelete.url : itemToDelete;
+            
+            // If the URL exists, add it to the array URLsToDelete state which
+            // collects all the URLs marked for deletion before they are sent to the backend
+            if (url) {
+                setUrlsToDelete(prevUrls => [...prevUrls, url]);
+            }
+            
+            // This return, becomes the new state of editableProfileData.
+            // Triggers the state update and forces React to re-render the component
             return {
                 ...prev,
-                [fieldName]: updatedArray,
+                // Dynamically sets the property with the key of fieldName to the created updatedArray.
+                [fieldName]: updatedArray,// JavaScript trick called a computed property name
             };
         });
     };
@@ -445,10 +532,10 @@ function CreateProfileContent({
         let finalAudioUrls = [];
 
         // Step 1: Upload Images to Cloudinary via FastAPI /upload-multiple endpoint
-        if (imageFiles.length > 0) {
+        if (photosToUpload.length > 0) {
             try {
                 const formData = new FormData();
-                imageFiles.forEach((item) => {
+                photosToUpload.forEach((item) => {
                     formData.append('files', item.file);
                 });
 
@@ -474,10 +561,10 @@ function CreateProfileContent({
         }
 
         // --- NEW: Step 2: Upload Audio Files ---
-        if (audioFiles.length > 0) {
+        if (audiosToUpdate.length > 0) {
             try {
                 const formData = new FormData();
-                audioFiles.forEach((item) => {
+                audiosToUpdate.forEach((item) => {
                     formData.append('files', item.file);
                 });
 
@@ -519,6 +606,7 @@ function CreateProfileContent({
                                     .map(item => ({ title: item.title, url: item.url })),
         };
 
+        // Fetch
         try {
             const token = localStorage.getItem("token");
 
@@ -736,7 +824,7 @@ function CreateProfileContent({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add photos -</p>
                 {/* Render previews from the state returned by the hook */}
-                {imageFiles.length > 0 && imageFiles.map(item => (
+                {photosToUpload.length > 0 && photosToUpload.map(item => (
                     <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
                         <div className=" rounded-xl overflow-hidden shadow-md">
                             <img
@@ -746,7 +834,7 @@ function CreateProfileContent({
                             />
                         </div>
                         <button
-                            onClick={() => handleRemoveFile(item.id)}
+                            onClick={() => handleRemoveSelectedPhoto(item.id)}
                             className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
                         >
                             &times;
@@ -758,7 +846,7 @@ function CreateProfileContent({
                 type="file"
                 accept="image/*"
                 multiple
-                onChange={handleFileChange}
+                onChange={handleSelectedPhotoChange}
                 className="hidden" // Hides the default browser input
                 id="photo-upload-input" // The unique ID to link with the label
                 />
@@ -777,13 +865,33 @@ function CreateProfileContent({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                 <p className="text-gray-500 text-center col-span-full pb-5">- Add videos -</p>
                 {/* Map through the videos array to display each input and preview */}
-                {editableProfileData.videos.map((url, index) => {
-                    const embedUrl = getYouTubeEmbedUrl(url);
+                {editableProfileData.videos.map((item, index) => {
+                    const embedUrl = getYouTubeEmbedUrl(item.url);
 
                     return (
                         <div key={index} className="flex flex-col gap-2">
                             {/* Video Preview */}
+                            
                             <div className="aspect-video rounded-xl overflow-hidden shadow-md">
+                                {/* Input Field with Delete Button */}
+                                <div className="relative">
+                                    {/* Add url input field */}
+                                    <input
+                                        type="url"
+                                        placeholder="https://youtube.com/watch?v=..."
+                                        value={item.url}
+                                        onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
+                                        className="w-full bg-orange-400 border rounded px-3 py-2"
+                                    />
+                                    {/* Delete Video */}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeleteArrayField(index, 'videos')}
+                                        className="absolute right-0 top-0 mt-2.5 mr-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
                                 {embedUrl ? (
                                     <iframe
                                         src={embedUrl}
@@ -797,25 +905,6 @@ function CreateProfileContent({
                                         Add a valid Youtube URL
                                     </div>
                                 )}
-                            </div>
-                            {/* Input Field with Delete Button */}
-                            <div className="relative">
-                                {/* Add url input field */}
-                                <input
-                                    type="url"
-                                    placeholder="https://youtube.com/watch?v=..."
-                                    value={url}
-                                    onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
-                                    className="w-full bg-orange-400 border rounded px-3 py-2"
-                                />
-                                {/* Delete Video */}
-                                <button
-                                    type="button"
-                                    onClick={() => handleDeleteArrayField(index, 'videos')}
-                                    className="absolute right-0 top-0 mt-2.5 mr-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
-                                >
-                                    &times;
-                                </button>
                             </div>
                         </div>
                     );
@@ -837,10 +926,10 @@ function CreateProfileContent({
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                     <p className="text-gray-500 text-center col-span-full pb-5">- Add audios -</p>
                     {/* Render previews from the state returned by the hook */}
-                    {audioFiles.length > 0 && audioFiles.map(item => (
+                    {audiosToUpdate.length > 0 && audiosToUpdate.map(item => (
                         <div key={item.id} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
                             <button
-                                onClick={() => handleRemoveAudio(item.id)}
+                                onClick={() => handleRemoveSelectedAudio(item.id)}
                                 className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
                             >
                                 &times;
@@ -861,7 +950,7 @@ function CreateProfileContent({
                         type="file"
                         multiple
                         accept="audio/*" // Changed to accept audio files
-                        onChange={handleAudioChange}
+                        onChange={handleSelectedAudioChange}
                         className="hidden" // Hides the default browser input
                         id="audio-upload-input" // The unique ID to link with the label
                     />
@@ -1052,10 +1141,10 @@ function CreateProfileContent({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
                 <p className="text-gray-500 text-center col-span-full">- Add and remove photos -</p>
                 {/* **Display Existing Photos from the Database** */}
-                {(editableProfileData.photos || []).map((url, index) => (
-                    <div key={url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
+                {(editableProfileData.photos || []).map((item, index) => (
+                    <div key={item.url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
                         <img
-                            src={url}
+                            src={item.url}
                             alt={`photo ${index + 1} not available`}
                             className="w-full h-full object-cover"
                         />
@@ -1071,18 +1160,18 @@ function CreateProfileContent({
                 ))}
 
                 {/* **Display Newly Selected Photos from the Local State** */}
-                {imageFiles.length > 0 && imageFiles.map(item => (
-                    <div key={item.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
+                {photosToUpload.length > 0 && photosToUpload.map(newItem => (
+                    <div key={newItem.id} className="relative aspect-video overflow-hidden rounded-xl shadow-md">
                         <div className="rounded-xl overflow-hidden shadow-md">
                             <img
-                                src={item.previewUrl}
-                                alt={`Preview of ${item.file.name}`}
+                                src={newItem.previewUrl}
+                                alt={`Preview of ${newItem.file.name}`}
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <button
                             type="button"
-                            onClick={() => handleRemoveFile(item.id)}
+                            onClick={() => handleRemoveSelectedPhoto(newItem.id)}
                             className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
                         >
                             &times;
@@ -1094,9 +1183,10 @@ function CreateProfileContent({
                 <input
                     type="file"
                     multiple
-                    onChange={handleFileChange}
+                    onChange={handleSelectedPhotoChange}
                     className="hidden"
                     id="photo-upload-input"
+                    ref={imageInputRef}
                 />
                 <label
                     htmlFor="photo-upload-input"
@@ -1114,12 +1204,32 @@ function CreateProfileContent({
         videosProfile = (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12 z-1">
                 <p className="text-gray-500 text-center col-span-full">- Add, change or remove video -</p>
-                {editableProfileData.videos.map((url, index) => {
-                    const embedUrl = getYouTubeEmbedUrl(url);
+                {editableProfileData.videos.map((item, index) => {
+                    const embedUrl = getYouTubeEmbedUrl(item.url);
                     return (
                         <div key={index} className="flex flex-col gap-2 relative">
                             {/* Video Preview */}
-                            <div className="aspect-video rounded-xl overflow-hidden shadow-md">
+                            <div className="flex flex-col aspect-video rounded-xl overflow-hidden shadow-md">
+                                {/* Input Field with Delete Button */}
+                                <div className="flex items-center justify-center">
+                                    {/* Add url input field */}
+                                    <input
+                                        type="url"
+                                        placeholder="https://youtube.com/watch?v=..."
+                                        value={item.url}
+                                        onChange={(e) => handleArrayDictChange(index, e.target.value, 'videos', 'url')}
+                                        required
+                                        className="w-full bg-orange-200 border rounded pr-10 pl-3 py-2"
+                                    />
+                                    {/* Delete Video */}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeleteArrayField(index, 'videos')}
+                                        className="absolute right-1 text-gray-500 hover:text-red-500 text-2xl font-bold"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
                                 {embedUrl ? (
                                     <iframe
                                         src={embedUrl}
@@ -1136,26 +1246,16 @@ function CreateProfileContent({
                                     </div>
                                 )}
                             </div>
-
-                            {/* Input Field with Delete Button */}
-                            <div className="flex relative items-center justify-center">
-                                {/* Add url input field */}
+                            <div className="flex items-center justify-center">
+                                <p className="font-bold">title: </p>
                                 <input
-                                    type="url"
-                                    placeholder="https://youtube.com/watch?v=..."
-                                    value={url}
-                                    onChange={(e) => handleArrayChange(index, e.target.value, 'videos')}
-                                    required
-                                    className="w-full bg-orange-200 border rounded pr-10 pl-3 py-2"
+                                    type="text"
+                                    placeholder="Title"
+                                    value={item.title || ''}
+                                    onChange={(e) => handleArrayDictChange(
+                                        index, e.target.value, 'videos', 'title'
+                                    )}
                                 />
-                                {/* Delete Video */}
-                                <button
-                                    type="button"
-                                    onClick={() => handleDeleteArrayField(index, 'videos')}
-                                    className="absolute right-1 text-gray-500 hover:text-red-500 text-2xl font-bold"
-                                >
-                                    &times;
-                                </button>
                             </div>
                         </div>
                     );
@@ -1181,17 +1281,11 @@ function CreateProfileContent({
             <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 z-1">
                     <p className="text-gray-500 text-center col-span-full pb-5">- Add and remove audios -</p>
-                    {/* **Display Existing Photos from the Database** */}
-                    {(editableProfileData.audios || []).map((url, index) => (
-                        <div key={url} className="relative aspect-video bg-gray-300 overflow-hidden rounded-xl shadow-md">
-                            <audio
-                                controls
-                                src={url}
-                                className="w-full h-full object-cover"
-                            >
-                                Your browser does not support the audio element.
-                            </audio>
-                            {/* You might want a button to delete these photos as well */}
+                    {/* **Display Existing Audios from the Database** */}
+                    {(editableProfileData.audios || []).map((item, index) => (
+                        <div key={index} className="flex flex-col relative aspect-video 
+                                bg-slate-500 overflow-hidden rounded-xl shadow-md">
+                            {/* Delete button */}
                             <button
                                 type="button"
                                 onClick={() => handleDeleteArrayField(index, 'audios')} // function to delete field
@@ -1199,23 +1293,51 @@ function CreateProfileContent({
                             >
                                 &times;
                             </button>
+                            <div className="flex items-center h-full justify-center">
+                                <p className="font-bold">title: </p>
+                                <input
+                                    type="text"
+                                    placeholder="Title"
+                                    value={item.title || ''}
+                                    onChange={(e) => handleArrayDictChange(
+                                        index, e.target.value, 'audios', 'title'
+                                    )}
+                                />
+                            </div>
+                            <audio
+                                controls
+                                src={item.url}
+                                className="w-full h-full object-cover"
+                            >
+                                Your browser does not support the audio element.
+                            </audio>
                         </div>
                     ))}
 
                     {/* Display Newly Selected Audios from the Local State */}
-                    {audioFiles.length > 0 && audioFiles.map(item => (
-                        <div key={item.id} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
-                            <button
-                                onClick={() => handleRemoveAudio(item.id)}
-                                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
-                            >
-                                &times;
-                            </button>
-                            <p className="bg-red-600 mt-16 text-center" >{item.file.name}</p>
-                            
+                    {audiosToUpdate.length > 0 && audiosToUpdate.map((newItem, index) => (
+                        <div key={newItem.id} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
+                            <div className="flex items-center justify-center">
+                                <button
+                                    onClick={() => handleRemoveSelectedAudio(newItem.id)}
+                                    className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700"
+                                >
+                                    &times;
+                                </button>
+                                <div className="bg-red-600 mt-16 text-center">
+                                    <p className="font-bold">title: </p>
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        value={newItem.title || ''} // Bind to the new 'title' property
+                                        onChange={(e) => handleNewAudioChange(index, e.target.value)} // Use the new handler
+                                    />
+                                </div>
+                                
+                            </div>
                             <audio
                                 controls
-                                src={item.previewUrl}
+                                src={newItem.previewUrl}
                                 className="w-full h-full object-cover"
                             >
                                 Your browser does not support the audio element.
@@ -1228,9 +1350,10 @@ function CreateProfileContent({
                         type="file"
                         multiple
                         accept="audio/*" // Changed to accept audio files
-                        onChange={handleAudioChange}
+                        onChange={handleSelectedAudioChange}
                         className="hidden" // Hides the default browser input
                         id="audio-upload-input" // The unique ID to link with the label
+                        ref={audioInputRef}
                     />
                     {/* Custom button/label that users will see */}
                     <label
@@ -1243,7 +1366,7 @@ function CreateProfileContent({
                     </label>
                 </div>
             </>
-        )
+        );
         bioProfile = (
             <div>
                 <textarea
@@ -1405,14 +1528,14 @@ function CreateProfileContent({
                         <p className="text-gray-500 text-center col-span-full">
                             - Some pictures describing the project -
                         </p>
-                        {profileData.photos.map((photoUrl, index) => (
+                        {profileData.photos.map((item, index) => (
                             <div
                                 key={index} // Use a unique key for each item in the list
                                 className="aspect-video rounded-xl overflow-hidden shadow-md bg-gray-200
                                 transition-transform duration-200 ease-in-out hover:-translate-y-1.5"
                             >
                                 <img
-                                    src={photoUrl} // The URL for the current photo in the iteration
+                                    src={item.url} // The URL for the current photo in the iteration
                                     alt={`Photo ${index + 1} not available`} // Dynamic alt text
                                     className="w-full h-full object-cover rounded-xl"
                                 />
@@ -1439,8 +1562,8 @@ function CreateProfileContent({
                 {editableProfileData.videos.length > 0 ? (
                     <>
                         <p className="text-gray-500 text-center col-span-full">- Descriptions in motion -</p>
-                        {editableProfileData.videos.map((url, index) => {
-                            const embedUrl = getYouTubeEmbedUrl(url);
+                        {editableProfileData.videos.map((item, index) => {
+                            const embedUrl = getYouTubeEmbedUrl(item.url);
 
                             return (
                                 <div key={index} className="flex flex-col gap-2">
@@ -1461,6 +1584,9 @@ function CreateProfileContent({
                                                 Video not available
                                             </div>
                                         )}
+                                    </div>
+                                    <div className="flex items-center justify-center">
+                                        <p>{item.title}</p>
                                     </div>
                                 </div>
                             );
@@ -1487,12 +1613,16 @@ function CreateProfileContent({
                             <p className="text-gray-500 text-center col-span-full">
                                 - Some audios describing the project -
                             </p>
-                            {profileData.audios.map((audioUrl, index) => (
-                            <div key={index} className="flex flex-col relative aspect-video overflow-hidden rounded-xl shadow-md">
-                                {/* <p className="bg-red-600 mt-16 text-center" >{item.file.name}</p> */}
+                            {profileData.audios.map((item, index) => (
+                            <div key={index} className="flex flex-col relative aspect-video
+                             overflow-hidden rounded-xl shadow-md"
+                            >
+                                <div className="flex h-full bg-slate-500 items-center justify-center">
+                                    <p className="text-slate-900 text-center" >{item.title}</p>
+                                </div>
                                 <audio
                                     controls
-                                    src={audioUrl}
+                                    src={item.url}
                                     className="w-full h-full object-cover"
                                 >
                                     Your browser does not support the audio element.
